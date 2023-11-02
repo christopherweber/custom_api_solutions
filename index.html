@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Update All Services</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <aside>
+        <!-- Scrollable side menu (example) -->
+        <ul>
+            <li><a href="#bulk-update">Bulk Update All Services</a></li>
+            <!-- Add more links to other projects here -->
+        </ul>
+    </aside>
+
+    <main>
+        <section id="bulk-update">
+            <h2>Bulk Update All Services</h2>
+            <form id="bulkUpdateForm">
+                <label for="authToken">Authorization Token:</label>
+                <input type="text" id="authToken" required>
+                
+                <div class="expandable-field">
+                    <button type="button" onclick="toggleExpandableFields()">+</button>
+                    <div class="fields">
+                        <label for="autoAlert">Auto Alert Responding Team:</label>
+                        <select id="autoAlert">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+
+                        <label for="autoAdd">Auto Add Responding Team:</label>
+                        <select id="autoAdd">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

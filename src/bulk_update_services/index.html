@@ -32,7 +32,7 @@ fetch('../sidebar.html') // Adjusted path, assuming the server serves from `src`
 </script>
 
     <main>
-        <section id="bulk-update">
+        <section id="bulk-update" class="container">
             <h2>Bulk Update Services</h2>
             <form id="bulkUpdateForm">
                 <label for="authToken">Authorization Token:</label>
@@ -56,6 +56,7 @@ fetch('../sidebar.html') // Adjusted path, assuming the server serves from `src`
                 </div>
                 <button type="submit">Submit</button>
             </form>
+            <div class="code-preview" id="codePreview">Your API call will be displayed here...</div>
         </section>
     </main>
 

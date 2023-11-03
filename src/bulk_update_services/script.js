@@ -37,3 +37,13 @@ function toggleExpandableFields() {
     const fields = document.querySelector('.expandable-field .fields'); // Corrected class name
     fields.style.display = fields.style.display === 'none' ? 'block' : 'none';
 }
+
+// New code for expandable sections
+const expandableFields = document.querySelectorAll('.expandable-field');
+
+expandableFields.forEach(field => {
+   field.querySelector('h2').addEventListener('click', function() {
+      const fieldsSection = field.querySelector('.fields');
+      fieldsSection.style.display = fieldsSection.style.display === 'none' ? 'block' : 'none';
+   });
+});

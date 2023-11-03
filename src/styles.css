@@ -1,46 +1,51 @@
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
+/* General container for each section, similar to the API documentation */
+.container {
+    background-color: #f9f9f9;
+    border: 1px solid #e1e4e8;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 6px;
 }
 
-aside {
-    min-width: 250px;
-    border-right: 1px solid #ccc;
-    padding: 1em;
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-nav li a {
-    text-decoration: none;
-    color: #333;
+/* The form label styling */
+label {
     display: block;
-    padding: 0.5em;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Input and select element styling */
+input[type="text"], select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-sizing: border-box; /* Ensure padding doesn't make input larger than container */
+}
+
+/* Button styling */
+button {
+    background-color: #0366d6; /* A GitHub-like blue */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
     transition: background-color 0.3s;
 }
 
-nav li a:hover {
-    background-color: #f4f4f4;
+button:hover {
+    background-color: #0056b3; /* Slightly darker blue for hover effect */
 }
 
-main {
-    flex-grow: 1;
-    padding: 1em;
+/* Code preview box styling */
+.code-preview {
+    background-color: #f6f8fa; /* Lighter background */
+    border: 1px solid #e1e4e8;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: 'Courier New', Courier, monospace; /* Use a monospace font for code */
+    margin-top: 20px;
 }
 
-header h1 {
-    margin: 0;
-    padding-bottom: 1em;
-}
-
-#content {
-    padding: 1em;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}

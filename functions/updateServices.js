@@ -26,12 +26,12 @@ exports.handler = async (event) => {
 
     const updatePromises = services.map(service =>
       axios.patch(`${apiEndpoint}/${service.id}`, {
-        alert_on_add: autoAlert === 'true', // Ensure these values are parsed correctly from your form
-        auto_add_responding_team: autoAdd === 'true'
+        alert_on_add: autoAlert, // Assuming autoAlert is already a boolean
+        auto_add_responding_team: autoAdd // Assuming autoAdd is already a boolean
       }, {
         headers: { Authorization: bearerToken }
       })
-    );
+    );    
 
     const results = await Promise.allSettled(updatePromises);
 

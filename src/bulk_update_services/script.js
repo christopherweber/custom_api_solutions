@@ -2,9 +2,9 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
     e.preventDefault();
 
     const authToken = document.getElementById('authToken').value;
-    const autoAlert = document.getElementById('autoAlert').value === "true";
-    const autoAdd = document.getElementById('autoAdd').value === "true";
-
+    const autoAlert = document.getElementById('autoAlert').value.toLowerCase() === 'true';
+    const autoAdd = document.getElementById('autoAdd').value.toLowerCase() === 'true';
+    
     console.log(authToken, autoAlert, autoAdd)
     
     try {

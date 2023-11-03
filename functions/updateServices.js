@@ -33,6 +33,7 @@ exports.handler = async (event) => {
       servicesResponse = await axios.get(`${apiEndpoint}/v1/services`, {
         headers: { Authorization: bearerToken }
       });
+      console.log('API Response:', servicesResponse.data); // Log the whole response
     } catch (fetchError) {
       // Log the detailed error from fetching services
       return {
@@ -41,6 +42,18 @@ exports.handler = async (event) => {
           message: 'Failed to fetch services.',
           error: fetchError.message,
           details: fetchError.response?.data || 'No additional error information from Firehydrant API.'
+        })
+      };
+    }
+    
+    // If the response is not as expected, handle it accordingly
+    if (!Array.isArray(servicesResponse.data)) {
+      console.error('Error: Expected an array of services, received:', servicesResponse.data);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          message: 'Internal Server Error',
+          error: 'The API response is not in the expected format.'
         })
       };
     }

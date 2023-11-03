@@ -5,6 +5,8 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
     const autoAlert = document.getElementById('autoAlert').value === "true";
     const autoAdd = document.getElementById('autoAdd').value === "true";
 
+    console.log(authToken, autoAlert, autoAdd)
+    
     try {
         const response = await fetch('/.netlify/functions/updateServices', {  // Note the Netlify Functions endpoint
             method: 'POST',

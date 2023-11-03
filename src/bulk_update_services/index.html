@@ -9,13 +9,26 @@
 </head>
 
 <body>
-    <aside>
-        <!-- Scrollable side menu (example) -->
-        <ul>
-            <li><a href="#bulk-update">Bulk Update Services</a></li>
-            <!-- Add more links to other projects here -->
-        </ul>
-    </aside>
+
+
+<div id="sidebar-placeholder"></div>
+
+<script>
+  // Fetch the sidebar content and include it into the sidebar placeholder
+  fetch('/src/sidebar.html')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(data => {
+      document.getElementById('sidebar-placeholder').innerHTML = data;
+    })
+    .catch(error => {
+      console.error('Could not load sidebar:', error);
+    });
+</script>
 
     <main>
         <section id="bulk-update">

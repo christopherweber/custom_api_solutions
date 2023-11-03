@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Custom API Solutions</title>
+    <link rel="stylesheet" href="global_styles.css">
+</head>
+<body>
+
+    <!-- In your directory pages like bulk_update_services/index.html -->
+    <div id="sidebar-placeholder"></div>
+    <script>
+        // Fetch the sidebar content and include it into the sidebar placeholder
+        fetch('/src/sidebar.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('sidebar-placeholder').innerHTML = data;
+          })
+          .catch(error => {
+            console.error('Could not load sidebar:', error);
+          });
+      </script>
+
+
+    <main>
+        <header>
+            <h1>Welcome to Custom API Solutions</h1>
+        </header>
+        <section id="content">
+            <p>Select a service from the sidebar to get started.</p>
+        </section>
+    </main>
+
+    <script src="global_script.js"></script>
+</body>
+</html>

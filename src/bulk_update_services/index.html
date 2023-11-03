@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulk Update All Services</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Bulk Update Services</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
-
 <body>
     <aside>
-        <!-- Scrollable side menu (example) -->
-        <ul>
-            <li><a href="#bulk-update">Bulk Update All Services</a></li>
-            <!-- Add more links to other projects here -->
-        </ul>
+        <!-- Back to home link -->
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+            </ul>
+        </nav>
     </aside>
 
     <main>
@@ -22,24 +21,25 @@
             <h2>Bulk Update All Services</h2>
             <form id="bulkUpdateForm">
                 <label for="authToken">Authorization Token:</label>
-                <input type="text" id="authToken" required>
+                <input type="text" id="authToken" name="authToken" required>
                 
                 <div class="expandable-field">
                     <button type="button" onclick="toggleExpandableFields()">+</button>
-                    <div class="fields">
+                    <div class="fields" style="display: none;">
                         <label for="autoAlert">Auto Alert Responding Team:</label>
-                        <select id="autoAlert">
+                        <select id="autoAlert" name="autoAlert">
                             <option value="true">True</option>
                             <option value="false">False</option>
                         </select>
 
                         <label for="autoAdd">Auto Add Responding Team:</label>
-                        <select id="autoAdd">
+                        <select id="autoAdd" name="autoAdd">
                             <option value="true">True</option>
                             <option value="false">False</option>
                         </select>
                     </div>
                 </div>
+
                 <button type="submit">Submit</button>
             </form>
         </section>
@@ -47,5 +47,4 @@
 
     <script src="script.js"></script>
 </body>
-
 </html>

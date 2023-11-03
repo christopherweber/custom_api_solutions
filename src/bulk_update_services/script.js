@@ -6,7 +6,7 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
     const autoAdd = document.getElementById('autoAdd').value === "true";
 
     try {
-        const response = await fetch('https://5775d63d1acd.ngrok.app/update-services', {
+        const response = await fetch('/.netlify/functions/updateServices', {  // Note the Netlify Functions endpoint
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -32,6 +32,6 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
 });
 
 function toggleExpandableFields() {
-    const fields = document.querySelector('.expandable-fields');
+    const fields = document.querySelector('.expandable-field .fields');
     fields.style.display = fields.style.display === 'none' ? 'block' : 'none';
 }

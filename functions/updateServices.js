@@ -1,40 +1,48 @@
-// /functions/updateServices.js
+// Import axios for making HTTP requests
 const axios = require('axios');
 
-exports.handler = async (event, context) => {
-  // Make sure we are dealing with a POST request
+exports.handler = async (event) => {
+  // Only allow POST
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
-      body: 'Method Not Allowed',
-      headers: { 'Allow': 'POST' },
+      body: JSON.stringify({ message: 'Method Not Allowed' })
     };
   }
 
   const { authToken, autoAlert, autoAdd } = JSON.parse(event.body);
 
   try {
-    // Perform the GET request to retrieve services
+    // Get all services
     const servicesResponse = await axios.get('https://api.firehydrant.io/v1/services', {
-      headers: { 'Authorization': `Bearer ${authToken}` }
+      headers: { Authorization: `Bearer ${authToken}` }
     });
 
-    // ... Rest of your logic to update each service ...
+    // Loop through services and update them
+    const updatePromises = servicesResponse.data.map((service) => {
+      return axios.patch(`https://api.firehydrant.io/v1/services/${service.id}`, {
+        alert_on_add: autoAlert,
+        auto_add_responding_team: autoAdd
+      }, {
+        headers: { Authorization: `Bearer ${authToken}` }
+      });
+    });
 
-    // Example of updating a service, you would loop over all services
-    // const serviceUpdateResponse = await axios.patch(`https://api.firehydrant.io/v1/services/${serviceId}`, updateData, {
-    //   headers: { 'Authorization': `Bearer ${authToken}` }
-    // });
+    // Wait for all updates to complete
+    await Promise.all(updatePromises);
 
-    // After all updates are done, send back a success response
+    // Return a success response
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Services updated successfully' }),
+      body: JSON.stringify({ success: true })
     };
   } catch (error) {
+    console.error('Error updating services:', error);
+
+    // Return an error response
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to update services' }),
+      statusCode: error.response?.status || 500,
+      body: JSON.stringify({ success: false, error: error.message })
     };
   }
 };

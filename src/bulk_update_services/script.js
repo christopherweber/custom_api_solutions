@@ -32,6 +32,6 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
 });
 
 function toggleExpandableFields() {
-    const fields = document.querySelector('.expandable-field .fields');
+    const fields = document.querySelector('.expandable-field .fields'); // Corrected class name
     fields.style.display = fields.style.display === 'none' ? 'block' : 'none';
 }

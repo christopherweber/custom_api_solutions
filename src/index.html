@@ -10,23 +10,25 @@
 
     <!-- In your directory pages like bulk_update_services/index.html -->
     <div id="sidebar-placeholder"></div>
-    <script>
-        // Fetch the sidebar content and include it into the sidebar placeholder
-        fetch('/src/sidebar.html')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.text();
-          })
-          .then(data => {
-            document.getElementById('sidebar-placeholder').innerHTML = data;
-          })
-          .catch(error => {
-            console.error('Could not load sidebar:', error);
-          });
-      </script>
 
+    <script>
+      // Fetch the sidebar content and include it into the sidebar placeholder
+      fetch('sidebar.html') // Adjusted path, assuming the server serves from `src` as root
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok - status: ' + response.status);
+          }
+          return response.text();
+        })
+        .then(data => {
+          document.getElementById('sidebar-placeholder').innerHTML = data;
+        })
+        .catch(error => {
+          console.error('Could not load sidebar:', error);
+        });
+      
+      </script>
+      
 
     <main>
         <header>

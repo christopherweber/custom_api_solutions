@@ -16,11 +16,8 @@ exports.handler = async (event) => {
       headers: { Authorization: bearerToken }
     });
 
-    // Log the full services response data to debug the structure
-    console.log('Services response data:', JSON.stringify(servicesResponse.data, null, 2));
-
-    // Ensure to adjust this line based on the actual structure you find in the logs
-    const services = servicesResponse.data.items || servicesResponse.data.services;
+    // Since the response structure is directly an array of services, we extract it like this
+    const services = servicesResponse.data;
 
     if (!Array.isArray(services)) {
       throw new Error('Expected services to be an array');
@@ -38,12 +35,12 @@ exports.handler = async (event) => {
 
     // Wait for all the update promises to settle
     const results = await Promise.allSettled(updatePromises);
-    const success = results.filter(result => result.status === 'fulfilled');
+    const successes = results.filter(result => result.status === 'fulfilled');
 
     // Return success response
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, updated: success.length })
+      body: JSON.stringify({ success: true, updated: successes.length })
     };
   } catch (error) {
     // Log the error details

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulk Update Services</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
 
 <script>
 // Fetch the sidebar content and include it into the sidebar placeholder
-fetch('sidebar.html') // Adjusted path, assuming the server serves from `src` as root
+fetch('../sidebar.html') // Adjusted path, assuming the server serves from `src` as root
   .then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok - status: ' + response.status);

@@ -90,8 +90,8 @@ function updateCodeSnippets() {
     async function updateServices() {
       // These values are dynamically set from the form inputs
       const authToken = '${authToken}';
-      const autoAlert = ${autoAlert === 'true'};
-      const autoAdd = ${autoAdd === 'true'};
+      const autoAlert = ${autoAlert};
+      const autoAdd = ${autoAdd};
     
       // Rest of the Node.js code
       try {

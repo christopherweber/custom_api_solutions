@@ -148,5 +148,47 @@ fetch('../sidebar.html') // Adjusted path, assuming the server serves from `src`
   });
 </script>
 <script src="script.js"></script>
+<script>
+    // Function to update the code snippet based on the form inputs
+    function updateCodeSnippet() {
+      // Get the current values from the form inputs
+      const authToken = document.getElementById('authToken').value;
+      const autoAlert = document.getElementById('autoAlert').value;
+      const autoAdd = document.getElementById('autoAdd').value;
+    
+      // Generate the updated code snippet
+      const code = `const axios = require('axios');
+    // ... other code ...
+    const authToken = '${authToken}';
+    const autoAlert = ${autoAlert};
+    const autoAdd = ${autoAdd};
+    // ... rest of your Node.js script`;
+    
+      // Set the text content of the pre element to the new code snippet
+      document.getElementById('codeSnippetNodeJs').textContent = code;
+    }
+    
+    // Attach event listeners to form elements to update the code snippet as the user types
+    document.getElementById('authToken').addEventListener('input', updateCodeSnippet);
+    document.getElementById('autoAlert').addEventListener('change', updateCodeSnippet);
+    document.getElementById('autoAdd').addEventListener('change', updateCodeSnippet);
+    
+    // Function to handle form submission
+    function handleSubmit(event) {
+      event.preventDefault(); // Prevent default form submission
+      updateCodeSnippet(); // Update the code snippet
+      // Clear the form fields
+      document.getElementById('authToken').value = '';
+      document.getElementById('autoAlert').selectedIndex = 0;
+      document.getElementById('autoAdd').selectedIndex = 0;
+    }
+    
+    // Attach the submit event listener to the form
+    document.getElementById('bulkUpdateForm').addEventListener('submit', handleSubmit);
+    
+    // Initialize the code snippet on page load
+    updateCodeSnippet();
+    </script>
+    
 </body>
 </html>

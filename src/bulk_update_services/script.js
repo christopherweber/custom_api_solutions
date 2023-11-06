@@ -60,87 +60,107 @@ document.getElementById('btnPython').addEventListener('click', function() {
   toggleCodeSnippet('codeSnippetPython');
 });
 
+function toggleCodeSnippet(id) {
+  document.querySelectorAll('.code-snippet').forEach(function(snippet) {
+    snippet.style.display = 'none';
+  });
+  document.getElementById(id).style.display = 'block';
+}
+
 function updateCodeSnippets() {
     // Fetch values from the form elements
     const authToken = document.getElementById('authToken').value;
-    const autoAlert = document.getElementById('autoAlert').value;
-    const autoAdd = document.getElementById('autoAdd').value;
+    // Since autoAlert and autoAdd are now selects, we use .value
+    const autoAlert = document.getElementById('autoAlert').value === 'true';
+    const autoAdd = document.getElementById('autoAdd').value === 'true';
   
-    // Generate the updated Node.js code snippet including the dynamic parts
     const nodeSnippet = `const axios = require('axios');
-  const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  
-  // Function to prompt for user input
-  function prompt(query) {
-    return new Promise((resolve) => {
-      readline.question(query, resolve);
+    const readline = require('readline').createInterface({
+      input: process.stdin,
+      output: process.stdout
     });
-  }
-  
-  async function updateServices() {
-    // These values are dynamically set from the form inputs
-    const authToken = '${authToken}';
-    const autoAlert = ${autoAlert === 'true'};
-    const autoAdd = ${autoAdd === 'true'};
-  
-    // Rest of the Node.js code
-    try {
-      const apiEndpoint = 'https://api.firehydrant.io/v1/services';
-      const bearerToken = \`Bearer \${authToken}\`;
-  
-      const servicesResponse = await axios.get(apiEndpoint, {
-        headers: { Authorization: bearerToken }
+    
+    // Function to prompt for user input
+    function prompt(query) {
+      return new Promise((resolve) => {
+        readline.question(query, resolve);
       });
-      console.log('Services response data:', servicesResponse.data);
-      
-      const services = servicesResponse.data.data; 
-      if (!Array.isArray(services)) {
-        throw new Error('Expected services to be an array');
-      }
-  
-      const updatePromises = services.map(service =>
-        axios.patch(\`\${apiEndpoint}/\${service.id}\`, {
-          alert_on_add: autoAlert,
-          auto_add_responding_team: autoAdd
-        }, {
-          headers: { Authorization: bearerToken }
-        })
-      );
-  
-      const results = await Promise.allSettled(updatePromises);
-      results.forEach(result => {
-        if (result.status === 'fulfilled') {
-          console.log('Update success for service:', result.value.data);
-        } else {
-          console.error('Update failed for service:', result.reason);
-        }
-      });
-  
-      const successes = results.filter(result => result.status === 'fulfilled');
-      console.log(\`Services updated successfully: \${successes.length}\`);
-      
-    } catch (error) {
-      console.error('Error details:', error.response?.data || error.message);
-    } finally {
-      readline.close();
     }
-  }
+    
+    async function updateServices() {
+      // These values are dynamically set from the form inputs
+      const authToken = '${authToken}';
+      const autoAlert = ${autoAlert === 'true'};
+      const autoAdd = ${autoAdd === 'true'};
+    
+      // Rest of the Node.js code
+      try {
+        const apiEndpoint = 'https://api.firehydrant.io/v1/services';
+        const bearerToken = \`Bearer \${authToken}\`;
+    
+        const servicesResponse = await axios.get(apiEndpoint, {
+          headers: { Authorization: bearerToken }
+        });
+        console.log('Services response data:', servicesResponse.data);
+        
+        const services = servicesResponse.data.data; 
+        if (!Array.isArray(services)) {
+          throw new Error('Expected services to be an array');
+        }
+    
+        const updatePromises = services.map(service =>
+          axios.patch(\`\${apiEndpoint}/\${service.id}\`, {
+            alert_on_add: autoAlert,
+            auto_add_responding_team: autoAdd
+          }, {
+            headers: { Authorization: bearerToken }
+          })
+        );
+    
+        const results = await Promise.allSettled(updatePromises);
+        results.forEach(result => {
+          if (result.status === 'fulfilled') {
+            console.log('Update success for service:', result.value.data);
+          } else {
+            console.error('Update failed for service:', result.reason);
+          }
+        });
+    
+        const successes = results.filter(result => result.status === 'fulfilled');
+        console.log(\`Services updated successfully: \${successes.length}\`);
+        
+      } catch (error) {
+        console.error('Error details:', error.response?.data || error.message);
+      } finally {
+        readline.close();
+      }
+    }
+    
+    updateServices();`;
   
-  updateServices();`;
-  
-    // Insert the Node.js snippet into the HTML element
+    // Update Node.js snippet
     document.getElementById('codeSnippetNodeJs').textContent = nodeSnippet;
+    
+    // If you have a Python snippet that needs updating, add similar logic for it here
+    // ...
+  
   }
   
-  // Event listeners for the form elements to update the code snippet as the user types or selects values
+  // Event listeners for form elements to update the code snippets as the user interacts with the form
   document.getElementById('authToken').addEventListener('input', updateCodeSnippets);
   document.getElementById('autoAlert').addEventListener('change', updateCodeSnippets);
   document.getElementById('autoAdd').addEventListener('change', updateCodeSnippets);
   
-  // Initialize the code snippet on page load
+  // Initialize the code snippets on page load
   document.addEventListener('DOMContentLoaded', updateCodeSnippets);
   
+  // Function to handle form submission
+  function handleSubmit(event) {
+    event.preventDefault(); // Prevent the default form submission
+    updateCodeSnippets();   // Update the code snippets with current form data
+    // Consider if you want to clear the form here or not after submission
+  }
+  
+  // Attach the submit event listener to the form
+  document.getElementById('bulkUpdateForm').addEventListener('submit', handleSubmit);
   

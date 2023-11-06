@@ -53,70 +53,6 @@
             <button id="btnNodeJs">Node.js</button>
             <button id="btnPython">Python</button>
             <pre id="codeSnippetNodeJs" class="code-snippet" style="display:none;"><code>
-                const axios = require('axios');
-                const readline = require('readline').createInterface({
-                  input: process.stdin,
-                  output: process.stdout
-                });
-                
-                // Function to prompt for user input
-                function prompt(query) {
-                  return new Promise((resolve) => {
-                    readline.question(query, resolve);
-                  });
-                }
-                
-                async function updateServices() {
-                  try {
-                    const authToken = await prompt('Enter Authorization Token: ');
-                    const autoAlertInput = await prompt('Auto Alert Responding Team (true/false): ');
-                    const autoAddInput = await prompt('Auto Add Responding Team (true/false): ');
-                    
-                    const autoAlert = autoAlertInput.toLowerCase() === 'true';
-                    const autoAdd = autoAddInput.toLowerCase() === 'true';
-                
-                    const apiEndpoint = 'https://api.firehydrant.io/v1/services';
-                    const bearerToken = `Bearer ${authToken}`;
-                
-                    const servicesResponse = await axios.get(apiEndpoint, {
-                      headers: { Authorization: bearerToken }
-                    });
-                    console.log('Services response data:', servicesResponse.data);
-                    
-                    const services = servicesResponse.data.data; 
-                    if (!Array.isArray(services)) {
-                      throw new Error('Expected services to be an array');
-                    }
-                
-                    const updatePromises = services.map(service =>
-                      axios.patch(`${apiEndpoint}/${service.id}`, {
-                        alert_on_add: autoAlert,
-                        auto_add_responding_team: autoAdd
-                      }, {
-                        headers: { Authorization: bearerToken }
-                      })
-                    );
-                
-                    const results = await Promise.allSettled(updatePromises);
-                    results.forEach(result => {
-                      if (result.status === 'fulfilled') {
-                        console.log('Update success for service:', result.value.data);
-                      } else {
-                        console.error('Update failed for service:', result.reason);
-                      }
-                    });
-                
-                    const successes = results.filter(result => result.status === 'fulfilled');
-                    console.log(`Services updated successfully: ${successes.length}`);
-                    
-                  } catch (error) {
-                    console.error('Error details:', error.response?.data || error.message);
-                  } finally {
-                    readline.close();
-                  }
-                }
-                
-                updateServices();
             </code></pre>
             <pre id="codeSnippetPython" class="code-snippet" style="display:none;"></pre>
         </div>
@@ -127,7 +63,70 @@
       <h2>Node.js Code Snippet</h2>
       <button onclick="copyToClipboard('nodeSnippet')">Copy to Clipboard</button>
       <pre id="nodeSnippet"><code>
-// (Your Node.js snippet code here)
+        const axios = require('axios');
+        const readline = require('readline').createInterface({
+          input: process.stdin,
+          output: process.stdout
+        });
+        
+        // Function to prompt for user input
+        function prompt(query) {
+          return new Promise((resolve) => {
+            readline.question(query, resolve);
+          });
+        }
+        
+        async function updateServices() {
+          try {
+            const authToken = await prompt('Enter Authorization Token: ');
+            const autoAlertInput = await prompt('Auto Alert Responding Team (true/false): ');
+            const autoAddInput = await prompt('Auto Add Responding Team (true/false): ');
+            
+            const autoAlert = autoAlertInput.toLowerCase() === 'true';
+            const autoAdd = autoAddInput.toLowerCase() === 'true';
+        
+            const apiEndpoint = 'https://api.firehydrant.io/v1/services';
+            const bearerToken = `Bearer ${authToken}`;
+        
+            const servicesResponse = await axios.get(apiEndpoint, {
+              headers: { Authorization: bearerToken }
+            });
+            console.log('Services response data:', servicesResponse.data);
+            
+            const services = servicesResponse.data.data; 
+            if (!Array.isArray(services)) {
+              throw new Error('Expected services to be an array');
+            }
+        
+            const updatePromises = services.map(service =>
+              axios.patch(`${apiEndpoint}/${service.id}`, {
+                alert_on_add: autoAlert,
+                auto_add_responding_team: autoAdd
+              }, {
+                headers: { Authorization: bearerToken }
+              })
+            );
+        
+            const results = await Promise.allSettled(updatePromises);
+            results.forEach(result => {
+              if (result.status === 'fulfilled') {
+                console.log('Update success for service:', result.value.data);
+              } else {
+                console.error('Update failed for service:', result.reason);
+              }
+            });
+        
+            const successes = results.filter(result => result.status === 'fulfilled');
+            console.log(`Services updated successfully: ${successes.length}`);
+            
+          } catch (error) {
+            console.error('Error details:', error.response?.data || error.message);
+          } finally {
+            readline.close();
+          }
+        }
+        
+        updateServices();
       </code></pre>
     </section>
 </main>

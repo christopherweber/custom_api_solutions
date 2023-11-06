@@ -11,8 +11,9 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
     e.preventDefault();
 
     const authToken = document.getElementById('authToken').value;
-    const autoAlert = document.getElementById('autoAlert').value.toLowerCase() === 'true';
-    const autoAdd = document.getElementById('autoAdd').value.toLowerCase() === 'true';
+    // Parse the boolean values directly from the form inputs
+    const autoAlert = document.getElementById('autoAlert').checked;
+    const autoAdd = document.getElementById('autoAdd').checked;
 
     try {
         const response = await fetch('/.netlify/functions/updateServices', {
@@ -67,23 +68,24 @@ function toggleCodeSnippet(id) {
 }
 
 function updateCodeSnippets() {
+  // Fetch values directly as boolean from the checkboxes
   const authToken = document.getElementById('authToken').value;
-  const autoAlert = document.getElementById('autoAlert').value;
-  const autoAdd = document.getElementById('autoAdd').value;
+  const autoAlert = document.getElementById('autoAlert').checked;
+  const autoAdd = document.getElementById('autoAdd').checked;
 
   const nodeSnippet = `// Node.js code
 const fetch = require('node-fetch');
 const authToken = '${authToken}';
-const autoAlert = ${autoAlert === 'true'};
-const autoAdd = ${autoAdd === 'true'};
+const autoAlert = ${autoAlert};
+const autoAdd = ${autoAdd};
 
 // Add the rest of the Node.js logic here`;
 
   const pythonSnippet = `# Python code
 import requests
 auth_token = '${authToken}'
-auto_alert = ${autoAlert.title()}
-auto_add = ${autoAdd.title()}
+auto_alert = ${autoAlert}
+auto_add = ${autoAdd}
 
 # Add the rest of the Python logic here`;
 

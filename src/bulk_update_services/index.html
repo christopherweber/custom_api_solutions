@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulk Update Services & Code Snippet Example</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script> <!-- Ensure script.js is included at the end of the body -->
     <script>
       // Function to copy text from the preformatted block
       function copyToClipboard(id) {
@@ -58,137 +59,9 @@
         </div>
     </section>
 
-    <!-- Include your Node.js Code Snippet section here -->
-    <section>
-      <h2>Node.js Code Snippet</h2>
-      <button onclick="copyToClipboard('nodeSnippet')">Copy to Clipboard</button>
-      <pre id="nodeSnippet"><code>
-        const axios = require('axios');
-        const readline = require('readline').createInterface({
-          input: process.stdin,
-          output: process.stdout
-        });
-        
-        // Function to prompt for user input
-        function prompt(query) {
-          return new Promise((resolve) => {
-            readline.question(query, resolve);
-          });
-        }
-        
-        async function updateServices() {
-          try {
-            const authToken = await prompt('Enter Authorization Token: ');
-            const autoAlertInput = await prompt('Auto Alert Responding Team (true/false): ');
-            const autoAddInput = await prompt('Auto Add Responding Team (true/false): ');
-            
-            const autoAlert = autoAlertInput.toLowerCase() === 'true';
-            const autoAdd = autoAddInput.toLowerCase() === 'true';
-        
-            const apiEndpoint = 'https://api.firehydrant.io/v1/services';
-            const bearerToken = `Bearer ${authToken}`;
-        
-            const servicesResponse = await axios.get(apiEndpoint, {
-              headers: { Authorization: bearerToken }
-            });
-            console.log('Services response data:', servicesResponse.data);
-            
-            const services = servicesResponse.data.data; 
-            if (!Array.isArray(services)) {
-              throw new Error('Expected services to be an array');
-            }
-        
-            const updatePromises = services.map(service =>
-              axios.patch(`${apiEndpoint}/${service.id}`, {
-                alert_on_add: autoAlert,
-                auto_add_responding_team: autoAdd
-              }, {
-                headers: { Authorization: bearerToken }
-              })
-            );
-        
-            const results = await Promise.allSettled(updatePromises);
-            results.forEach(result => {
-              if (result.status === 'fulfilled') {
-                console.log('Update success for service:', result.value.data);
-              } else {
-                console.error('Update failed for service:', result.reason);
-              }
-            });
-        
-            const successes = results.filter(result => result.status === 'fulfilled');
-            console.log(`Services updated successfully: ${successes.length}`);
-            
-          } catch (error) {
-            console.error('Error details:', error.response?.data || error.message);
-          } finally {
-            readline.close();
-          }
-        }
-        
-        updateServices();
-      </code></pre>
-    </section>
+    <!-- Node.js Code Snippet section is no longer needed directly in HTML due to script.js logic -->
 </main>
 
-<script>
-// Fetch the sidebar content and include it into the sidebar placeholder
-fetch('../sidebar.html') // Adjusted path, assuming the server serves from `src` as root
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok - status: ' + response.status);
-    }
-    return response.text();
-  })
-  .then(data => {
-    document.getElementById('sidebar-placeholder').innerHTML = data;
-  })
-  .catch(error => {
-    console.error('Could not load sidebar:', error);
-  });
-</script>
-<script src="script.js"></script>
-<script>
-    // Function to update the code snippet based on the form inputs
-    function updateCodeSnippet() {
-      // Get the current values from the form inputs
-      const authToken = document.getElementById('authToken').value;
-      const autoAlert = document.getElementById('autoAlert').value;
-      const autoAdd = document.getElementById('autoAdd').value;
-    
-      // Generate the updated code snippet
-      const code = `const axios = require('axios');
-    // ... other code ...
-    const authToken = '${authToken}';
-    const autoAlert = ${autoAlert};
-    const autoAdd = ${autoAdd};
-    // ... rest of your Node.js script`;
-    
-      // Set the text content of the pre element to the new code snippet
-      document.getElementById('codeSnippetNodeJs').textContent = code;
-    }
-    
-    // Attach event listeners to form elements to update the code snippet as the user types
-    document.getElementById('authToken').addEventListener('input', updateCodeSnippet);
-    document.getElementById('autoAlert').addEventListener('change', updateCodeSnippet);
-    document.getElementById('autoAdd').addEventListener('change', updateCodeSnippet);
-    
-    // Function to handle form submission
-    function handleSubmit(event) {
-      event.preventDefault(); // Prevent default form submission
-      updateCodeSnippet(); // Update the code snippet
-      // Clear the form fields
-      document.getElementById('authToken').value = '';
-      document.getElementById('autoAlert').selectedIndex = 0;
-      document.getElementById('autoAdd').selectedIndex = 0;
-    }
-    
-    // Attach the submit event listener to the form
-    document.getElementById('bulkUpdateForm').addEventListener('submit', handleSubmit);
-    
-    // Initialize the code snippet on page load
-    updateCodeSnippet();
-    </script>
-    
+<!-- Removed inline script tag for sidebar fetching and handling form submission because script.js handles this logic -->
 </body>
 </html>

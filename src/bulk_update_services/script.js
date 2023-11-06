@@ -68,28 +68,43 @@ function toggleCodeSnippet(id) {
 }
 
 function updateCodeSnippets() {
-  // Fetch values directly as boolean from the checkboxes
-  const authToken = document.getElementById('authToken').value;
-  const autoAlert = document.getElementById('autoAlert').checked;
-  const autoAdd = document.getElementById('autoAdd').checked;
-
-  const nodeSnippet = `// Node.js code
-const fetch = require('node-fetch');
-const authToken = '${authToken}';
-const autoAlert = ${autoAlert};
-const autoAdd = ${autoAdd};
-
-// Add the rest of the Node.js logic here`;
-
-  const pythonSnippet = `# Python code
-import requests
-auth_token = '${authToken}'
-auto_alert = ${autoAlert}
-auto_add = ${autoAdd}
-
-# Add the rest of the Python logic here`;
-
-  // Insert the snippets into the HTML elements
-  document.getElementById('codeSnippetNodeJs').textContent = nodeSnippet;
-  document.getElementById('codeSnippetPython').textContent = pythonSnippet;
-}
+    // Fetch values from the form elements
+    const authToken = document.getElementById('authToken').value;
+    // Since autoAlert and autoAdd are now selects, we use .value
+    const autoAlert = document.getElementById('autoAlert').value === 'true';
+    const autoAdd = document.getElementById('autoAdd').value === 'true';
+  
+    const nodeSnippet = `// Node.js code
+  const axios = require('axios');
+  const authToken = '${authToken}';
+  const autoAlert = ${autoAlert};
+  const autoAdd = ${autoAdd};
+  
+  // Add the rest of the Node.js logic here`;
+  
+    // Update Node.js snippet
+    document.getElementById('codeSnippetNodeJs').textContent = nodeSnippet;
+    
+    // If you have a Python snippet that needs updating, add similar logic for it here
+    // ...
+  
+  }
+  
+  // Event listeners for form elements to update the code snippets as the user interacts with the form
+  document.getElementById('authToken').addEventListener('input', updateCodeSnippets);
+  document.getElementById('autoAlert').addEventListener('change', updateCodeSnippets);
+  document.getElementById('autoAdd').addEventListener('change', updateCodeSnippets);
+  
+  // Initialize the code snippets on page load
+  document.addEventListener('DOMContentLoaded', updateCodeSnippets);
+  
+  // Function to handle form submission
+  function handleSubmit(event) {
+    event.preventDefault(); // Prevent the default form submission
+    updateCodeSnippets();   // Update the code snippets with current form data
+    // Consider if you want to clear the form here or not after submission
+  }
+  
+  // Attach the submit event listener to the form
+  document.getElementById('bulkUpdateForm').addEventListener('submit', handleSubmit);
+  

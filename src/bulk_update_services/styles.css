@@ -13,6 +13,7 @@ aside {
 }
 
 main {
+    margin-left: 22%;
     padding: 20px;
 }
 
@@ -22,9 +23,6 @@ main {
   
   #bulk-update form {
     margin-top: 10px; 
-    margin-left: 0; /* Ensure the form also starts at the left edge */
-    margin-right: 0; /* Ensure the form does not center */
-    /* Rest of your form styles */
   }
   
 
@@ -107,6 +105,7 @@ form {
   #bulk-update button:hover {
     background: #0056b3;
   }
+
   
 
 .snippet-container {

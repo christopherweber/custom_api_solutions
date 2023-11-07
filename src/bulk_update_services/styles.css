@@ -17,6 +17,64 @@ main {
     padding: 20px;
 }
 
+form {
+    max-width: 400px; /* Adjust the width as needed */
+    margin: 20px auto;
+    padding: 15px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Input and select fields */
+  form input[type="text"],
+  form select {
+    width: 100%; /* Full width */
+    padding: 8px;
+    margin-bottom: 10px; /* Space between fields */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding and border in the width */
+  }
+  
+  /* Labels */
+  form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #333;
+  }
+  
+  /* Buttons */
+  form button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  form button:hover {
+    background-color: #0056b3;
+  }
+
+.expandable-field button {
+    /* Styling similar to the main form buttons */
+    background: none;
+    color: #007bff;
+    font-size: 1.2em;
+  }
+  
+  /* Styles for the additional fields */
+  .fields {
+    border-top: 1px solid #eee; /* A subtle line to separate additional fields */
+    padding-top: 10px; /* Space between the toggle button and fields */
+    margin-top: 10px; /* Space above the separator line */
+  }
+
 .expandable-field .fields {
     display: none;
 }

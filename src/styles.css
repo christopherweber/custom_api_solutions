@@ -43,8 +43,8 @@ nav li a:hover {
 }
 
 main {
-    flex-grow: 1;
-    padding: 1em;
+    margin-left: 22%;
+    padding: 20px;
 }
 
 header h1 {

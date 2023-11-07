@@ -25,14 +25,15 @@ exports.handler = async (event) => {
       throw new Error('Expected services to be an array');
     }
 
-    const updatePromises = services.map(service =>
-      axios.patch(`${apiEndpoint}/${service.id}`, {
-        alert_on_add: autoAlert, // Assuming autoAlert is already a boolean
-        auto_add_responding_team: autoAdd // Assuming autoAdd is already a boolean
+    const updatePromises = services.map(service => {
+      console.log('Sending update for service:', service.id, { autoAlert, autoAdd });
+      return axios.patch(`${apiEndpoint}/${service.id}`, {
+        alert_on_add: autoAlert,
+        auto_add_responding_team: autoAdd
       }, {
         headers: { Authorization: bearerToken }
-      })
-    );    
+      });
+    });
 
     const results = await Promise.allSettled(updatePromises);
 

@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulk Update Services & Code Snippet Example</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <script src="script.js" defer></script> <!-- Ensure script.js is included at the end of the body -->
     <script>
+      // Function to copy text from the preformatted block
       function copyToClipboard(id) {
         const str = document.getElementById(id).innerText;
         const el = document.createElement('textarea');
@@ -24,33 +25,32 @@
 <div id="sidebar-placeholder"></div>
 
 <main>
-    <div class="content-wrapper">
-        <section id="bulk-update">
-            <h2>Bulk Update Services</h2>
-            <form id="bulkUpdateForm">
-                <label for="authToken">Authorization Token:</label>
-                <input type="text" id="authToken" required>
-                
-                <div class="expandable-field">
-                    <button type="button" onclick="toggleExpandableFields()">+</button><span>Add automation</span>
-                    <div class="fields" style="display: none;">
-                        <label for="autoAlert">Auto Alert Responding Team:</label>
-                        <select id="autoAlert">
-                            <option value="true">True</option>
-                            <option value="false">False</option>
-                        </select>
+    <section id="bulk-update">
+        <h2>Bulk Update Services</h2>
+        <form id="bulkUpdateForm">
+            <label for="authToken">Authorization Token:</label>
+            <input type="text" id="authToken" required>
+            
+            <div class="expandable-field">
+                <button type="button" onclick="toggleExpandableFields()">+</button><span>Add automation</span>
+                <div class="fields" style="display: none;">
+                    <label for="autoAlert">Auto Alert Responding Team:</label>
+                    <select id="autoAlert">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
 
-                        <label for="autoAdd">Auto Add Responding Team:</label>
-                        <select id="autoAdd">
-                            <option value="true">True</option>
-                            <option value="false">False</option>
-                        </select>
-                    </div>
+                    <label for="autoAdd">Auto Add Responding Team:</label>
+                    <select id="autoAdd">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
                 </div>
-                <button type="submit">Submit</button>
-            </form>
-        </section>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
 
+        <!-- Code snippets toggle box -->
         <div class="code-snippets">
             <div class="button-container">
                 <button id="btnNodeJs">Node / Axios</button>
@@ -71,8 +71,10 @@
                 </code></pre>
             </div>
         </div>
-    </div>
+    </section>
 </main>
 
+
+<!-- Removed inline script tag for sidebar fetching and handling form submission because script.js handles this logic -->
 </body>
 </html>

@@ -52,9 +52,11 @@
 
         <!-- Code snippets toggle box -->
         <div class="code-snippets">
-            <button id="btnNodeJs">Node.js</button>
-            <button id="btnPython">Python</button>
-            
+            <div class="button-container">
+                <button id="btnNodeJs">Node / Axios</button>
+                <button id="btnPython">Python</button>
+            </div>
+
             <div id="nodeJsSnippetContainer" class="snippet-container" style="display:none;">
                 <button class="copy-btn" onclick="copyToClipboard('codeSnippetNodeJs')">Copy Code</button>
                 <pre id="codeSnippetNodeJs" class="code-snippet"><code>

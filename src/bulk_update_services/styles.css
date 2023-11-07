@@ -17,6 +17,15 @@ main {
     padding: 20px;
 }
 
+#bulk-update h2 {
+    margin-bottom: 0;
+  }
+  
+  #bulk-update form {
+    margin-top: 10px; 
+  }
+  
+
 form {
     max-width: 400px; /* Adjust the width as needed */
     margin: 20px auto;
@@ -78,6 +87,25 @@ form {
 .expandable-field .fields {
     display: none;
 }
+
+/* Button styling */
+#bulk-update button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Adjust font size as needed */
+    text-align: center;
+    display: inline-block; /* To align buttons side by side */
+    margin-right: 10px; /* Space between buttons */
+  }
+  
+  #bulk-update button:hover {
+    background: #0056b3;
+  }
+  
 
 .snippet-container {
     background-color: #f5f5f5; /* Light gray background */

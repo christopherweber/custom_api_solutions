@@ -52,17 +52,22 @@
 
         <!-- Code snippets toggle box -->
         <div class="code-snippets">
-            <div id="copyMessage" style="display: none; color: green; /* other styling */">Code snippet copied to clipboard!</div>
             <button id="btnNodeJs">Node.js</button>
             <button id="btnPython">Python</button>
-
-            <div class="snippet-container">
-                <pre id="codeSnippetNodeJs" class="code-snippet" style="display:none;"></pre>
+            
+            <!-- Node.js code snippet and copy button -->
+            <div id="nodeJsSnippetContainer" style="display:none;">
+                <pre id="codeSnippetNodeJs" class="code-snippet"><code>
+                    // Node.js code here
+                </code></pre>
                 <button onclick="copyToClipboard('codeSnippetNodeJs')">Copy Node.js Snippet</button>
             </div>
             
-            <div class="snippet-container">
-                <pre id="codeSnippetPython" class="code-snippet" style="display:none;"></pre>
+            <!-- Python code snippet and copy button -->
+            <div id="pythonSnippetContainer" style="display:none;">
+                <pre id="codeSnippetPython" class="code-snippet"><code>
+                    // Python code here
+                </code></pre>
                 <button onclick="copyToClipboard('codeSnippetPython')">Copy Python Snippet</button>
             </div>
         </div>

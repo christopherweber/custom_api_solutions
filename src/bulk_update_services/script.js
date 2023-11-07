@@ -241,6 +241,19 @@ function updateCodeSnippets() {
     }
   }
   
+  function showNodeJsSnippet() {
+    document.getElementById('nodeJsSnippetContainer').style.display = 'block';
+    document.getElementById('pythonSnippetContainer').style.display = 'none';
+  }
+  
+  function showPythonSnippet() {
+    document.getElementById('nodeJsSnippetContainer').style.display = 'none';
+    document.getElementById('pythonSnippetContainer').style.display = 'block';
+  }
+  
+  // Update the existing event listeners
+  document.getElementById('btnNodeJs').addEventListener('click', showNodeJsSnippet);
+  document.getElementById('btnPython').addEventListener('click', showPythonSnippet);
   
   // Attach the submit event listener to the form
   document.getElementById('bulkUpdateForm').addEventListener('submit', handleSubmit);

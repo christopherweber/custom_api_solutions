@@ -21,3 +21,35 @@ main {
     display: none;
 }
 
+.snippet-container {
+    background-color: #f5f5f5; /* Light gray background */
+    border: 1px solid #ddd; /* Optional border */
+    border-radius: 4px; /* Rounded corners */
+    position: relative; /* Allows absolute positioning inside */
+    padding: 20px; /* Give some spacing inside the container */
+    margin-top: 10px; /* Space above the container */
+  }
+  
+  .code-snippet {
+    white-space: pre-wrap; /* Maintain formatting of text */
+    word-break: break-word; /* Prevent overflow */
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    margin-top: 30px; /* Make space for the copy button */
+  }
+  
+  .copy-btn {
+    position: absolute; /* Position absolutely within the parent .snippet-container */
+    top: 5px; /* Space from the top of the container */
+    right: 5px; /* Space from the right of the container */
+    padding: 5px 10px; /* Padding inside the button */
+    border: none; /* Remove the border */
+    background-color: #3498db; /* Example button color */
+    color: white; /* Text color for the button */
+    border-radius: 3px; /* Rounded corners for the button */
+    cursor: pointer; /* Mouse pointer */
+  }
+  
+  .copy-btn:hover {
+    background-color: #2980b9; /* Darker shade on hover */
+  }
+  

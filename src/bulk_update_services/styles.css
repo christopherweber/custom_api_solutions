@@ -7,9 +7,20 @@ aside {
     overflow-y: scroll;
     position: fixed;
     height: 100vh;
-    background-color: #f7f7f7;
+    background-color: #EBEEF5; /* Updated background color */
     padding: 10px;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Add this rule to style hyperlinks in the sidebar */
+aside a {
+    color: #333; /* This will set the text color of links to a dark grey */
+    text-decoration: none; /* This will remove the underline from links */
+}
+
+/* Add this rule to change the hyperlink color on hover, if desired */
+aside a:hover {
+    color: #555; /* Darker grey color on hover */
 }
 
 main {
@@ -23,6 +34,7 @@ main {
   
   #bulk-update form {
     margin-top: 10px; 
+    margin-left: 0px;
   }
   
 
@@ -142,6 +154,7 @@ form {
   
   .expandable-field button {
     /* Other styles for your button */
+    margin-bottom: 10px;
     vertical-align: middle; /* Aligns the button vertically in the middle */
 }
 
@@ -149,4 +162,9 @@ form {
     /* Styles for the span/text next to the button */
     margin-left: 8px; /* Adjusts the space between the button and the text */
     vertical-align: middle; /* Aligns the text vertically in the middle */
+}
+
+form button[type="submit"] {
+    /* existing styles */
+    margin-top: 10px; /* Adjust the space as needed */
 }

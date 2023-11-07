@@ -71,8 +71,8 @@ function updateCodeSnippets() {
     // Fetch values from the form elements
     const authToken = document.getElementById('authToken').value;
     // Since autoAlert and autoAdd are now selects, we use .value
-    const autoAlert = document.getElementById('autoAlert').value;
-    const autoAdd = document.getElementById('autoAdd').value;
+    const autoAlert = document.getElementById('autoAlert').value === 'true';
+    const autoAdd = document.getElementById('autoAdd').value === 'true';
   
     const nodeSnippet = `const axios = require('axios');
     const readline = require('readline').createInterface({

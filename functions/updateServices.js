@@ -6,6 +6,7 @@ exports.handler = async (event) => {
   }
 
   const { authToken, autoAlert, autoAdd } = JSON.parse(event.body);
+  console.log('Received values:', { authToken, autoAlert, autoAdd });
   const apiEndpoint = 'https://api.firehydrant.io/v1/services';
   const bearerToken = `Bearer ${authToken}`;
 

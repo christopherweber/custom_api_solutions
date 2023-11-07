@@ -40,7 +40,7 @@ form {
     max-width: 400px;
     margin: 20px auto;
     padding: 15px;
-    background: #2D493E;
+    background: #2D394A;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -133,7 +133,8 @@ form button:hover,
 .expandable-field span {
     margin-left: 8px;
     vertical-align: middle;
-    background-color: white;
+    background-color: #2D394A;
+    color:white;
 }
 
 form button[type="submit"] {

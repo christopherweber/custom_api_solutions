@@ -221,6 +221,26 @@ function updateCodeSnippets() {
     updateCodeSnippets();   // Update the code snippets with current form data
     // Consider if you want to clear the form here or not after submission
   }
+
+  async function copyToClipboard(elementId) {
+    const snippetText = document.getElementById(elementId).textContent;
+    try {
+      await navigator.clipboard.writeText(snippetText);
+      // Show a temporary message that the text was copied.
+      const copyMsg = document.getElementById('copyMessage');
+      copyMsg.textContent = 'Code snippet copied to clipboard!';
+      copyMsg.style.display = 'block';
+  
+      // Hide the message after 2 seconds
+      setTimeout(() => {
+        copyMsg.style.display = 'none';
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+      // Optionally, display a user-friendly error message.
+    }
+  }
+  
   
   // Attach the submit event listener to the form
   document.getElementById('bulkUpdateForm').addEventListener('submit', handleSubmit);

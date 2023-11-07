@@ -49,18 +49,27 @@
             </div>
             <button type="submit">Submit</button>
         </form>
+
         <!-- Code snippets toggle box -->
         <div class="code-snippets">
             <button id="btnNodeJs">Node.js</button>
             <button id="btnPython">Python</button>
-            <pre id="codeSnippetNodeJs" class="code-snippet" style="display:none;"><code>
-            </code></pre>
-            <pre id="codeSnippetPython" class="code-snippet" style="display:none;"></pre>
+
+            <div class="snippet-container">
+                <pre id="codeSnippetNodeJs" class="code-snippet" style="display:none;"></pre>
+                <button onclick="copyToClipboard('codeSnippetNodeJs')">Copy Node.js Snippet</button>
+                <div id="copyMessage" style="display: none; color: green; /* other styling */">Code snippet copied to clipboard!</div>
+            </div>
+            
+            <div class="snippet-container">
+                <pre id="codeSnippetPython" class="code-snippet" style="display:none;"></pre>
+                <button onclick="copyToClipboard('codeSnippetPython')">Copy Python Snippet</button>
+                <div id="copyMessage" style="display: none; color: green; /* other styling */">Code snippet copied to clipboard!</div>
+            </div>
         </div>
     </section>
-
-    <!-- Node.js Code Snippet section is no longer needed directly in HTML due to script.js logic -->
 </main>
+
 
 <!-- Removed inline script tag for sidebar fetching and handling form submission because script.js handles this logic -->
 </body>

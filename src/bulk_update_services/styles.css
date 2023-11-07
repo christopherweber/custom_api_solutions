@@ -40,7 +40,7 @@ form {
     max-width: 400px;
     margin: 20px auto;
     padding: 15px;
-    background: #fff;
+    background: #2D493E;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -60,7 +60,7 @@ form label {
     margin-bottom: 5px;
     font-weight: 600;
     font-size: 0.9em;
-    color: #333;
+    color: white;
 }
 
 /* Updated button styles */
@@ -133,6 +133,7 @@ form button:hover,
 .expandable-field span {
     margin-left: 8px;
     vertical-align: middle;
+    background-color: white;
 }
 
 form button[type="submit"] {

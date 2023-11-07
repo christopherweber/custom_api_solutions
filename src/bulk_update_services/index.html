@@ -52,19 +52,18 @@
 
         <!-- Code snippets toggle box -->
         <div class="code-snippets">
+            <div id="copyMessage" style="display: none; color: green; /* other styling */">Code snippet copied to clipboard!</div>
             <button id="btnNodeJs">Node.js</button>
             <button id="btnPython">Python</button>
 
             <div class="snippet-container">
                 <pre id="codeSnippetNodeJs" class="code-snippet" style="display:none;"></pre>
                 <button onclick="copyToClipboard('codeSnippetNodeJs')">Copy Node.js Snippet</button>
-                <div id="copyMessage" style="display: none; color: green; /* other styling */">Code snippet copied to clipboard!</div>
             </div>
             
             <div class="snippet-container">
                 <pre id="codeSnippetPython" class="code-snippet" style="display:none;"></pre>
                 <button onclick="copyToClipboard('codeSnippetPython')">Copy Python Snippet</button>
-                <div id="copyMessage" style="display: none; color: green; /* other styling */">Code snippet copied to clipboard!</div>
             </div>
         </div>
     </section>

@@ -166,7 +166,7 @@ function updateCodeSnippets() {
         # The rest of the Python code
         try:
             api_endpoint = 'https://api.firehydrant.io/v1/services'
-            bearer_token = f'Bearer {auth_token}'
+            bearer_token = f'Bearer ${authToken}'
     
             # Get services
             services_response = requests.get(api_endpoint, headers={'Authorization': bearer_token})
@@ -183,8 +183,8 @@ function updateCodeSnippets() {
                 update_response = requests.patch(
                     f"{api_endpoint}/{service['id']}",
                     json={
-                        'alert_on_add': auto_alert,
-                        'auto_add_responding_team': auto_add
+                        'alert_on_add': ${autoAlert},
+                        'auto_add_responding_team': ${autoAdd}
                     },
                     headers={'Authorization': bearer_token}
                 )

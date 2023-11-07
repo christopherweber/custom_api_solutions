@@ -53,3 +53,13 @@ main {
     background-color: #2980b9; /* Darker shade on hover */
   }
   
+  .expandable-field button {
+    /* Other styles for your button */
+    vertical-align: middle; /* Aligns the button vertically in the middle */
+}
+
+.expandable-field span {
+    /* Styles for the span/text next to the button */
+    margin-left: 8px; /* Adjusts the space between the button and the text */
+    vertical-align: middle; /* Aligns the text vertically in the middle */
+}

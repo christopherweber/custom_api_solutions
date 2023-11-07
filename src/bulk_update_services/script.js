@@ -143,9 +143,7 @@ function updateCodeSnippets() {
     document.getElementById('codeSnippetNodeJs').textContent = nodeSnippet;
     //codeSnippetPython
     
-    const pythonSnippet = `
-    
-    // Before you run this code, make sure you have the requests library installed in your Python environment. You can install it using pip: pip install requests
+    const pythonSnippet = `// Before you run this code, make sure you have the requests library installed in your Python environment. You can install it using pip: pip install requests
     
     import requests
 

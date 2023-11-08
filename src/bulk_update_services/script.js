@@ -29,9 +29,8 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
         const result = await response.json();
 
         if (result.success) {
-            debugger
             alert('Services updated successfully!');
-            document.getElementById('authToken').value = ''; // Clear the authorization field
+            //document.getElementById('authToken').value = ''; // Clear the authorization field
         } else {
             alert('Error updating services: ' + result.error);
         }

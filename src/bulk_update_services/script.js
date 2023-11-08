@@ -110,8 +110,8 @@ function updateCodeSnippets() {
     
         const updatePromises = services.map(service =>
           axios.patch(\`\${apiEndpoint}/\${service.id}\`, {
-            alert_on_add: autoAlert,
-            auto_add_responding_team: autoAdd
+            alert_on_add: ${autoAlert},
+            auto_add_responding_team: ${autoAdd}
           }, {
             headers: { Authorization: bearerToken }
           })
@@ -143,46 +143,32 @@ function updateCodeSnippets() {
     document.getElementById('codeSnippetNodeJs').textContent = nodeSnippet;
     //codeSnippetPython
     
-    const pythonSnippet = `// Before you run this code, make sure you have the requests library installed in your Python environment. You can install it using pip: pip install requests
-    
-    import requests
+    const pythonSnippet = `import requests
 
-    # Function to prompt for user input
     def prompt(query):
         return input(query)
     
     def update_services():
-        # These values should be provided by user input
-        auth_token = prompt('Enter Authorization Token: ')
-        auto_alert_input = prompt('Auto Alert Responding Team (true/false): ')
-        auto_add_input = prompt('Auto Add Responding Team (true/false): ')
     
-        # Convert user input to boolean
-        auto_alert = auto_alert_input.lower() == 'true'
-        auto_add = auto_add_input.lower() == 'true'
-    
-        # The rest of the Python code
         try:
             api_endpoint = 'https://api.firehydrant.io/v1/services'
-            bearer_token = f'Bearer ${authToken}'
+            bearer_token = f'Bearer ${auth_token}'
     
-            # Get services
             services_response = requests.get(api_endpoint, headers={'Authorization': bearer_token})
-            services_response.raise_for_status()  # Will raise an error if the request failed
+            services_response.raise_for_status()
             services_data = services_response.json()
     
             services = services_data.get('data')
             if not isinstance(services, list):
                 raise ValueError('Expected services to be a list')
     
-            # Update services
             successes = 0
             for service in services:
                 update_response = requests.patch(
                     f"{api_endpoint}/{service['id']}",
                     json={
-                        'alert_on_add': ${autoAlert},
-                        'auto_add_responding_team': ${autoAdd}
+                        'alert_on_add': auto_alert,
+                        'auto_add_responding_team': auto_add
                     },
                     headers={'Authorization': bearer_token}
                 )
@@ -197,9 +183,7 @@ function updateCodeSnippets() {
         except requests.RequestException as error:
             print(f"Error details: {error}")
     
-    # Execute the function
-    update_services()
-    `;
+    update_services()`;
 
     document.getElementById('codeSnippetPython').textContent = pythonSnippet;
   

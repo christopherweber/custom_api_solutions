@@ -29,6 +29,7 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
         const result = await response.json();
 
         if (result.success) {
+            debugger
             alert('Services updated successfully!');
             document.getElementById('authToken').value = ''; // Clear the authorization field
         } else {
@@ -215,7 +216,7 @@ function updateCodeSnippets() {
   
   // Function to handle form submission
   function handleSubmit(event) {
-    //event.preventDefault(); // Prevent the default form submission
+    event.preventDefault(); // Prevent the default form submission
     updateCodeSnippets();   // Update the code snippets with current form data
     // Consider if you want to clear the form here or not after submission
   }

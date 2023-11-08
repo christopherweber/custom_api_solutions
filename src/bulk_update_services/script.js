@@ -40,7 +40,7 @@ async function submitForm(event) {
   
     // Update code snippets after submission
     updateCodeSnippets();
-
+}
     document.getElementById('bulkUpdateForm').addEventListener('submit', submitForm);
 
 // Toggle the expandable fields

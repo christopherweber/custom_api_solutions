@@ -12,9 +12,10 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
 
     const authToken = document.getElementById('authToken').value;
     // Parse the boolean values directly from the form inputs
-    const autoAlert = document.getElementById('autoAlert').checked;
-    const autoAdd = document.getElementById('autoAdd').checked;
-
+    //const autoAlert = document.getElementById('autoAlert').checked;
+    //const autoAdd = document.getElementById('autoAdd').checked;
+    const autoAlert = true
+    const autoAdd = true
     try {
         const response = await fetch('/.netlify/functions/updateServices', {
             method: 'POST',
@@ -30,7 +31,7 @@ document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) =
 
         if (result.success) {
             alert('Services updated successfully!');
-            //document.getElementById('authToken').value = ''; // Clear the authorization field
+            document.getElementById('authToken').value = ''; // Clear the authorization field
         } else {
             alert('Error updating services: ' + result.error);
         }

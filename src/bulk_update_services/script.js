@@ -6,42 +6,42 @@ fetch('../sidebar.html')
   })
   .catch(error => console.error('Error loading the sidebar:', error));
 
-// Event listener for the form submission
-document.getElementById('bulkUpdateForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
+// Function to handle form submission
+async function submitForm(event) {
+    event.preventDefault(); // Prevent the default form submission
+  
     const authToken = document.getElementById('authToken').value;
-    // Parse the boolean values directly from the form inputs
-    const autoAlert = document.getElementById('autoAlert').value;
-    const autoAdd = document.getElementById('autoAdd').value;
-
+    const autoAlert = document.getElementById('autoAlert').value === 'true'; // Ensure you convert to boolean here if needed
+    const autoAdd = document.getElementById('autoAdd').value === 'true'; // Ensure you convert to boolean here if needed
+  
     try {
-        const response = await fetch('/.netlify/functions/updateServices', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ authToken, autoAlert, autoAdd })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (result.success) {
-            alert('Services updated successfully!');
-            document.getElementById('authToken').value = ''; // Clear the authorization field
-        } else {
-            alert('Error updating services: ' + result.error);
-        }
+      const response = await fetch('/.netlify/functions/updateServices', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ authToken, autoAlert, autoAdd })
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const result = await response.json();
+  
+      if (result.success) {
+        alert('Services updated successfully!');
+        document.getElementById('authToken').value = ''; // Clear the authorization field
+      } else {
+        alert('Error updating services: ' + result.error);
+      }
     } catch (error) {
-        console.error('Error while sending request to backend:', error);
-        alert('Failed to update services. Check the console for more information.');
+      console.error('Error while sending request to backend:', error);
+      alert('Failed to update services. Check the console for more information.');
     }
-
+  
     // Update code snippets after submission
     updateCodeSnippets();
-});
+
+    document.getElementById('bulkUpdateForm').addEventListener('submit', submitForm);
 
 // Toggle the expandable fields
 function toggleExpandableFields() {

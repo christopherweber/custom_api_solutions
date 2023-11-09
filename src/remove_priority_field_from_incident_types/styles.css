@@ -17,6 +17,7 @@ aside {
 aside a {
     color: #333;
     text-decoration: none;
+    word-break: break-word;
 }
 
 aside a:hover {
@@ -41,6 +42,8 @@ main {
     background: #2D394A; /* Dark blue background for the form */
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 10px; 
+    margin-left: 0px;
 }
 
 #remove-priority form input[type="text"],
@@ -80,5 +83,3 @@ main {
     margin-top: 10px;
 }
 
-/* If there are other specific styles from the bulk_update_services page that you need,
-   you can add them here, ensuring they target the #remove-priority ID or other specific selectors. */

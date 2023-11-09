@@ -1,5 +1,8 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
 }
 
 aside {
@@ -21,6 +24,23 @@ aside a {
 
 aside a:hover {
     color: #555; /* Text color on hover */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 0.5em;
+    transition: background-color 0.3s;
+}
+
+nav li a:hover {
+    background-color: #f4f4f4;
 }
 
 main {

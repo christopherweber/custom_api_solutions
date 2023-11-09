@@ -53,16 +53,15 @@ main {
     margin-bottom: 0.5em;
 }
 
-#remove-priority form {
+form {
     max-width: 400px;
     margin: 20px auto;
     padding: 15px;
-    background: #2D394A; /* Dark blue background for the form */
+    background: #2D394A;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 10px; 
-    margin-left: 0px;
 }
+
 
 #remove-priority form input[type="text"],
 #remove-priority form select {
@@ -74,13 +73,14 @@ main {
     box-sizing: border-box;
 }
 
-#remove-priority form label {
+form label {
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
     font-size: 0.9em;
     color: white;
 }
+
 
 #remove-priority form button {
     padding: 6px 10px;

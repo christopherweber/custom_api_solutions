@@ -16,6 +16,7 @@ aside {
 aside a {
     color: #333; /* Text color */
     text-decoration: none; /* Removes underline */
+    word-break: break-word;
 }
 
 aside a:hover {

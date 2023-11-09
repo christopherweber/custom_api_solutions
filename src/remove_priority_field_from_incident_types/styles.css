@@ -1,35 +1,53 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
-    background-color: #f4f4f4; /* Assuming a light background color for consistency */
+    padding: 0;
+    display: flex;
 }
 
 aside {
     width: 20%;
-    overflow-y: auto; /* Scroll as needed */
+    overflow-y: scroll;
     position: fixed;
     height: 100vh;
-    background-color: #EBEEF5; /* Light blue background */
+    background-color: #EBEEF5; /* Updated background color */
     padding: 10px;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Style for hyperlinks to remove purple color and underline */
 aside a {
-    color: #333;
-    text-decoration: none;
+    color: #333; /* Text color */
+    text-decoration: none; /* Removes underline */
     word-break: break-word;
 }
 
 aside a:hover {
-    color: #555;
+    color: #555; /* Text color on hover */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 0.5em;
+    transition: background-color 0.3s;
+}
+
+nav li a:hover {
+    background-color: #f4f4f4;
 }
 
 main {
-    margin-left: 20%; /* Match the width of the aside */
+    margin-left: 22%;
     padding: 20px;
-    background-color: #ffffff; /* White background for the content area */
-    min-height: 100vh; /* Minimum height */
 }
+
 
 #remove-priority h2 {
     margin-bottom: 0.5em;

@@ -1,0 +1,189 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+aside {
+    width: 20%;
+    overflow-y: scroll;
+    position: fixed;
+    height: 100vh;
+    background-color: #EBEEF5; /* Updated background color */
+    padding: 10px;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for hyperlinks to remove purple color and underline */
+aside a {
+    color: #333; /* Text color */
+    text-decoration: none; /* Removes underline */
+}
+
+aside a:hover {
+    color: #555; /* Text color on hover */
+}
+
+main {
+    margin-left: 22%;
+    padding: 20px;
+}
+
+#bulk-update h2 {
+    margin-bottom: 0;
+}
+
+#bulk-update form {
+    margin-top: 10px; 
+    margin-left: 0px;
+}
+
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 15px;
+    background: #2D394A;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form input[type="text"],
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: white;
+}
+
+/* Updated button styles */
+form button,
+.expandable-field button,
+#bulk-update button {
+    padding: 6px 10px; /* Smaller padding for a smaller button */
+    font-size: 0.8em; /* Smaller font size for the text inside the button */
+    border: none;
+    border-radius: 4px;
+    background-color: #12A0F3; /* New button background color */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover,
+.expandable-field button:hover,
+#bulk-update button:hover {
+    background-color: #0F87C9; /* Darker shade on hover */
+}
+
+.fields {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.expandable-field .fields {
+    display: none;
+}
+
+.snippet-container {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.code-snippet {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+    margin-top: 30px;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background-color: #2980b9;
+}
+
+.expandable-field button {
+    margin-bottom: 10px;
+    vertical-align: middle;
+}
+
+.expandable-field span {
+    margin-left: 8px;
+    vertical-align: middle;
+    background-color: #2D394A;
+    color:white;
+}
+
+form button[type="submit"] {
+    margin-top: 10px;
+}
+
+
+@import url('../styles.css'); /* Adjust the relative path to point to your main CSS file location */
+
+/* Custom styles for the remove_priority_field_from_incident_types page */
+#remove-priority-field-form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 15px;
+    background: #2D394A;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#remove-priority-field-form input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#remove-priority-field-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: white;
+}
+
+#remove-priority-field-form button[type="submit"] {
+    padding: 6px 10px;
+    font-size: 0.8em;
+    border: none;
+    border-radius: 4px;
+    background-color: #12A0F3;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#remove-priority-field-form button[type="submit"]:hover {
+    background-color: #0F87C9;
+}
+
+/* Additional custom styles for this page can be added below */

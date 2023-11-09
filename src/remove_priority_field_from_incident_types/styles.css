@@ -62,9 +62,7 @@ form {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
-#remove-priority form input[type="text"],
-#remove-priority form select {
+form input[type="text"], form select {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;

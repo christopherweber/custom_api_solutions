@@ -152,6 +152,8 @@ form button[type="submit"] {
     background: #2D394A;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 10px; 
+    margin-left: 0px;
 }
 
 #remove-priority-field-form input[type="text"] {

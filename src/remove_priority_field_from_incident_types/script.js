@@ -1,3 +1,12 @@
+// Fetch and insert the sidebar content
+fetch('../sidebar.html')
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('sidebar-placeholder').innerHTML = data;
+  })
+  .catch(error => console.error('Error loading the sidebar:', error));
+
+
 document.getElementById('apiKeyForm').addEventListener('submit', function (e) {
     e.preventDefault();
     const fhBot = document.getElementById('apiKey').value;

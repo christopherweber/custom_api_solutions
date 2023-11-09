@@ -19,6 +19,7 @@ function attachFormSubmitListener() {
   const form = document.getElementById('apiKeyForm');
   if (!form) {
     console.error('Form not found.');
+    setTimeout(attachFormSubmitListener, 500);
     return;
   }
   form.addEventListener('submit', async function (e) {

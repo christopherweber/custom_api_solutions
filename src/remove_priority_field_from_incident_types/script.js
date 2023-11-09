@@ -1,61 +1,75 @@
-// Fetch and insert the sidebar content
-fetch('../sidebar.html')
-  .then(response => response.text())
-  .then(data => {
-    document.getElementById('sidebar-placeholder').innerHTML = data;
-  })
-  .catch(error => console.error('Error loading the sidebar:', error));
+document.addEventListener('DOMContentLoaded', () => {
+  // Fetch and insert the sidebar content
+  fetch('../sidebar.html')
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.text();
+      })
+      .then(data => {
+          document.getElementById('sidebar-placeholder').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading the sidebar:', error));
 
-
-document.getElementById('apiKeyForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const fhBot = document.getElementById('apiKey').value;
-    getIncidentTypesRemovePriority(fhBot).then(updateIncidentTypes);
+  const form = document.getElementById('apiKeyForm');
+  form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const confirmation = confirm("Are you sure you want to submit?");
+      if (confirmation) {
+          const fhBot = document.getElementById('apiKey').value;
+          try {
+              const incidentTypesRemoved = await getIncidentTypesRemovePriority(fhBot);
+              if (incidentTypesRemoved) {
+                  await updateIncidentTypes(fhBot, incidentTypesRemoved);
+                  alert('Incident types updated successfully.');
+              }
+          } catch (error) {
+              alert(`An error occurred: ${error.message}`);
+              console.error('Update failed:', error);
+          }
+      }
+  });
 });
 
 const api = 'https://api.firehydrant.io/v1';
 
 async function getIncidentTypesRemovePriority(fhBot) {
   try {
-    const response = await axios.get(`${api}/incident_types`, {
-      headers: {
-        Authorization: `Bearer ${fhBot}`,
-      },
-    });
+      const response = await axios.get(`${api}/incident_types`, {
+          headers: {
+              Authorization: `Bearer ${fhBot}`,
+          },
+      });
 
-    const newIncidentTypesWithoutPriority = response.data.data.map(incidentType => {
-      const { priority, ...restOfIncidentType } = incidentType;
-      return restOfIncidentType;
-    });
+      const newIncidentTypesWithoutPriority = response.data.data.map(incidentType => {
+          const { priority, ...restOfIncidentType } = incidentType;
+          return restOfIncidentType;
+      });
 
-    // Since you can't use 'fs' in the browser, storing the result in local storage or handling it some other way
-    localStorage.setItem('incidentTypes', JSON.stringify(newIncidentTypesWithoutPriority));
-
-    return newIncidentTypesWithoutPriority;
+      return newIncidentTypesWithoutPriority;
   } catch (error) {
-    console.error('yikes', error.message);
-    return null;
+      console.error('Error fetching incident types:', error);
+      throw new Error('Failed to fetch incident types.');
   }
 }
 
-async function updateIncidentTypes() {
-  const fhBot = document.getElementById('apiKey').value;
-  try {
-    const incidentTypes = JSON.parse(localStorage.getItem('incidentTypes'));
-
-    for (const incidentType of incidentTypes) {
+async function updateIncidentTypes(fhBot, incidentTypes) {
+  for (const incidentType of incidentTypes) {
       const incidentTypeId = incidentType.id;
       delete incidentType.template.priority;
 
-      await axios.patch(`${api}/incident_types/${incidentTypeId}`, incidentType, {
-        headers: {
-          Authorization: `Bearer ${fhBot}`,
-        },
-      });
+      try {
+          await axios.patch(`${api}/incident_types/${incidentTypeId}`, incidentType, {
+              headers: {
+                  Authorization: `Bearer ${fhBot}`,
+              },
+          });
 
-      console.log(`Updated incident type with ID: ${incidentTypeId}`);
-    }
-  } catch (error) {
-    console.error(error.message);
+          console.log(`Updated incident type with ID: ${incidentTypeId}`);
+      } catch (error) {
+          console.error(`Error updating incident type ID ${incidentTypeId}:`, error);
+          throw new Error(`Failed to update incident type ID ${incidentTypeId}.`);
+      }
   }
 }

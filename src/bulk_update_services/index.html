@@ -40,15 +40,15 @@
 
         <!-- Code snippets toggle box -->
         <div class="code-snippets">
-            <div id="copyMessage" style="display: none; color: red; border: 1px solid red; padding: 5px;"></div>
             <div class="button-container">
                 <h5>You can select which language you prefer and copy and paste into your editor. 
                 </br>
-                    Note: Updating the fields above will automatically update the code snippets with those values.
-                </h5>
-                <button id="btnNodeJs">Node / Axios</button>
-                <button id="btnPython">Python</button>
-            </div>
+                Note: Updating the fields above will automatically update the code snippets with those values.
+            </h5>
+            <button id="btnNodeJs">Node / Axios</button>
+            <button id="btnPython">Python</button>
+        </div>
+        <div id="copyMessage" style="display: none"></div>
 
             <div id="nodeJsSnippetContainer" class="snippet-container" style="display:none;">
                 <button class="copy-btn" onclick="copyToClipboard('codeSnippetNodeJs')">Copy Code</button>

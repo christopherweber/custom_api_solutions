@@ -183,13 +183,27 @@ function updateCodeSnippets() {
 document.getElementById('apiKey').addEventListener('input', updateCodeSnippets);
 document.addEventListener('DOMContentLoaded', updateCodeSnippets);
 
-function copyToClipboard(id) {
-  const text = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    alert('Copied to clipboard!');
-  }).catch(err => {
-    console.error('Error in copying text: ', err);
-  });
+async function copyToClipboard(elementId) {
+  const snippetText = document.getElementById(elementId).textContent;
+  try {
+    await navigator.clipboard.writeText(snippetText);
+    console.log('Text copied:', snippetText); // Debugging log
+
+    const copyMsg = document.getElementById('copyMessage');
+    if (!copyMsg) {
+      console.error('copyMessage element not found');
+      return;
+    }
+
+    copyMsg.textContent = 'Code snippet copied to clipboard!';
+    copyMsg.style.display = 'block';
+
+    setTimeout(() => {
+      copyMsg.style.display = 'none';
+    }, 2000);
+  } catch (err) {
+    console.error('Failed to copy:', err);
+  }
 }
 
 // Ensure this function is called when the DOM is loaded

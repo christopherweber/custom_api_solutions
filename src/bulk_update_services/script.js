@@ -96,7 +96,7 @@ function updateCodeSnippets() {
       // Rest of the Node.js code
       try {
         const apiEndpoint = 'https://api.firehydrant.io/v1/services';
-        const bearerToken = \`Bearer \ authToken}\`;
+        const bearerToken = \`Bearer \ ${authToken}\`;
     
         const servicesResponse = await axios.get(apiEndpoint, {
           headers: { Authorization: bearerToken }

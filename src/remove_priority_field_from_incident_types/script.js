@@ -132,7 +132,48 @@ function updateCodeSnippets() {
     .then(updateIncidentTypes)
     .catch(error => console.error('An error occurred:', error.message));`;
   
-  const pythonSnippet = `# Your Python code using apiKey: ${apiKey}`;
+    const pythonSnippet = `import requests
+    import json
+    
+    api_endpoint = 'https://api.firehydrant.io/v1'
+    fh_bot_token = '${authToken}'
+    
+    def get_incident_types_remove_priority():
+        try:
+            response = requests.get(f'{api_endpoint}/incident_types', headers={'Authorization': f'Bearer {fh_bot_token}'})
+            response.raise_for_status()
+    
+            new_incident_types_without_priority = [{key: value for key, value in incident_type.items() if key != 'priority'} for incident_type in response.json()['data']]
+    
+            with open('incidentTypes.json', 'w') as file:
+                json.dump(new_incident_types_without_priority, file, indent=2)
+            print('Incident types without priority saved to file.')
+    
+            return new_incident_types_without_priority
+        except requests.RequestException as error:
+            print('Error fetching incident types:', error)
+            return None
+    
+    def update_incident_types():
+        try:
+            with open('incidentTypes.json', 'r') as file:
+                incident_types = json.load(file)
+    
+            for incident_type in incident_types:
+                incident_type_id = incident_type['id']
+                if 'template' in incident_type and 'priority' in incident_type['template']:
+                    del incident_type['template']['priority']
+    
+                response = requests.patch(f'{api_endpoint}/incident_types/{incident_type_id}', json=incident_type, headers={'Authorization': f'Bearer {fh_bot_token}'})
+                response.raise_for_status()
+    
+                print(f'Updated incident type with ID: {incident_type_id}')
+        except requests.RequestException as error:
+            print('Error updating incident types:', error)
+    
+    get_incident_types_remove_priority()
+    update_incident_types()`;
+    
 
   document.getElementById('codeSnippetNodeJs').textContent = nodeSnippet;
   document.getElementById('codeSnippetPython').textContent = pythonSnippet;

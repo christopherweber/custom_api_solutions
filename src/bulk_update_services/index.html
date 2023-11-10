@@ -6,19 +6,7 @@
     <title>Bulk Update Services & Code Snippet Example</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script> <!-- Ensure script.js is included at the end of the body -->
-    <script>
-      // Function to copy text from the preformatted block
-      function copyToClipboard(id) {
-        const str = document.getElementById(id).innerText;
-        const el = document.createElement('textarea');
-        el.value = str;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        alert('Copied to clipboard!');
-      }
-    </script>
+
 </head>
 <body>
 
@@ -74,6 +62,8 @@
                     // Python code here
                 </code></pre>
             </div>
+            <div id="copyMessage" style="display: none;"></div>
+
         </div>
     </section>
 </main>

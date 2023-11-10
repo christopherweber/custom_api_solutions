@@ -87,6 +87,10 @@ function updateCodeSnippets() {
   document.getElementById('codeSnippetPython').textContent = pythonSnippet;
 }
 
+
+document.getElementById('apiKey').addEventListener('input', updateCodeSnippets);
+document.addEventListener('DOMContentLoaded', updateCodeSnippets);
+
 function copyToClipboard(id) {
   const text = document.getElementById(id).innerText;
   navigator.clipboard.writeText(text).then(() => {

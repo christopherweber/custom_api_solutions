@@ -109,3 +109,35 @@ form label {
 #remove-priority form button[type="submit"] {
     margin-top: 10px;
 }
+
+.snippet-container {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.code-snippet {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+    margin-top: 30px;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background-color: #2980b9;
+}

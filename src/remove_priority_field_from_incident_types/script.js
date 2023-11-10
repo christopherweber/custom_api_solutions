@@ -90,7 +90,7 @@ function updateCodeSnippets() {
     try {
       const response = await axios.get(\`\${apiEndpoint}/incident_types\`, {
         headers: {
-          Authorization: \`Bearer \ ${authToken}\`,
+          Authorization: \`Bearer \ fhBotToken\`,
         },
       });
   
@@ -117,7 +117,7 @@ function updateCodeSnippets() {
   
         await axios.patch(\`\${apiEndpoint}/incident_types/\${id}\`, updatedIncidentType, {
           headers: {
-            Authorization: \`Bearer \ ${authToken}\`,
+            Authorization: \`Bearer \ fhBotToken\`,
           },
         });
   

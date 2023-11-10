@@ -78,9 +78,60 @@ function showPythonSnippet() {
 }
 
 function updateCodeSnippets() {
-  const apiKey = document.getElementById('apiKey').value;
+  const authToken = document.getElementById('apiKey').value;
 
-  const nodeSnippet = `// Your Node/Axios code using apiKey: ${apiKey}`;
+  const nodeSnippet = `const axios = require('axios');
+  const fs = require('fs').promises;
+  
+  const apiEndpoint = 'https://api.firehydrant.io/v1';
+  const fhBotToken = '${authToken}'
+  
+  async function getIncidentTypesRemovePriority() {
+    try {
+      const response = await axios.get(\`\${apiEndpoint}/incident_types\`, {
+        headers: {
+          Authorization: \`Bearer \ ${authToken}\`,
+        },
+      });
+  
+      const newIncidentTypesWithoutPriority = response.data.data.map(({ priority, ...rest }) => rest);
+  
+      await fs.writeFile('incidentTypes.json', JSON.stringify(newIncidentTypesWithoutPriority, null, 2));
+      console.log('Incident types without priority saved to file.');
+  
+      return newIncidentTypesWithoutPriority;
+    } catch (error) {
+      console.error('Error fetching incident types:', error.message);
+      return null;
+    }
+  }
+  
+  async function updateIncidentTypes() {
+    try {
+      const incidentTypes = await fs.readFile('./incidentTypes.json', 'utf8');
+      const parsedIncidentTypes = JSON.parse(incidentTypes);
+  
+      for (const incidentType of parsedIncidentTypes) {
+        const { id, template, ...rest } = incidentType;
+        const updatedIncidentType = { ...rest, template: { ...template, priority: undefined } };
+  
+        await axios.patch(\`\${apiEndpoint}/incident_types/\${id}\`, updatedIncidentType, {
+          headers: {
+            Authorization: \`Bearer \ ${authToken}\`,
+          },
+        });
+  
+        console.log(\`Updated incident type with ID: \${id}\`);
+      }
+    } catch (error) {
+      console.error('Error updating incident types:', error.message);
+    }
+  }
+  
+  getIncidentTypesRemovePriority()
+    .then(updateIncidentTypes)
+    .catch(error => console.error('An error occurred:', error.message));`;
+  
   const pythonSnippet = `# Your Python code using apiKey: ${apiKey}`;
 
   document.getElementById('codeSnippetNodeJs').textContent = nodeSnippet;

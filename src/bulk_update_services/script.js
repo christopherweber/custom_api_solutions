@@ -96,7 +96,7 @@ function updateCodeSnippets() {
       // Rest of the Node.js code
       try {
         const apiEndpoint = 'https://api.firehydrant.io/v1/services';
-        const bearerToken = \`Bearer \ ${authToken}\`;
+        const bearerToken = \`Bearer \ authToken}\`;
     
         const servicesResponse = await axios.get(apiEndpoint, {
           headers: { Authorization: bearerToken }
@@ -110,8 +110,8 @@ function updateCodeSnippets() {
     
         const updatePromises = services.map(service =>
           axios.patch(\`\${apiEndpoint}/\${service.id}\`, {
-            alert_on_add: ${autoAlert},
-            auto_add_responding_team: ${autoAdd}
+            alert_on_add: autoAlert,
+            auto_add_responding_team: autoAdd
           }, {
             headers: { Authorization: bearerToken }
           })

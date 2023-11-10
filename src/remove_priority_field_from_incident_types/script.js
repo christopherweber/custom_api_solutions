@@ -53,3 +53,51 @@ function attachFormSubmitListener() {
     });
   });
 }
+
+// Existing JavaScript code
+
+// Event listeners and functions for the code snippets toggle box
+document.getElementById('btnNodeJs').addEventListener('click', function() {
+  updateCodeSnippets();
+  showNodeJsSnippet();
+});
+
+document.getElementById('btnPython').addEventListener('click', function() {
+  updateCodeSnippets();
+  showPythonSnippet();
+});
+
+function showNodeJsSnippet() {
+  document.getElementById('nodeJsSnippetContainer').style.display = 'block';
+  document.getElementById('pythonSnippetContainer').style.display = 'none';
+}
+
+function showPythonSnippet() {
+  document.getElementById('nodeJsSnippetContainer').style.display = 'none';
+  document.getElementById('pythonSnippetContainer').style.display = 'block';
+}
+
+function updateCodeSnippets() {
+  const apiKey = document.getElementById('apiKey').value;
+
+  const nodeSnippet = `// Your Node/Axios code using apiKey: ${apiKey}`;
+  const pythonSnippet = `# Your Python code using apiKey: ${apiKey}`;
+
+  document.getElementById('codeSnippetNodeJs').textContent = nodeSnippet;
+  document.getElementById('codeSnippetPython').textContent = pythonSnippet;
+}
+
+function copyToClipboard(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Copied to clipboard!');
+  }).catch(err => {
+    console.error('Error in copying text: ', err);
+  });
+}
+
+// Ensure this function is called when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  attachFormSubmitListener();
+  updateCodeSnippets(); // Initialize code snippets
+});

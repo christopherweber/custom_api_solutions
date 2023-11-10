@@ -21,6 +21,27 @@
             <button type="submit">Submit</button>
         </form>
     </section>
+    <div class="code-snippets">
+        <div class="button-container">
+            <h5>Select a language and copy the code to your editor:</h5>
+            <button id="btnNodeJs">Node / Axios</button>
+            <button id="btnPython">Python</button>
+        </div>
+
+        <div id="nodeJsSnippetContainer" class="snippet-container" style="display:none;">
+            <button class="copy-btn" onclick="copyToClipboard('codeSnippetNodeJs')">Copy Code</button>
+            <pre id="codeSnippetNodeJs" class="code-snippet"><code>
+                // Node.js code here
+            </code></pre>
+        </div>
+        
+        <div id="pythonSnippetContainer" class="snippet-container" style="display:none;">
+            <button class="copy-btn" onclick="copyToClipboard('codeSnippetPython')">Copy Code</button>
+            <pre id="codeSnippetPython" class="code-snippet"><code>
+                // Python code here
+            </code></pre>
+        </div>
+    </div>
 </main>
 
 </body>

@@ -85,7 +85,7 @@ form label {
 }
 
 /* Updated button styles */
-#remove-priority form button {
+#remove-priority form button, #btnNodeJs, #btnPython {
     padding: 6px 10px; /* Smaller padding for a smaller button */
     font-size: 0.8em; /* Smaller font size for the text inside the button */
     border: none;
@@ -95,6 +95,7 @@ form label {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
 
 .fields {
     border-top: 1px solid #eee;

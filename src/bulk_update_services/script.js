@@ -208,20 +208,25 @@ function updateCodeSnippets() {
     const snippetText = document.getElementById(elementId).textContent;
     try {
       await navigator.clipboard.writeText(snippetText);
-      // Show a temporary message that the text was copied.
+      console.log('Text copied:', snippetText); // Debugging log
+  
       const copyMsg = document.getElementById('copyMessage');
+      if (!copyMsg) {
+        console.error('copyMessage element not found');
+        return;
+      }
+  
       copyMsg.textContent = 'Code snippet copied to clipboard!';
       copyMsg.style.display = 'block';
   
-      // Hide the message after 2 seconds
       setTimeout(() => {
         copyMsg.style.display = 'none';
       }, 2000);
     } catch (err) {
-      console.error('Failed to copy: ', err);
-      // Optionally, display a user-friendly error message.
+      console.error('Failed to copy:', err);
     }
   }
+  
   
   function showNodeJsSnippet() {
     document.getElementById('nodeJsSnippetContainer').style.display = 'block';

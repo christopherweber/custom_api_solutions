@@ -7,9 +7,12 @@ exports.handler = async (event) => {
     }
 
     try {
-        const services = JSON.parse(event.body).services;
-        const responses = [];
+        const { authToken, services } = JSON.parse(event.body);
 
+        // Log the received data for debugging
+        console.log("Received data:", { authToken, services });
+
+        const responses = [];
         for (const service of services) {
             const payload = {
                 name: service.name,
@@ -24,7 +27,7 @@ exports.handler = async (event) => {
             };
 
             const response = await axios.post('https://api.firehydrant.io/v1/services', payload, {
-                headers: { 'Authorization': `Bearer ${service.authToken}` }
+                headers: { 'Authorization': `Bearer ${authToken}` } // Use the single authToken for all requests
             });
 
             responses.push(response.data);
@@ -32,10 +35,13 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ messages: 'Services created successfully', data: responses }),
+            body: JSON.stringify({ message: 'Services created successfully', data: responses }),
             headers: { 'Content-Type': 'application/json' }
         };
     } catch (error) {
+        // Log the error for debugging
+        console.error("Error occurred:", error);
+
         return {
             statusCode: error.response ? error.response.status : 500,
             body: JSON.stringify({ message: error.message }),

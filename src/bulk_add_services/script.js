@@ -32,13 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
       const authToken = document.getElementById('authToken').value;
       const serviceFields = document.querySelectorAll('.serviceFields');
-      const services = Array.from(serviceFields).map(fields => {
-        return {
+      const services = Array.from(serviceFields).map(fields => ({
           name: fields.querySelector('[name="serviceName"]').value,
           remoteId: fields.querySelector('[name="remoteId"]').value,
           connectionType: fields.querySelector('[name="connectionType"]').value
-        };
-      });
+      }));
   
       fetch('/.netlify/functions/bulkAddServices', {
         method: 'POST',
@@ -49,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Network response was not ok.');
+          throw new Error(`Network response was not ok. Status: ${response.status}`);
         }
         return response.json();
       })
@@ -69,4 +67,3 @@ document.addEventListener('DOMContentLoaded', () => {
       container.appendChild(newFieldSet);
     });
   }
-  

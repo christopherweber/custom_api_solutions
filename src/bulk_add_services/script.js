@@ -1,7 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Sidebar loading code and other initializations
-    // ...
-  
+    fetch('../sidebar.html') // Make sure the path to sidebar.html is correct
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(data => {
+      document.getElementById('sidebar-placeholder').innerHTML = data;
+      // Ensure the form is present in the sidebar HTML
+      // Then attach the event listener to the form
+      attachFormSubmitListener();
+    })
+    .catch(error => console.error('Error loading the sidebar:', error));
     attachBulkServiceFormListener();
   });
   

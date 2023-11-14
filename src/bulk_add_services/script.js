@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function attachBulkServiceFormListener() {
     const form = document.getElementById('bulkServiceForm');
+    const serviceFieldsContainer = document.getElementById('serviceFieldsContainer');
+    const authTokenInput = document.getElementById('authToken');
+
     if (!form) {
         console.error('Bulk service form not found.');
         return;
@@ -28,15 +31,17 @@ function attachBulkServiceFormListener() {
             return;
         }
 
-        const authToken = document.getElementById('authToken').value;
+        const authToken = authTokenInput.value;
+        let services = [];
         const csvFile = document.getElementById('csvFileUpload').files[0];
 
         if (csvFile) {
             parseCSV(csvFile, parsedServices => {
-                submitServices(authToken, parsedServices);
+                services = parsedServices;
+                submitServices(authToken, services);
             });
         } else {
-            let services = Array.from(document.querySelectorAll('.serviceFields')).map(fields => ({
+            services = Array.from(serviceFieldsContainer.querySelectorAll('.serviceFields')).map(fields => ({
                 name: fields.querySelector('[name="serviceName"]').value,
                 remoteId: fields.querySelector('[name="remoteId"]').value,
                 connectionType: fields.querySelector('[name="connectionType"]').value
@@ -46,20 +51,23 @@ function attachBulkServiceFormListener() {
     });
 
     document.getElementById('addServiceButton').addEventListener('click', function() {
-        const container = document.getElementById('serviceFieldsContainer');
-        const newFieldSet = container.firstElementChild.cloneNode(true);
+        const newFieldSet = serviceFieldsContainer.firstElementChild.cloneNode(true);
         newFieldSet.querySelectorAll('input').forEach(input => input.value = '');
-        container.appendChild(newFieldSet);
+        serviceFieldsContainer.appendChild(newFieldSet);
     });
 }
 
 function attachCSVUploadListener() {
     const csvUploadInput = document.getElementById('csvFileUpload');
+    const serviceFieldsContainer = document.getElementById('serviceFieldsContainer');
+
     csvUploadInput.addEventListener('change', function() {
         if (this.files && this.files[0]) {
             setFieldsRequired(false);
+            serviceFieldsContainer.style.display = 'none';
         } else {
             setFieldsRequired(true);
+            serviceFieldsContainer.style.display = '';
         }
     });
 }

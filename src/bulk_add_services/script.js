@@ -1,69 +1,90 @@
 document.addEventListener('DOMContentLoaded', () => {
     fetch('../sidebar.html') // Make sure the path to sidebar.html is correct
     .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.text();
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.text();
     })
     .then(data => {
-      document.getElementById('sidebar-placeholder').innerHTML = data;
-      // Ensure the form is present in the sidebar HTML
-      // Then attach the event listener to the form
-      attachFormSubmitListener();
+        document.getElementById('sidebar-placeholder').innerHTML = data;
+        attachBulkServiceFormListener();
     })
     .catch(error => console.error('Error loading the sidebar:', error));
-    attachBulkServiceFormListener();
-  });
-  
-  function attachBulkServiceFormListener() {
+});
+
+function attachBulkServiceFormListener() {
     const form = document.getElementById('bulkServiceForm');
     if (!form) {
-      console.error('Bulk service form not found.');
-      return;
-    }
-  
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const confirmation = confirm("Are you sure you want to submit the services?");
-      if (!confirmation) {
+        console.error('Bulk service form not found.');
         return;
-      }
-  
-      const authToken = document.getElementById('authToken').value;
-      const serviceFields = document.querySelectorAll('.serviceFields');
-      const services = Array.from(serviceFields).map(fields => ({
-          name: fields.querySelector('[name="serviceName"]').value,
-          remoteId: fields.querySelector('[name="remoteId"]').value,
-          connectionType: fields.querySelector('[name="connectionType"]').value
-      }));
-  
-      fetch('/.netlify/functions/bulkAddServices', {
+    }
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const confirmation = confirm("Are you sure you want to submit the services?");
+        if (!confirmation) {
+            return;
+        }
+
+        const authToken = document.getElementById('authToken').value;
+        let services = Array.from(document.querySelectorAll('.serviceFields')).map(fields => ({
+            name: fields.querySelector('[name="serviceName"]').value,
+            remoteId: fields.querySelector('[name="remoteId"]').value,
+            connectionType: fields.querySelector('[name="connectionType"]').value
+        }));
+
+        const csvFile = document.getElementById('csvFileUpload').files[0];
+        if (csvFile) {
+            parseCSV(csvFile, parsedServices => {
+                services = services.concat(parsedServices);
+                submitServices(authToken, services);
+            });
+        } else {
+            submitServices(authToken, services);
+        }
+    });
+
+    document.getElementById('addServiceButton').addEventListener('click', function() {
+        const container = document.getElementById('serviceFieldsContainer');
+        const newFieldSet = container.firstElementChild.cloneNode(true);
+        newFieldSet.querySelectorAll('input').forEach(input => input.value = '');
+        container.appendChild(newFieldSet);
+    });
+}
+
+function parseCSV(file, callback) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const text = e.target.result;
+        const data = text.split('\n').slice(1).filter(row => row).map(row => {
+            const [name, remoteId, connectionType] = row.split(',');
+            return { name, remoteId, connectionType };
+        });
+        callback(data);
+    };
+    reader.readAsText(file);
+}
+
+function submitServices(authToken, services) {
+    fetch('/.netlify/functions/bulkAddServices', {
         method: 'POST',
         body: JSON.stringify({ authToken, services }),
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
-      })
-      .then(response => {
+    })
+    .then(response => {
         if (!response.ok) {
-          throw new Error(`Network response was not ok. Status: ${response.status}`);
+            throw new Error(`Network response was not ok. Status: ${response.status}`);
         }
         return response.json();
-      })
-      .then(data => {
+    })
+    .then(data => {
         alert('Services added successfully');
-      })
-      .catch(error => {
+    })
+    .catch(error => {
         alert(`An error occurred: ${error.message}`);
         console.error('Service addition failed:', error);
-      });
     });
-  
-    document.getElementById('addServiceButton').addEventListener('click', function() {
-      const container = document.getElementById('serviceFieldsContainer');
-      const newFieldSet = container.firstElementChild.cloneNode(true);
-      newFieldSet.querySelectorAll('input').forEach(input => input.value = '');
-      container.appendChild(newFieldSet);
-    });
-  }
+}

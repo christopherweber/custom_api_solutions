@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('../sidebar.html') // Make sure the path to sidebar.html is correct
+    fetch('../sidebar.html')
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -48,6 +48,11 @@ function attachBulkServiceFormListener() {
             }));
             submitServices(authToken, services);
         }
+
+        // Clear form fields after submission
+        form.reset();
+        setFieldsRequired(true);
+        serviceFieldsContainer.style.display = '';
     });
 
     document.getElementById('addServiceButton').addEventListener('click', function() {
@@ -60,14 +65,17 @@ function attachBulkServiceFormListener() {
 function attachCSVUploadListener() {
     const csvUploadInput = document.getElementById('csvFileUpload');
     const serviceFieldsContainer = document.getElementById('serviceFieldsContainer');
+    const csvUploadMessage = document.getElementById('csvUploadMessage'); // Add this element in your HTML for the message
 
     csvUploadInput.addEventListener('change', function() {
         if (this.files && this.files[0]) {
             setFieldsRequired(false);
             serviceFieldsContainer.style.display = 'none';
+            csvUploadMessage.textContent = 'CSV file uploaded successfully.'; // Display message
         } else {
             setFieldsRequired(true);
             serviceFieldsContainer.style.display = '';
+            csvUploadMessage.textContent = ''; // Clear message
         }
     });
 }

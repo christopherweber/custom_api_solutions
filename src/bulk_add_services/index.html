@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Add Services</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+<div id="sidebar-placeholder"></div>
+
+<main>
+    <section id="bulk-add-services">
+        <h1>Bulk Add Services</h1>
+        <form id="bulkServiceForm">
+            <div id="serviceFieldsContainer">
+                <div class="serviceFields">
+                    <label for="authToken">Authorization Token:</label>
+                    <input type="text" name="authToken" placeholder="Add API token here" required>
+
+                    <label for="remoteId">Remote ID (optional):</label>
+                    <input type="text" name="remoteId" placeholder="Enter Remote ID">
+
+                    <label for="connectionType">Connection Type (optional):</label>
+                    <select name="connectionType">
+                        <option value="github">GitHub</option>
+                        <option value="opsgenie">Opsgenie</option>
+                        <option value="pager_duty">PagerDuty</option>
+                        <option value="victorops">VictorOps</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" id="addServiceButton">+ Add Another Service</button>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+</main>
+
+</body>
+</html>

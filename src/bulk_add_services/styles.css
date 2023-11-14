@@ -1,0 +1,33 @@
+#bulk-add-services h1 {
+    margin-bottom: 0;
+}
+
+#bulk-add-services form {
+    margin-top: 10px; 
+}
+
+#bulk-add-services .serviceFields {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+#bulk-add-services form button[type="button"] {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    margin-bottom: 10px;
+}
+
+#bulk-add-services form button[type="button"]:hover {
+    background-color: #45a049;
+}
+
+#bulk-add-services form button[type="submit"] {
+    background-color: #008CBA; /* Blue */
+    color: white;
+    margin-top: 10px;
+}
+
+#bulk-add-services form button[type="submit"]:hover {
+    background-color: #007BBA;
+}

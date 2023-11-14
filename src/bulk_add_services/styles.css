@@ -1,33 +1,144 @@
-#bulk-add-services h1 {
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+aside {
+    width: 20%;
+    overflow-y: scroll;
+    position: fixed;
+    height: 100vh;
+    background-color: #EBEEF5; /* Updated background color */
+    padding: 10px;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for hyperlinks to remove purple color and underline */
+aside a {
+    color: #333; /* Text color */
+    text-decoration: none; /* Removes underline */
+    word-break: break-word;
+}
+
+aside a:hover {
+    color: #555; /* Text color on hover */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 0.5em;
+    transition: background-color 0.3s;
+}
+
+nav li a:hover {
+    background-color: #f4f4f4;
+}
+
+main {
+    margin-left: 22%;
+    padding: 20px;
+}
+
+#remove-priority h1 {
     margin-bottom: 0;
 }
 
-#bulk-add-services form {
+#remove-priority form {
     margin-top: 10px; 
+    margin-left: 0px;
 }
 
-#bulk-add-services .serviceFields {
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 15px;
+    background: #2D394A;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form input[type="text"],
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: white;
+}
+
+/* Updated button styles */
+#remove-priority form button, #btnNodeJs, #btnPython {
+    padding: 6px 10px; /* Smaller padding for a smaller button */
+    font-size: 0.8em; /* Smaller font size for the text inside the button */
+    border: none;
+    border-radius: 4px;
+    background-color: #12A0F3; /* New button background color */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+.fields {
     border-top: 1px solid #eee;
     padding-top: 10px;
     margin-top: 10px;
 }
 
-#bulk-add-services form button[type="button"] {
-    background-color: #4CAF50; /* Green */
-    color: white;
-    margin-bottom: 10px;
+#remove-priority form button:hover {
+    background-color: #0F87C9; /* Darker shade on hover */
 }
 
-#bulk-add-services form button[type="button"]:hover {
-    background-color: #45a049;
-}
-
-#bulk-add-services form button[type="submit"] {
-    background-color: #008CBA; /* Blue */
-    color: white;
+#remove-priority form button[type="submit"] {
     margin-top: 10px;
 }
 
-#bulk-add-services form button[type="submit"]:hover {
-    background-color: #007BBA;
+.snippet-container {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.code-snippet {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+    margin-top: 30px;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background-color: #2980b9;
 }

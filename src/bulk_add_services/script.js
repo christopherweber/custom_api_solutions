@@ -28,19 +28,20 @@ function attachBulkServiceFormListener() {
         }
 
         const authToken = document.getElementById('authToken').value;
-        let services = Array.from(document.querySelectorAll('.serviceFields')).map(fields => ({
-            name: fields.querySelector('[name="serviceName"]').value,
-            remoteId: fields.querySelector('[name="remoteId"]').value,
-            connectionType: fields.querySelector('[name="connectionType"]').value
-        }));
-
         const csvFile = document.getElementById('csvFileUpload').files[0];
+
         if (csvFile) {
+            // If a CSV file is uploaded, parse and submit only the CSV data
             parseCSV(csvFile, parsedServices => {
-                services = services.concat(parsedServices);
-                submitServices(authToken, services);
+                submitServices(authToken, parsedServices);
             });
         } else {
+            // If no CSV file is uploaded, process the manually entered services
+            let services = Array.from(document.querySelectorAll('.serviceFields')).map(fields => ({
+                name: fields.querySelector('[name="serviceName"]').value,
+                remoteId: fields.querySelector('[name="remoteId"]').value,
+                connectionType: fields.querySelector('[name="connectionType"]').value
+            }));
             submitServices(authToken, services);
         }
     });

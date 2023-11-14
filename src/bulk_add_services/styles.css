@@ -148,3 +148,10 @@ form label {
     border-top: 1px solid #ccc;
     padding-top: 20px;
 }
+
+form small {
+    display: block;
+    margin-top: 5px;
+    color: #cfcfcf; /* Lighter color for visibility */
+    font-size: 0.85em; /* Slightly larger font size for readability */
+}

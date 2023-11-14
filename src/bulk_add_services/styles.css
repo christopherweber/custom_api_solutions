@@ -142,3 +142,9 @@ form label {
 .copy-btn:hover {
     background-color: #2980b9;
 }
+
+.serviceFields + .serviceFields {
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+}

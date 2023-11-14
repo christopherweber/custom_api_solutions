@@ -15,10 +15,13 @@
     <section id="bulk-add-services">
         <h1>Bulk Add Services</h1>
         <form id="bulkServiceForm">
+            <label for="authToken">Authorization Token:</label>
+            <input type="text" id="authToken" name="authToken" placeholder="Add API token here" required>
+
             <div id="serviceFieldsContainer">
                 <div class="serviceFields">
-                    <label for="authToken">Authorization Token:</label>
-                    <input type="text" name="authToken" placeholder="Add API token here" required>
+                    <label for="serviceName">Service Name:</label>
+                    <input type="text" name="serviceName" placeholder="Enter Service Name" required>
 
                     <label for="remoteId">Remote ID (optional):</label>
                     <input type="text" name="remoteId" placeholder="Enter Remote ID">

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
         document.getElementById('sidebar-placeholder').innerHTML = data;
         attachBulkServiceFormListener();
+        attachCSVUploadListener();
     })
     .catch(error => console.error('Error loading the sidebar:', error));
 });
@@ -31,12 +32,10 @@ function attachBulkServiceFormListener() {
         const csvFile = document.getElementById('csvFileUpload').files[0];
 
         if (csvFile) {
-            // If a CSV file is uploaded, parse and submit only the CSV data
             parseCSV(csvFile, parsedServices => {
                 submitServices(authToken, parsedServices);
             });
         } else {
-            // If no CSV file is uploaded, process the manually entered services
             let services = Array.from(document.querySelectorAll('.serviceFields')).map(fields => ({
                 name: fields.querySelector('[name="serviceName"]').value,
                 remoteId: fields.querySelector('[name="remoteId"]').value,
@@ -51,6 +50,24 @@ function attachBulkServiceFormListener() {
         const newFieldSet = container.firstElementChild.cloneNode(true);
         newFieldSet.querySelectorAll('input').forEach(input => input.value = '');
         container.appendChild(newFieldSet);
+    });
+}
+
+function attachCSVUploadListener() {
+    const csvUploadInput = document.getElementById('csvFileUpload');
+    csvUploadInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            setFieldsRequired(false);
+        } else {
+            setFieldsRequired(true);
+        }
+    });
+}
+
+function setFieldsRequired(isRequired) {
+    const serviceFields = document.querySelectorAll('.serviceFields input');
+    serviceFields.forEach(field => {
+        field.required = isRequired;
     });
 }
 

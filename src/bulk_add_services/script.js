@@ -3,10 +3,9 @@ function getSelectedFunctionalities() {
     return Array.from(selectedOptions).map(opt => ({ id: opt.value }));
 }
 
-function fetchFunctionalities(authToken) {
-    fetch('https://api.firehydrant.io/v1/functionalities', {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-    })
+function fetchFunctionalities() {
+    const authToken = document.getElementById('authToken').value;
+    fetch(`/.netlify/functions/fetchFunctionalities?authToken=${encodeURIComponent(authToken)}`)
     .then(response => response.json())
     .then(data => {
         const functionalitiesDropdown = document.getElementById('functionalities');
@@ -18,8 +17,7 @@ function fetchFunctionalities(authToken) {
             functionalitiesDropdown.appendChild(option);
         });
     })
-    .catch(error => console.error('Error fetching functionalities:', error));
-}
+}  
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch('../sidebar.html')

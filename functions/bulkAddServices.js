@@ -8,26 +8,32 @@ exports.handler = async (event) => {
 
     try {
         const { authToken, services } = JSON.parse(event.body);
-
-        // Log the received data for debugging
         console.log("Received data:", { authToken, services });
 
         const responses = [];
         for (const service of services) {
+            // Construct the payload with additional fields
             const payload = {
                 name: service.name,
-                owner: null,
+                description: service.description,
+                alert_on_add: service.alertOnAdd,
+                auto_add_responding_team: service.autoAddRespondingTeam,
                 external_resources: [
                     {
                         remote_id: service.remoteId,
                         connection_type: service.connectionType
                     }
-                ]
-                // Add other fields as necessary
+                ],
+                // Set owner only if ownerId is provided
+                owner: service.ownerId ? { id: service.ownerId } : null,
+                // Include teams if teamsId is provided
+                teams: service.teamsId ? [{ id: service.teamsId }] : [],
+                // Include functionalities if provided
+                functionalities: service.functionalities ? service.functionalities.map(f => ({ id: f.id })) : []
             };
 
             const response = await axios.post('https://api.firehydrant.io/v1/services', payload, {
-                headers: { 'Authorization': `Bearer ${authToken}` } // Use the single authToken for all requests
+                headers: { 'Authorization': `Bearer ${authToken}` }
             });
 
             responses.push(response.data);
@@ -39,9 +45,7 @@ exports.handler = async (event) => {
             headers: { 'Content-Type': 'application/json' }
         };
     } catch (error) {
-        // Log the error for debugging
         console.error("Error occurred:", error);
-
         return {
             statusCode: error.response ? error.response.status : 500,
             body: JSON.stringify({ message: error.message }),

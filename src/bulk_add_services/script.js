@@ -31,6 +31,13 @@ function attachBulkServiceFormListener() {
             return;
         }
 
+        document.getElementById('functionalities').addEventListener('click', function() {
+            const authToken = document.getElementById('authToken').value;
+            if (authToken && this.options.length === 0) { // Check if authToken exists and dropdown is empty
+                fetchFunctionalities(authToken);
+            }
+        });
+
         const authToken = authTokenInput.value;
         let services = [];
         const csvFile = document.getElementById('csvFileUpload').files[0];
@@ -44,7 +51,13 @@ function attachBulkServiceFormListener() {
             services = Array.from(serviceFieldsContainer.querySelectorAll('.serviceFields')).map(fields => ({
                 name: fields.querySelector('[name="serviceName"]').value,
                 remoteId: fields.querySelector('[name="remoteId"]').value,
-                connectionType: fields.querySelector('[name="connectionType"]').value
+                connectionType: fields.querySelector('[name="connectionType"]').value,
+                alertOnAdd: document.getElementById('alertOnAdd').checked,
+                autoAddRespondingTeam: document.getElementById('autoAddRespondingTeam').checked,
+                ownerId: document.getElementById('ownerId').value,
+                description: document.getElementById('description').value,
+                teamsId: document.getElementById('teamsId').value,
+                functionalities: getSelectedFunctionalities()
             }));
             submitServices(authToken, services);
         }
@@ -54,6 +67,31 @@ function attachBulkServiceFormListener() {
         setFieldsRequired(true);
         serviceFieldsContainer.style.display = '';
     });
+
+    function getSelectedFunctionalities() {
+        const selectedOptions = document.getElementById('functionalities').selectedOptions;
+        return Array.from(selectedOptions).map(opt => ({ id: opt.value }));
+    }
+
+    function fetchFunctionalities(authToken) {
+        fetch('https://api.firehydrant.io/v1/functionalities', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const functionalitiesDropdown = document.getElementById('functionalities');
+            functionalitiesDropdown.innerHTML = ''; // Clear existing options
+            data.forEach(func => {
+                const option = document.createElement('option');
+                option.value = func.id;
+                option.textContent = func.name;
+                functionalitiesDropdown.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching functionalities:', error));
+    }
+    
+    
 
     document.getElementById('addServiceButton').addEventListener('click', function() {
         const newFieldSet = serviceFieldsContainer.firstElementChild.cloneNode(true);
@@ -71,13 +109,16 @@ function attachCSVUploadListener() {
         if (this.files && this.files[0]) {
             setFieldsRequired(false);
             serviceFieldsContainer.style.display = 'none';
-            csvUploadMessage.textContent = 'CSV file uploaded successfully.'; // Display message
+            csvUploadMessage.textContent = 'CSV file uploaded successfully.';
+            console.log('CSV Upload message set'); // Log statement
         } else {
             setFieldsRequired(true);
             serviceFieldsContainer.style.display = '';
-            csvUploadMessage.textContent = ''; // Clear message
+            csvUploadMessage.textContent = '';
+            console.log('CSV Upload message cleared'); // Log statement
         }
     });
+    
 }
 
 function setFieldsRequired(isRequired) {

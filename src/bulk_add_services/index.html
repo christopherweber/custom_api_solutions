@@ -43,13 +43,16 @@
                     <input type="text" id="ownerId" name="ownerId" placeholder="Enter Owner ID (optional)">
                     <input type="text" id="description" name="description" placeholder="Enter Description (optional)">
 
+                    <label for="teamsId">Teams:</label>
                     <select id="teamsId" name="teamsId">
                         <!-- Teams options will be populated here -->
                     </select>
 
-                    <select id="relatedFunctionalities" name="relatedFunctionalities">
+                    <label for="functionalities">Functionalities:</label>
+                    <select id="functionalities" name="functionalities">
                         <!-- Functionalities options will be populated here -->
-                    </select>   
+                    </select> 
+                    
                     <label for="csvFileUpload">Upload CSV of Services:</label>
                     <input type="file" id="csvFileUpload" accept=".csv">
                     <small>Optional: Upload a CSV file to add multiple services</small>

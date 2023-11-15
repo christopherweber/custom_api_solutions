@@ -5,21 +5,21 @@ function getSelectedFunctionalities() {
 
 function fetchFunctionalities() {
     const authToken = document.getElementById('authToken').value;
-    console.log("Fetching functionalities with authToken:", authToken); // Log the authToken used for fetching
+    console.log("Fetching functionalities with authToken:", authToken);
 
     fetch(`/.netlify/functions/fetchFunctionalities?authToken=${encodeURIComponent(authToken)}`)
     .then(response => {
-        console.log("Response received:", response); // Log the response
+        console.log("Response received:", response);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
     })
-    .then(data => {
-        console.log("Data received:", data); // Log the received data
+    .then(responseObject => {
+        console.log("Data received:", responseObject);
 
-        // Check if data is an array, and convert it if it's not
-        const functionalitiesArray = Array.isArray(data) ? data : Object.values(data);
+        // Access the functionalities array nested under 'data'
+        const functionalitiesArray = responseObject.data;
 
         const functionalitiesDropdown = document.getElementById('functionalities');
         functionalitiesDropdown.innerHTML = ''; // Clear existing options
@@ -32,9 +32,10 @@ function fetchFunctionalities() {
         });
     })
     .catch(error => {
-        console.error('Error fetching functionalities:', error); // Log any errors encountered during fetch
+        console.error('Error fetching functionalities:', error);
     });
 }
+
 
 
 

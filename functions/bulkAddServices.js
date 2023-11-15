@@ -32,8 +32,6 @@ exports.handler = async (event) => {
                 functionalities: service.functionalities ? service.functionalities.map(f => ({ id: f.id })) : []
             };
 
-            console.log("Sending request to FireHydrant API with payload:", payload);
-
             const response = await axios.post('https://api.firehydrant.io/v1/services', payload, {
                 headers: { 'Authorization': `Bearer ${authToken}` }
             });
@@ -47,8 +45,7 @@ exports.handler = async (event) => {
             headers: { 'Content-Type': 'application/json' }
         };
     } catch (error) {
-        console.error("Error occurred in bulkAddServices function:", error);
-        console.error("API response:", error.response ? error.response.data : "No response data");
+        console.error("Error occurred:", error);
         return {
             statusCode: error.response ? error.response.status : 500,
             body: JSON.stringify({ message: error.message }),

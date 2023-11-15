@@ -8,17 +8,13 @@ function fetchFunctionalities() {
     fetch(`/.netlify/functions/fetchFunctionalities?authToken=${encodeURIComponent(authToken)}`)
     .then(response => response.json())
     .then(data => {
-        console.log("Received data:", data); // Log the received data
-        // Check if data is an array
-        if (!Array.isArray(data)) {
-            console.error('Received data is not an array:', data);
-            return;
-        }
+        // Check if data is an array, and convert it if it's not
+        const functionalitiesArray = Array.isArray(data) ? data : Object.values(data);
 
         const functionalitiesDropdown = document.getElementById('functionalities');
         functionalitiesDropdown.innerHTML = ''; // Clear existing options
 
-        data.forEach(func => {
+        functionalitiesArray.forEach(func => {
             const option = document.createElement('option');
             option.value = func.id;
             option.textContent = func.name;
@@ -29,6 +25,7 @@ function fetchFunctionalities() {
         console.error('Error fetching functionalities:', error);
     });
 }
+
 
 
 document.addEventListener('DOMContentLoaded', () => {

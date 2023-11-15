@@ -5,9 +5,19 @@ function getSelectedFunctionalities() {
 
 function fetchFunctionalities() {
     const authToken = document.getElementById('authToken').value;
+    console.log("Fetching functionalities with authToken:", authToken); // Log the authToken used for fetching
+
     fetch(`/.netlify/functions/fetchFunctionalities?authToken=${encodeURIComponent(authToken)}`)
-    .then(response => response.json())
+    .then(response => {
+        console.log("Response received:", response); // Log the response
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
+        console.log("Data received:", data); // Log the received data
+
         // Check if data is an array, and convert it if it's not
         const functionalitiesArray = Array.isArray(data) ? data : Object.values(data);
 
@@ -22,9 +32,10 @@ function fetchFunctionalities() {
         });
     })
     .catch(error => {
-        console.error('Error fetching functionalities:', error);
+        console.error('Error fetching functionalities:', error); // Log any errors encountered during fetch
     });
 }
+
 
 
 

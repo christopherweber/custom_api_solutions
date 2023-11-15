@@ -154,13 +154,24 @@ function parseCSV(file, callback) {
     reader.onload = function (e) {
         const text = e.target.result;
         const data = text.split('\n').slice(1).filter(row => row).map(row => {
-            const [name, remoteId, connectionType] = row.split(',');
-            return { name, remoteId, connectionType };
+            const [name, description, remoteId, connectionType, alertOnAdd, autoAddRespondingTeam, ownerId, teamsId, functionalitiesId] = row.split(',');
+            return {
+                name,
+                description,
+                remoteId,
+                connectionType,
+                alertOnAdd: alertOnAdd === 'true',
+                autoAddRespondingTeam: autoAddRespondingTeam === 'true',
+                ownerId,
+                teamsId,
+                functionalities: functionalitiesId ? [{ id: functionalitiesId }] : []
+            };
         });
         callback(data);
     };
     reader.readAsText(file);
 }
+
 
 function submitServices(authToken, services) {
     fetch('/.netlify/functions/bulkAddServices', {

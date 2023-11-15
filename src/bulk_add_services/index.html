@@ -15,6 +15,7 @@
     <section id="bulk-add-services">
         <h1>Bulk Add Services</h1>
         <form id="bulkServiceForm">
+            <p>Add multiple services to your FireHydrant account, or simply use a CSV file for bulk upload."</p>
             <label for="authToken">Authorization Token:</label>
             <input type="text" id="authToken" name="authToken" placeholder="Add API token here" required>
 
@@ -26,10 +27,10 @@
                     <label for="description">Description (optional):</label>
                     <input type="text" id="description" name="description" placeholder="Enter Description">
 
-                    <label for="remoteId">Remote ID (optional):</label>
-                    <input type="text" name="remoteId" placeholder="Enter Remote ID">
+                    <label for="remoteId">Remote ID:</label>
+                    <input type="text" name="remoteId" placeholder="Enter Remote ID" required>
 
-                    <label for="connectionType">Connection Type (optional):</label>
+                    <label for="connectionType">Connection Type:</label>
 
                     <select name="connectionType">
                         <option value="pager_duty">PagerDuty</option>

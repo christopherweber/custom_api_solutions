@@ -8,17 +8,26 @@ function fetchFunctionalities() {
     fetch(`/.netlify/functions/fetchFunctionalities?authToken=${encodeURIComponent(authToken)}`)
     .then(response => response.json())
     .then(data => {
+        console.log("Received data:", data); // Log the received data
+        // Check if data is an array
+        if (!Array.isArray(data)) {
+            console.error('Received data is not an array:', data);
+            return;
+        }
+
         const functionalitiesDropdown = document.getElementById('functionalities');
         functionalitiesDropdown.innerHTML = ''; // Clear existing options
 
         data.forEach(func => {
             const option = document.createElement('option');
-            option.value = func.id; // Use the 'id' from each functionality object
-            option.textContent = func.name; // Use the 'name' from each functionality object
+            option.value = func.id;
+            option.textContent = func.name;
             functionalitiesDropdown.appendChild(option);
         });
     })
-    .catch(error => console.error('Error fetching functionalities:', error));
+    .catch(error => {
+        console.error('Error fetching functionalities:', error);
+    });
 }
 
 

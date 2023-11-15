@@ -12,11 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
         attachCSVUploadListener();
     })
     .catch(error => console.error('Error loading the sidebar:', error));
-    
+
     document.getElementById('functionalities').addEventListener('click', function() {
         const authToken = document.getElementById('authToken').value;
+        console.log("Functionalites clicked, authtoken: " + authToken)
         if (authToken && this.options.length === 0) { // Check if authToken exists and dropdown is empty
             fetchFunctionalities(authToken);
+            console.log("Succeeded")
         }
     });
 });

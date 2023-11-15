@@ -23,6 +23,9 @@
                     <label for="serviceName">Service Name:</label>
                     <input type="text" name="serviceName" placeholder="Enter Service Name" required>
 
+                    <label for="description">Description (optional):</label>
+                    <input type="text" id="description" name="description" placeholder="Enter Description">
+
                     <label for="remoteId">Remote ID (optional):</label>
                     <input type="text" name="remoteId" placeholder="Enter Remote ID">
 
@@ -34,21 +37,22 @@
                         <option value="opsgenie">Opsgenie</option>
                         <option value="github">GitHub</option>
                     </select>
-                    <label for="alertOnAdd">Alert on Add</label>
+                    <label for="alertOnAdd">Alert on Add (optional):</label>
                     <input type="checkbox" id="alertOnAdd" name="alertOnAdd">
 
-                    <label for="autoAddRespondingTeam">Auto Add Responding Team</label>
+                    <label for="autoAddRespondingTeam">Auto Add Responding Team (optional):</label>
                     <input type="checkbox" id="autoAddRespondingTeam" name="autoAddRespondingTeam">
 
-                    <input type="text" id="ownerId" name="ownerId" placeholder="Enter Owner ID (optional)">
-                    <input type="text" id="description" name="description" placeholder="Enter Description (optional)">
+                    <label for="ownerId">Owner Id (optional):</label>
+                    <input type="text" id="ownerId" name="ownerId" placeholder="Enter Owner ID">
 
-                    <label for="teamsId">Teams:</label>
+
+                    <label for="teamsId">Teams (optional):</label>
                     <select id="teamsId" name="teamsId">
                         <!-- Teams options will be populated here -->
                     </select>
 
-                    <label for="functionalities">Functionalities:</label>
+                    <label for="functionalities">Functionalities (optional):</label>
                     <select id="functionalities" name="functionalities">
                         <!-- Functionalities options will be populated here -->
                     </select> 

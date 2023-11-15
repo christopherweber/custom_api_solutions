@@ -37,9 +37,6 @@ function fetchFunctionalities() {
 }
 
 
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
     fetch('../sidebar.html')
     .then(response => {
@@ -179,6 +176,7 @@ function parseCSV(file, callback) {
 
 
 function submitServices(authToken, services) {
+    console.log("Final payload being sent:", { authToken, services });
     fetch('/.netlify/functions/bulkAddServices', {
         method: 'POST',
         body: JSON.stringify({ authToken, services }),

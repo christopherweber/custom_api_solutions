@@ -1,3 +1,26 @@
+function getSelectedFunctionalities() {
+    const selectedOptions = document.getElementById('functionalities').selectedOptions;
+    return Array.from(selectedOptions).map(opt => ({ id: opt.value }));
+}
+
+function fetchFunctionalities(authToken) {
+    fetch('https://api.firehydrant.io/v1/functionalities', {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const functionalitiesDropdown = document.getElementById('functionalities');
+        functionalitiesDropdown.innerHTML = ''; // Clear existing options
+        data.forEach(func => {
+            const option = document.createElement('option');
+            option.value = func.id;
+            option.textContent = func.name;
+            functionalitiesDropdown.appendChild(option);
+        });
+    })
+    .catch(error => console.error('Error fetching functionalities:', error));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     fetch('../sidebar.html')
     .then(response => {
@@ -71,31 +94,7 @@ function attachBulkServiceFormListener() {
         serviceFieldsContainer.style.display = '';
     });
 
-    function getSelectedFunctionalities() {
-        const selectedOptions = document.getElementById('functionalities').selectedOptions;
-        return Array.from(selectedOptions).map(opt => ({ id: opt.value }));
-    }
-
-    function fetchFunctionalities(authToken) {
-        fetch('https://api.firehydrant.io/v1/functionalities', {
-            headers: { 'Authorization': `Bearer ${authToken}` }
-        })
-        .then(response => response.json())
-        .then(data => {
-            const functionalitiesDropdown = document.getElementById('functionalities');
-            functionalitiesDropdown.innerHTML = ''; // Clear existing options
-            data.forEach(func => {
-                const option = document.createElement('option');
-                option.value = func.id;
-                option.textContent = func.name;
-                functionalitiesDropdown.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Error fetching functionalities:', error));
-    }
     
-    
-
     document.getElementById('addServiceButton').addEventListener('click', function() {
         const newFieldSet = serviceFieldsContainer.firstElementChild.cloneNode(true);
         newFieldSet.querySelectorAll('input').forEach(input => input.value = '');

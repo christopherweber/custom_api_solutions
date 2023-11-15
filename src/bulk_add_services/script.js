@@ -12,6 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
         attachCSVUploadListener();
     })
     .catch(error => console.error('Error loading the sidebar:', error));
+    
+    document.getElementById('functionalities').addEventListener('click', function() {
+        const authToken = document.getElementById('authToken').value;
+        if (authToken && this.options.length === 0) { // Check if authToken exists and dropdown is empty
+            fetchFunctionalities(authToken);
+        }
+    });
 });
 
 function attachBulkServiceFormListener() {
@@ -31,12 +38,6 @@ function attachBulkServiceFormListener() {
             return;
         }
 
-        document.getElementById('functionalities').addEventListener('click', function() {
-            const authToken = document.getElementById('authToken').value;
-            if (authToken && this.options.length === 0) { // Check if authToken exists and dropdown is empty
-                fetchFunctionalities(authToken);
-            }
-        });
 
         const authToken = authTokenInput.value;
         let services = [];

@@ -153,20 +153,25 @@ function parseCSV(file, callback) {
     const reader = new FileReader();
     reader.onload = function (e) {
         const text = e.target.result;
+        console.log("Raw CSV Data:", text);  // Log raw CSV data
+
         const data = text.split('\n').slice(1).filter(row => row).map(row => {
             const [name, description, remoteId, connectionType, alertOnAdd, autoAddRespondingTeam, ownerId, teamsId, functionalitiesId] = row.split(',');
-            return {
+            const serviceObject = {
                 name,
                 description,
                 remoteId,
                 connectionType,
-                alertOnAdd: alertOnAdd === 'true',
-                autoAddRespondingTeam: autoAddRespondingTeam === 'true',
+                alertOnAdd: alertOnAdd === 'true',  // Ensure boolean parsing
+                autoAddRespondingTeam: autoAddRespondingTeam === 'true',  // Ensure boolean parsing
                 ownerId,
                 teamsId,
-                functionalities: functionalitiesId ? [{ id: functionalitiesId }] : []
+                functionalities: functionalitiesId ? [{ id: functionalitiesId }] : []  // Ensure array format
             };
+            console.log("Parsed Service Object:", serviceObject);  // Log each parsed service object
+            return serviceObject;
         });
+
         callback(data);
     };
     reader.readAsText(file);

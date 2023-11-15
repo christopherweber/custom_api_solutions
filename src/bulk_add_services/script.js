@@ -8,6 +8,7 @@ function fetchFunctionalities() {
     fetch(`/.netlify/functions/fetchFunctionalities?authToken=${encodeURIComponent(authToken)}`)
     .then(response => response.json())
     .then(data => {
+        console.log(data);
         const functionalitiesDropdown = document.getElementById('functionalities');
         functionalitiesDropdown.innerHTML = ''; // Clear existing options
         data.forEach(func => {

@@ -156,18 +156,25 @@ function parseCSV(file, callback) {
         console.log("Raw CSV Data:", text);  // Log raw CSV data
 
         const data = text.split('\n').slice(1).filter(row => row).map(row => {
-            const [name, description, remoteId, connectionType, alertOnAdd, autoAddRespondingTeam, ownerId, teamsId, functionalitiesId] = row.split(',');
+            // Split the row by comma and filter out any empty strings
+            const values = row.split(',').filter(value => value.trim() !== '');
+
+            // Destructure the filtered values array
+            const [name, description, remoteId, connectionType, alertOnAdd, autoAddRespondingTeam, ownerId, teamsId, functionalitiesId] = values;
+
+            // Construct the service object
             const serviceObject = {
                 name,
                 description,
                 remoteId,
                 connectionType,
-                alertOnAdd: alertOnAdd === 'true',  // Ensure boolean parsing
-                autoAddRespondingTeam: autoAddRespondingTeam === 'true',  // Ensure boolean parsing
-                ownerId,
-                teamsId,
-                functionalities: functionalitiesId ? [{ id: functionalitiesId }] : []  // Ensure array format
+                alertOnAdd: alertOnAdd.trim().toLowerCase() === 'true',  // Corrected boolean parsing
+                autoAddRespondingTeam: autoAddRespondingTeam.trim().toLowerCase() === 'true',  // Corrected boolean parsing
+                ownerId: ownerId || null,  // Handle empty strings for optional fields
+                teamsId: teamsId || null,
+                functionalities: functionalitiesId ? [{ id: functionalitiesId }] : []  // Handle functionalities
             };
+
             console.log("Parsed Service Object:", serviceObject);  // Log each parsed service object
             return serviceObject;
         });

@@ -131,14 +131,15 @@ function attachCSVUploadListener() {
             setFieldsRequired(false);
             serviceFieldsContainer.style.display = 'none';
             csvUploadMessage.textContent = 'CSV file uploaded successfully.';
+            csvUploadMessage.style.display = 'block'; // Show the message
         } else {
             setFieldsRequired(true);
             serviceFieldsContainer.style.display = '';
-            // Do not clear the CSV upload message here
-            // The message will be cleared only when the form is reset or submitted
+            csvUploadMessage.style.display = 'none'; // Hide the message
         }
     });
 }
+
 
 
 function setFieldsRequired(isRequired) {

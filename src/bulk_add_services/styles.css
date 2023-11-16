@@ -155,3 +155,9 @@ form small {
     color: #cfcfcf; /* Lighter color for visibility */
     font-size: 0.85em; /* Slightly larger font size for readability */
 }
+
+#csvUploadMessage {
+    display: none;
+}
+
+

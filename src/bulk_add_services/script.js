@@ -156,24 +156,28 @@ function parseCSV(file, callback) {
         console.log("Raw CSV Data:", text);  // Log raw CSV data
 
         const data = text.split('\n').slice(1).filter(row => row).map(row => {
-            // Split the row by comma and filter out any empty strings
-            const values = row.split(',').filter(value => value.trim() !== '');
+            const values = row.split(',').map(value => value.trim());
 
-            // Destructure the filtered values array
-            const [name, description, remoteId, connectionType, alertOnAdd, autoAddRespondingTeam, ownerId, teamsId, functionalitiesId] = values;
-
-            // Construct the service object
+            // Create a service object with defaults
             const serviceObject = {
-                name,
-                description,
-                remoteId,
-                connectionType,
-                alertOnAdd: alertOnAdd.trim().toLowerCase() === 'true',  // Corrected boolean parsing
-                autoAddRespondingTeam: autoAddRespondingTeam.trim().toLowerCase() === 'true',  // Corrected boolean parsing
-                ownerId: ownerId || null,  // Handle empty strings for optional fields
-                teamsId: teamsId || null,
-                functionalities: functionalitiesId ? [{ id: functionalitiesId }] : []  // Handle functionalities
+                name: values[0] || '',
+                remoteId: values[1] || '',
+                connectionType: values[2] || '',
+                alertOnAdd: false,  // Default to false if not provided
+                autoAddRespondingTeam: false,  // Default to false if not provided
+                ownerId: null,  // Default to null if not provided
+                teamsId: null,  // Default to null if not provided
+                functionalities: []  // Default to empty array if not provided
             };
+
+            // Update the object if additional fields are present
+            if (values.length > 3) {
+                serviceObject.alertOnAdd = values[3].toLowerCase() === 'true';
+                serviceObject.autoAddRespondingTeam = values[4].toLowerCase() === 'true';
+                serviceObject.ownerId = values[5] || null;
+                serviceObject.teamsId = values[6] || null;
+                serviceObject.functionalities = values[7] ? [{ id: values[7] }] : [];
+            }
 
             console.log("Parsed Service Object:", serviceObject);  // Log each parsed service object
             return serviceObject;
@@ -183,6 +187,7 @@ function parseCSV(file, callback) {
     };
     reader.readAsText(file);
 }
+
 
 
 function submitServices(authToken, services) {

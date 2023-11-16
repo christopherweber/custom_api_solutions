@@ -124,29 +124,30 @@ function attachBulkServiceFormListener() {
 function attachCSVUploadListener() {
     const csvUploadInput = document.getElementById('csvFileUpload');
     const serviceFieldsContainer = document.getElementById('serviceFieldsContainer');
-    const csvUploadMessage = document.getElementById('csvUploadMessage'); // Element for the upload message
+    const csvUploadMessage = document.getElementById('csvUploadMessage');
 
     csvUploadInput.addEventListener('change', function() {
         if (this.files && this.files[0]) {
             setFieldsRequired(false);
             serviceFieldsContainer.style.display = 'none';
-            csvUploadMessage.textContent = 'CSV file uploaded successfully.'; // Keep this message
+            csvUploadMessage.textContent = 'CSV file uploaded successfully.';
         } else {
             setFieldsRequired(true);
             serviceFieldsContainer.style.display = '';
-            // Only clear the message if there's no file
-            csvUploadMessage.textContent = '';
+            // Do not clear the CSV upload message here
+            // The message will be cleared only when the form is reset or submitted
         }
     });
 }
 
 
 function setFieldsRequired(isRequired) {
-    const serviceFields = document.querySelectorAll('.serviceFields input');
-    serviceFields.forEach(field => {
+    const requiredFields = document.querySelectorAll('.serviceFields input[required], .serviceFields select[required]');
+    requiredFields.forEach(field => {
         field.required = isRequired;
     });
 }
+
 
 const columnMapping = {
     'name': 'name',

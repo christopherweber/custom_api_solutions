@@ -48,7 +48,7 @@ exports.handler = async (event) => {
         console.error("Error occurred:", error);
         return {
             statusCode: error.response ? error.response.status : 500,
-            body: JSON.stringify({ message: error.message }),
+            body: JSON.stringify({ message: error.message, errorDetail: error.response ? error.response.data : null }),
             headers: { 'Content-Type': 'application/json' }
         };
     }

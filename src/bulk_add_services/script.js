@@ -124,23 +124,22 @@ function attachBulkServiceFormListener() {
 function attachCSVUploadListener() {
     const csvUploadInput = document.getElementById('csvFileUpload');
     const serviceFieldsContainer = document.getElementById('serviceFieldsContainer');
-    const csvUploadMessage = document.getElementById('csvUploadMessage'); // Add this element in your HTML for the message
+    const csvUploadMessage = document.getElementById('csvUploadMessage'); // Element for the upload message
 
     csvUploadInput.addEventListener('change', function() {
         if (this.files && this.files[0]) {
             setFieldsRequired(false);
             serviceFieldsContainer.style.display = 'none';
-            csvUploadMessage.textContent = 'CSV file uploaded successfully.';
-            console.log('CSV Upload message set'); // Log statement
+            csvUploadMessage.textContent = 'CSV file uploaded successfully.'; // Keep this message
         } else {
             setFieldsRequired(true);
             serviceFieldsContainer.style.display = '';
+            // Only clear the message if there's no file
             csvUploadMessage.textContent = '';
-            console.log('CSV Upload message cleared'); // Log statement
         }
     });
-    
 }
+
 
 function setFieldsRequired(isRequired) {
     const serviceFields = document.querySelectorAll('.serviceFields input');
@@ -149,33 +148,46 @@ function setFieldsRequired(isRequired) {
     });
 }
 
+const columnMapping = {
+    'name': 'name',
+    'description': 'description',
+    'remoteId': 'remoteId',
+    'connectionType': 'connectionType',
+    'alertOnAdd': 'alertOnAdd',
+    'autoAddRespondingTeam': 'autoAddRespondingTeam',
+    'ownerId': 'ownerId',
+    'teamsId': 'teamsId',
+    'functionalitiesId': 'functionalitiesId'
+};
+
+
 function parseCSV(file, callback) {
     const reader = new FileReader();
     reader.onload = function (e) {
         const text = e.target.result;
-        console.log("Raw CSV Data:", text);  // Log raw CSV data
+        const lines = text.split('\n');
+        const headers = lines[0].split(',').map(header => header.trim());
 
-        const data = text.split('\n').slice(1).filter(row => row).map(row => {
-            // Split and filter out empty elements
-            const values = row.split(',').filter(value => value.trim() !== '');
+        const data = lines.slice(1).filter(line => line).map(line => {
+            const values = line.split(',').map(value => value.trim());
+            let serviceObject = {};
 
-            // Destructure the filtered values array
-            const [name, description, remoteId, connectionType, alertOnAdd, autoAddRespondingTeam, ownerId, teamsId, functionalitiesId] = values;
+            headers.forEach((header, index) => {
+                const key = columnMapping[header];
+                if (key) {
+                    if (key === 'alertOnAdd' || key === 'autoAddRespondingTeam') {
+                        serviceObject[key] = values[index].toLowerCase() === 'true';
+                    } else if (key === 'functionalitiesId') {
+                        serviceObject['functionalities'] = values[index] ? [{ id: values[index] }] : [];
+                    } else if (key === 'teamsId') {
+                        serviceObject['teams'] = values[index] ? [{ id: values[index] }] : [];
+                    } else {
+                        serviceObject[key] = values[index] || null;
+                    }
+                }
+            });
 
-            // Construct the service object
-            const serviceObject = {
-                name,
-                description,
-                remoteId,
-                connectionType,
-                alertOnAdd: alertOnAdd ? alertOnAdd.trim().toLowerCase() === 'true' : false, 
-                autoAddRespondingTeam: autoAddRespondingTeam ? autoAddRespondingTeam.trim().toLowerCase() === 'true' : false,
-                ownerId: ownerId || null,
-                teamsId: teamsId || null,
-                functionalities: functionalitiesId ? [{ id: functionalitiesId }] : []
-            };
-
-            console.log("Parsed Service Object:", serviceObject);  // Log each parsed service object
+            console.log("Parsed Service Object:", serviceObject);
             return serviceObject;
         });
 

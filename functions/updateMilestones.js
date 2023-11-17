@@ -22,6 +22,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({ message: 'Milestones updated successfully' })
         };
     } catch (error) {
+        console.error('Error:', error);
         return { statusCode: 500, body: `Server Error: ${error.message}` };
     }
 };

@@ -56,7 +56,12 @@ function updateMilestones(authToken, startingMilestone, targetMilestone) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ authToken, startingMilestone, targetMilestone })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text) });
+        }
+        return response.json();
+    })
     .then(data => console.log(data))
     .catch(error => console.error('Error:', error));
 }

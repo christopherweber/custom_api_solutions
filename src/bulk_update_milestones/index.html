@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Milestone Update</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="sidebar-placeholder"></div>
+
+<main>
+    <section id="milestone-update">
+        <h1>Update Incident Milestones</h1>
+        <p>Sequentially update incident milestones from a starting point to a target milestone.</p>
+        <form id="milestoneUpdateForm">
+            <label for="authToken">Authorization Token:</label>
+            <input type="text" id="authToken" placeholder="Enter API key here" required>
+
+            <div class="form-row">
+                <div class="form-field">
+                    <label for="startingMilestone">Starting Milestone:</label>
+                    <select id="startingMilestone" required>
+                        <!-- Milestones options will be populated here -->
+                    </select>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="form-field">
+                    <label for="targetMilestone">Target Milestone:</label>
+                    <select id="targetMilestone" required>
+                        <!-- Milestones options will be populated here -->
+                    </select>
+                </div>
+            </div>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+</main>
+
+<script src="script.js" defer></script> <!-- Load the script at the end of the body -->
+
+</body>
+</html>

@@ -37,9 +37,6 @@ function fetchFunctionalities() {
 }
 
 
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
     fetch('../sidebar.html')
     .then(response => {

@@ -161,3 +161,28 @@ form small {
 }
 
 
+#bulk-add-services form button, #btnNodeJs, #btnPython {
+    padding: 6px 10px; /* Smaller padding for a smaller button */
+    font-size: 0.8em; /* Smaller font size for the text inside the button */
+    border: none;
+    border-radius: 4px;
+    background-color: #12A0F3; /* New button background color */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+.fields {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+#bulk-add-services form button:hover {
+    background-color: #0F87C9; /* Darker shade on hover */
+}
+
+#bulk-add-services form button[type="submit"] {
+    margin-top: 10px;
+}

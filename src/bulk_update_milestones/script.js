@@ -38,20 +38,30 @@ function populateMilestoneOptions() {
 }
 
 function showLoadingMessage() {
-    document.getElementById('loadingMessage').textContent = 'Working on it!';
+    const loadingElement = document.getElementById('loadingMessage');
+    loadingElement.textContent = 'Working on it...';
+    loadingElement.style.display = 'block';
 }
 
 function showSuccessMessage() {
-    document.getElementById('loadingMessage').textContent = '';
-    document.getElementById('successMessage').textContent = 'All incidents have been processed.';
+    const successElement = document.getElementById('successMessage');
+    successElement.textContent = 'All incidents have been processed.';
+    successElement.style.display = 'block';
+    document.getElementById('loadingMessage').style.display = 'none'; // Hide loading message
 }
+
+function hideMessages() {
+    document.getElementById('loadingMessage').style.display = 'none';
+    document.getElementById('successMessage').style.display = 'none';
+}
+
 
 function attachFormSubmitListener() {
     const form = document.getElementById('milestoneUpdateForm');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const confirmed = window.confirm("This will move ALL incidents with this milestone. Are you sure you want to process?");
+        const confirmed = window.confirm("This will move ALL incidents with this milestone. Are you sure you want to proceed?");
         if (!confirmed) {
             return; // Stop the function if the user does not confirm
         }

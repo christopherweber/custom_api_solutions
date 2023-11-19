@@ -110,14 +110,28 @@ form label {
 #milestone-update form button[type="submit"] {
     margin-top: 10px;
 }
+
+#loadingMessage, #successMessage {
+    font-family: 'Press Start 2P', cursive; /* Pixelated font */
+    display: none; /* Hide by default */
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    border: 3px solid;
+    background-color: black;
+    color: lime;
+    border-radius: 5px;
+}
+
 #loadingMessage {
-    color: blue;
-    font-style: italic;
-    font-size: 1.2em;
+    border-color: blue;
+    animation: blinker 1.5s linear infinite;
 }
 
 #successMessage {
-    color: green;
-    font-weight: bold;
-    font-size: 1.2em;
+    border-color: green;
+}
+
+@keyframes blinker {
+    50% { opacity: 0; }
 }

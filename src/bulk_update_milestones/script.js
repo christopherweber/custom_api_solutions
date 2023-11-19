@@ -51,6 +51,10 @@ function showSuccessMessage() {
 
     // Hide the loading message
     hideLoadingMessage();
+
+    setTimeout(() => {
+        successElement.style.display = 'none';
+    }, 5000);
 }
 
 function hideLoadingMessage() {

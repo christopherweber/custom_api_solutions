@@ -39,21 +39,24 @@ function populateMilestoneOptions() {
 
 function showLoadingMessage() {
     const loadingElement = document.getElementById('loadingMessage');
-    loadingElement.textContent = 'Working on it...';
-    loadingElement.style.display = 'block';
+    loadingElement.textContent = 'Loading... Please wait.';
+    loadingElement.style.display = 'block'; // Show the loading message
 }
+
 
 function showSuccessMessage() {
     const successElement = document.getElementById('successMessage');
     successElement.textContent = 'All incidents have been processed.';
     successElement.style.display = 'block';
-    document.getElementById('loadingMessage').style.display = 'none'; // Hide loading message
+
+    // Hide the loading message
+    hideLoadingMessage();
 }
 
-function hideMessages() {
-    document.getElementById('loadingMessage').style.display = 'none';
-    document.getElementById('successMessage').style.display = 'none';
+function hideLoadingMessage() {
+    document.getElementById('loadingMessage').style.display = 'none'; // Hide the loading message
 }
+
 
 
 function attachFormSubmitListener() {
@@ -76,24 +79,36 @@ function attachFormSubmitListener() {
 }
 
 function updateMilestones(authToken, startingMilestone, targetMilestone) {
-    hideMessages();
+    // Show the loading message
+    showLoadingMessage();
+
+    // Make a POST request to the Netlify function
     fetch('/.netlify/functions/updateMilestones', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ authToken, startingMilestone, targetMilestone })
     })
     .then(response => {
+        // If the response is not OK, throw an error
         if (!response.ok) {
             return response.text().then(text => { throw new Error(text) });
         }
+        // Parse the JSON response
         return response.json();
     })
     .then(data => {
-        console.log(data.message);
+        // Handle successful response
+        // Show the success message
         showSuccessMessage();
+        console.log(data.message);
     })
     .catch(error => {
+        // Handle any errors
         console.error('Error:', error);
-        document.getElementById('loadingMessage').textContent = ''; 
+    })
+    .finally(() => {
+        // Hide the loading message whether the request succeeded or failed
+        hideLoadingMessage();
     });
 }
+

@@ -55,13 +55,19 @@ const fetchIncidents = async (authToken, milestone) => {
     try {
         const response = await makeHttpsRequest(options);
         console.log("API response for fetching incidents:", response);
-        return response; // Ensure this is an array
+
+        // Adjust the line below based on the actual response structure
+        const incidents = response.data || []; // Example - adjust based on actual API response
+
+        if (!Array.isArray(incidents)) {
+            throw new Error("Fetched data is not iterable. Expected an array of incidents.");
+        }
+
+        return incidents;
     } catch (error) {
         console.error("Error fetching incidents:", error);
-        throw error; // Rethrow error to be handled by the caller
+        throw error;
     }
-
-    return makeHttpsRequest(options);
 };
 
 const updateIncidentMilestone = async (authToken, incidentId, milestone) => {
@@ -106,7 +112,7 @@ exports.handler = async (event) => {
         if (!Array.isArray(incidents)) {
             throw new Error("Fetched data is not iterable. Expected an array of incidents.");
         }
-        
+
         for (const incident of incidents) {
             let currentMilestoneIndex = milestonesSequence.indexOf(incident.current_milestone);
             let targetIndex = milestonesSequence.indexOf(targetMilestone);

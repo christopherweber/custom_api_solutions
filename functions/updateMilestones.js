@@ -31,6 +31,7 @@ const makeHttpsRequest = (options, postData) => {
         });
 
         req.on('error', (e) => {
+            console.error(`HTTPS request error: ${e.message}`);
             reject(e);
         });
 
@@ -65,6 +66,7 @@ const fetchIncidents = async (authToken, milestone) => {
 
         return incidents;
     } catch (error) {
+        console.error(`Error fetching incidents: ${error.message}`);
         console.error("Error fetching incidents:", error);
         throw error;
     }

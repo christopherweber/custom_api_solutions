@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Fetch and inject the sidebar
-    fetch('../sidebar.html') // Adjust the path to sidebar.html as needed
+    fetch('../sidebar.html')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -62,6 +61,12 @@ function updateMilestones(authToken, startingMilestone, targetMilestone) {
         }
         return response.json();
     })
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
+    .then(data => {
+        console.log(data.message);
+        // Handle successful response
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Handle error response
+    });
 }

@@ -101,6 +101,7 @@ function updateMilestones(authToken, startingMilestone, targetMilestone) {
         // Show the success message
         showSuccessMessage();
         console.log(data.message);
+        document.getElementById('milestoneUpdateForm').reset();
     })
     .catch(error => {
         // Handle any errors

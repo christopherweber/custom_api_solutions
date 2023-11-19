@@ -113,10 +113,6 @@ form label {
 
 #loadingMessage, #successMessage {
     display: none; /* Initially hidden */
-    position: fixed; /* Fixed position relative to the viewport */
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Adjust to center precisely */
     text-align: center;
     padding: 5px 10px;
     background-color: #f3f3f3; /* Light gray background for subtlety */
@@ -125,8 +121,11 @@ form label {
     border-radius: 3px;
     font-family: 'Courier New', Courier, monospace; /* Monospace font for vintage computer feel */
     font-size: 0.8em;
-    z-index: 1000; /* Ensures it's above other elements */
+    margin-bottom: 20px; /* Add some space below the message */
 }
+
+/* Remove the positioning styles that center it in the middle of the page */
+
 
 
 @keyframes blinker {

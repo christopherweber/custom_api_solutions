@@ -76,6 +76,7 @@ function attachFormSubmitListener() {
 }
 
 function updateMilestones(authToken, startingMilestone, targetMilestone) {
+    hideMessages();
     fetch('/.netlify/functions/updateMilestones', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

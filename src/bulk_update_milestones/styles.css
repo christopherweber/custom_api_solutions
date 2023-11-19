@@ -114,23 +114,28 @@ form label {
 #loadingMessage, #successMessage {
     font-family: 'Press Start 2P', cursive; /* Pixelated font */
     display: none; /* Hide by default */
+    position: fixed; /* Positioning it relative to the viewport */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust to exact center */
     text-align: center;
-    margin-top: 20px;
-    padding: 10px;
-    border: 3px solid;
-    background-color: black;
-    color: lime;
+    padding: 5px;
+    border: 2px solid black;
+    background-color: white;
+    color: black;
     border-radius: 5px;
+    font-size: 0.8em; /* Smaller font size */
 }
 
 #loadingMessage {
-    border-color: blue;
-    animation: blinker 1.5s linear infinite;
+    animation: none; /* Removing blinking effect */
 }
 
+/* Optional: Style for success message (if you want to adjust it as well) */
 #successMessage {
-    border-color: green;
+    border-color: black;
 }
+
 
 @keyframes blinker {
     50% { opacity: 0; }

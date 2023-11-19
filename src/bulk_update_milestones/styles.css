@@ -110,3 +110,14 @@ form label {
 #milestone-update form button[type="submit"] {
     margin-top: 10px;
 }
+#loadingMessage {
+    color: blue;
+    font-style: italic;
+    font-size: 1.2em;
+}
+
+#successMessage {
+    color: green;
+    font-weight: bold;
+    font-size: 1.2em;
+}

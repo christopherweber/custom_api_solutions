@@ -13,8 +13,11 @@
 <main>
     <section id="milestone-update">
         <h1>Update Incident Milestones</h1>
-        <p>Sequentially update incident milestones from a starting point to a target milestone.</p>
+        <p>Sequentially update incident milestones 
+            <br> from a starting point to a target milestone.</p>
         <form id="milestoneUpdateForm">
+            <div id="loadingMessage"></div>
+            <div id="successMessage"></div>
             <label for="authToken">Authorization Token:</label>
             <input type="text" id="authToken" placeholder="Enter API key here" required>
 

@@ -54,7 +54,7 @@ function showSuccessMessage() {
 
     setTimeout(() => {
         successElement.style.display = 'none';
-    }, 5000);
+    }, 3000);
 }
 
 function hideLoadingMessage() {

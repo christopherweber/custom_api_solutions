@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <form id="parameters-form">
+    <label for="auth-token">Authorization Token:</label>
+    <input type="text" id="auth-token" name="auth_token" required>
+
+    <label for="bucket-size">Bucket Size:</label>
+    <select id="bucket-size" name="bucket_size" required>
+      <option value="week">Week</option>
+      <option value="day">Day</option>
+      <option value="month">Month</option>
+      <option value="all_time">All Time</option>
+    </select>
+
+    <label for="by">By:</label>
+    <select id="by" name="by" required>
+      <!-- Populate with options from the screenshot provided -->
+    </select>
+
+    <label for="start-date">Start Date:</label>
+    <input type="date" id="start-date" name="start_date" required>
+
+    <label for="end-date">End Date:</label>
+    <input type="date" id="end-date" name="end_date" required>
+
+    <input type="submit" value="Fetch Data">
+  </form>
+
+  <button id="download-csv" style="display: none;">Download CSV</button>
+
+  <div id="data-display"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

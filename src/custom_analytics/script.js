@@ -32,7 +32,7 @@ function fetchAnalyticsData(authToken, startDate, endDate) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data); 
+        console.log("Received data:", data); // Debugging line
         hideLoadingMessage();
         displayReportResults(data);
     })
@@ -41,6 +41,7 @@ function fetchAnalyticsData(authToken, startDate, endDate) {
         hideLoadingMessage();
     });
 }
+
 
 function showLoadingMessage() {
     const loadingElement = document.getElementById('loadingMessage');

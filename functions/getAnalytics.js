@@ -25,6 +25,14 @@ exports.handler = async function(event) {
       throw new Error("Unexpected response format from the FireHydrant API");
     }
 
+    // Log the first few incidents to avoid large log outputs
+    if (incidents && incidents.length > 0) {
+      console.log("First Incident:", incidents[0]);
+    if (incidents.length > 1) {
+      console.log("Second Incident:", incidents[1]);
+    }
+  }
+
     console.log("Incidents Data:", incidents);
 
     // Convert the incidents data to CSV format

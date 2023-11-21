@@ -7,12 +7,11 @@ exports.handler = async function(event) {
     const incidentsUrl = `https://api.firehydrant.io/v1/incidents?start_date=${startDate}&end_date=${endDate}`;
     console.log("in analytics.js")
     console.log("here is the URL: " + incidentsUrl)
-
-    // Fetch incidents
-    const incidentsResponse = await axios.get(incidentsUrl, { headers: { 'Authorization': authToken } });
-    console.log("API Response:", incidentsResponse.data); 
-    const incidents = incidentsResponse.data.incidents;  // Assuming the API returns an object with an 'incidents' array
+    console.log("API Response:", incidentsResponse.data);   
     console.log("here is the incidents from getAnalytics.js " + incidents)
+
+    const incidentsResponse = await axios.get(incidentsUrl, { headers: { 'Authorization': authToken } });
+    const incidents = incidentsResponse.data;
 
     // Convert to CSV
     const fields = ['id', 'name', 'created_at', 'started_at', 'discarded_at', 'summary', 'customer_impact_summary', 'description', 'current_milestone', 'number', 'priority', 'severity', /* Add other fields as necessary */];
@@ -34,5 +33,5 @@ exports.handler = async function(event) {
 };
 
 async function fetchIncidentDetails(incidentId, authToken) {
-  // Nothing here yet
+  // Nothing here yet 
 }

@@ -13,19 +13,22 @@ exports.handler = async function(event, context) {
       start_date: startDate
     };
 
-    // If conditions are not needed, they should not be included in the params
-    // if (conditions) {
-    //   params.conditions = conditions; // Only include conditions if it's provided
-    // }
+    // Construct the URL for logging
+    const url = new URL('https://api.firehydrant.io/v1/metrics/incidents');
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    
+    // Log the URL
+    console.log('Request URL:', url.href);
 
-    const response = await axios.get('https://api.firehydrant.io/v1/metrics/incidents', {
+    const response = await axios.get(url.href, {
       headers: {
         'Authorization': authToken
-      },
-      params: params // Use the params object
+      }
     });
 
-    // Convert the data to CSV
+    // Log the response data
+    console.log('Response data:', response.data);
+
     const csv = parse(response.data);
 
     return {
@@ -33,7 +36,9 @@ exports.handler = async function(event, context) {
       body: JSON.stringify({ csv })
     };
   } catch (error) {
+    // Log the error and the full error object
     console.error('Error:', error);
+    console.error('Error details:', error.response ? error.response.data : error);
 
     return {
       statusCode: 500,

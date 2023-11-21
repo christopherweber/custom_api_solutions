@@ -5,6 +5,8 @@ exports.handler = async function(event) {
   try {
     const { authToken, startDate, endDate } = JSON.parse(event.body);
     const incidentsUrl = `https://api.firehydrant.io/v1/incidents?start_date=${startDate}&end_date=${endDate}`;
+    console.log("in analytics.js")
+    console.log("here is the URL: " + incidentsUrl)
 
     // Fetch incidents
     const incidentsResponse = await axios.get(incidentsUrl, { headers: { 'Authorization': authToken } });

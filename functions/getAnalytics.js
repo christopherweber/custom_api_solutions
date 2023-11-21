@@ -14,6 +14,7 @@ exports.handler = async function(event) {
     const fields = ['id', 'name', 'created_at', 'started_at', 'discarded_at', 'summary', 'customer_impact_summary', 'description', 'current_milestone', 'number', 'priority', 'severity', /* Add other fields as necessary */];
     const csv = parse(incidents, { fields });
 
+    console.log(JSON.stringify({ incidents, csv })); // Add this line in getAnalytics.js before the return statement
     return {
       statusCode: 200,
       body: JSON.stringify({ incidents, csv })
@@ -21,6 +22,7 @@ exports.handler = async function(event) {
   } catch (error) {
     console.error('Error:', error);
     return {
+
       statusCode: 500,
       body: JSON.stringify({ error: error.message })
     };

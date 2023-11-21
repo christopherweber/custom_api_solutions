@@ -32,6 +32,7 @@ function fetchAnalyticsData(authToken, startDate, endDate) {
     })
     .then(response => response.json())
     .then(data => {
+        console.log(data); 
         hideLoadingMessage();
         displayReportResults(data);
     })
@@ -55,7 +56,7 @@ function displayReportResults(data) {
     const reportResultsElement = document.getElementById('reportResults');
     reportResultsElement.innerHTML = '';
 
-    if (!data || data.incidents.length === 0) {
+    if (!data || !data.incidents || data.incidents.length === 0) {
         reportResultsElement.textContent = 'No data to display.';
         return;
     }

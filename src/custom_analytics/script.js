@@ -62,39 +62,55 @@ function displayReportResults(data) {
     const reportResultsElement = document.getElementById('reportResults');
     reportResultsElement.innerHTML = ''; // Clear previous results
 
-    // Create a table element
+    // Check if there's data to display
+    if (!data || data.buckets.length === 0) {
+        reportResultsElement.textContent = 'No data to display.';
+        return;
+    }
+
+    // Process data into a flat structure for display
+    let flattenedData = [];
+    data.buckets.forEach(bucket => {
+        Object.entries(bucket.metrics).forEach(([key, value]) => {
+            if (data.display_information[key]) {
+                flattenedData.push({
+                    DateRange: `${bucket.starts_at} to ${bucket.ends_at}`,
+                    Severity: data.display_information[key].name,
+                    Count: value
+                });
+            }
+        });
+    });
+
+    // Create and populate table
     const table = document.createElement('table');
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
+    
+    // Create headers
+    const headers = Object.keys(flattenedData[0]);
+    const headerRow = document.createElement('tr');
+    headers.forEach(headerText => {
+        const header = document.createElement('th');
+        header.textContent = headerText;
+        headerRow.appendChild(header);
+    });
+    thead.appendChild(headerRow);
 
-    // Assuming data is an array of objects
-    if (data.length > 0) {
-        // Create headers
-        const headers = Object.keys(data[0]);
-        const headerRow = document.createElement('tr');
-        headers.forEach(headerText => {
-            const header = document.createElement('th');
-            header.textContent = headerText;
-            headerRow.appendChild(header);
+    // Create rows
+    flattenedData.forEach(item => {
+        const row = document.createElement('tr');
+        Object.values(item).forEach(text => {
+            const cell = document.createElement('td');
+            cell.textContent = text;
+            row.appendChild(cell);
         });
-        thead.appendChild(headerRow);
-
-        // Create rows
-        data.forEach(item => {
-            const row = document.createElement('tr');
-            Object.values(item).forEach(text => {
-                const cell = document.createElement('td');
-                cell.textContent = text;
-                row.appendChild(cell);
-            });
-            tbody.appendChild(row);
-        });
-    } else {
-        reportResultsElement.textContent = 'No data to display.';
-    }
+        tbody.appendChild(row);
+    });
 
     table.appendChild(thead);
     table.appendChild(tbody);
     reportResultsElement.appendChild(table);
 }
+
 

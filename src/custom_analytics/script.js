@@ -66,10 +66,18 @@ function displayReportResults(data) {
     // Assuming data is wrapped in a "data" key as per your example
     const incidents = data.data;
 
-    // Create and populate table
-    const table = createTable(incidents);
-    reportResultsElement.appendChild(table);
+    // Extract and display only the IDs
+    const ids = incidents.map(incident => incident.id);
+    const list = document.createElement('ul');
+    ids.forEach(id => {
+        const listItem = document.createElement('li');
+        listItem.textContent = id;
+        list.appendChild(listItem);
+    });
+
+    reportResultsElement.appendChild(list);
 }
+
 
 function createTable(incidents) {
     const table = document.createElement('table');

@@ -65,6 +65,7 @@ function displayReportResults(data) {
 
     // Assuming data is wrapped in a "data" key as per your example
     const incidents = data.data;
+    console.log("incidents: " + incidents)
 
     // Extract and display only the IDs
     const ids = incidents.map(incident => incident.id);

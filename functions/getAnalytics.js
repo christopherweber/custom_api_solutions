@@ -11,7 +11,8 @@ exports.handler = async function(event) {
     // Fetch incidents
     const incidentsResponse = await axios.get(incidentsUrl, { headers: { 'Authorization': authToken } });
     const incidents = incidentsResponse.data.incidents;  // Assuming the API returns an object with an 'incidents' array
-
+    console.log("here is the incidents from getAnalytics.js " + incidents)
+    
     // Convert to CSV
     const fields = ['id', 'name', 'created_at', 'started_at', 'discarded_at', 'summary', 'customer_impact_summary', 'description', 'current_milestone', 'number', 'priority', 'severity', /* Add other fields as necessary */];
     const csv = parse(incidents, { fields });

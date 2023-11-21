@@ -1,44 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analytics Dashboard</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Analytics Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-<div id="app">
-  <form id="parameters-form">
-    <label for="auth-token">Authorization Token:</label>
-    <input type="text" id="auth-token" name="auth_token" required>
 
-    <label for="bucket-size">Bucket Size:</label>
-    <select id="bucket-size" name="bucket_size" required>
-      <option value="week">Week</option>
-      <option value="day">Day</option>
-      <option value="month">Month</option>
-      <option value="all_time">All Time</option>
-    </select>
+<div id="sidebar-placeholder"></div>
 
-    <label for="by">By:</label>
-    <select id="by" name="by" required>
-      <!-- Populate with options from the screenshot provided -->
-    </select>
+<main>
+    <section id="analytics-dashboard">
+        <h1>Custom Analytics Dashboard</h1>
+        <p>Select parameters and generate reports for incidents.</p>
+        <form id="analyticsForm">
+            <label for="authToken">Authorization Token:</label>
+            <input type="text" id="authToken" placeholder="Enter API key here" required>
 
-    <label for="start-date">Start Date:</label>
-    <input type="date" id="start-date" name="start_date" required>
+            <label for="by">By:</label>
+            <select id="by" required>
+                <option value="">Not Set</option>
+                <option value="total">Total</option>
+                <option value="severity">Severity</option>
+                <option value="priority">Priority</option>
+                <option value="functionality">Functionality</option>
+                <option value="service">Service</option>
+                <option value="environment">Environment</option>
+                <option value="user">User</option>
+                <option value="user_involvement">User Involvement</option>
+            </select>
 
-    <label for="end-date">End Date:</label>
-    <input type="date" id="end-date" name="end_date" required>
+            <label for="bucketSize">Bucket Size:</label>
+            <select id="bucketSize" required>
+                <option value="week">Week</option>
+                <option value="day">Day</option>
+                <option value="month">Month</option>
+                <option value="all_time">All Time</option>
+            </select>
 
-    <input type="submit" value="Fetch Data">
-  </form>
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" required>
 
-  <button id="download-csv" style="display: none;">Download CSV</button>
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" required>
 
-  <div id="data-display"></div>
-</div>
+            <button type="submit">Fetch Data</button>
+        </form>
+        <div id="loadingMessage"></div>
+        <div id="successMessage"></div>
+        <div id="reportResults"></div>
+    </section>
+</main>
 
-<script src="script.js"></script>
+<script src="script.js" defer></script>
+
 </body>
 </html>

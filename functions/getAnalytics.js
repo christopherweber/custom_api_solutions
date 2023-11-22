@@ -45,13 +45,32 @@ exports.handler = async function(event) {
 };
 
 function formatCustomFields(fields) {
-  return fields.map(field => `${field.name}: ${field.value_string || field.value_array.join(', ')}`).join('; ');
+  // Ensure fields exist and is an array
+  if (!Array.isArray(fields)) {
+    return 'N/A';
+  }
+  return fields.map(field => {
+    const fieldValue = Array.isArray(field.value_array) ? field.value_array.join(', ') : field.value_string;
+    return `${field.name}: ${fieldValue || 'N/A'}`;
+  }).join('; ');
 }
 
 function formatMilestones(milestones) {
+  // Ensure milestones exist and is an array
+  if (!Array.isArray(milestones)) {
+    return 'N/A';
+  }
   return milestones.map(milestone => `${milestone.type} (duration: ${milestone.duration || 'N/A'})`).join('; ');
 }
 
 function formatImpacts(impacts) {
-  return impacts.map(impact => `${impact.type}: ${impact.impact.name} (Condition: ${impact.condition.name})`).join('; ');
+  // Ensure impacts exist and is an array
+  if (!Array.isArray(impacts)) {
+    return 'N/A';
+  }
+  return impacts.map(impact => {
+    const impactName = impact.impact && impact.impact.name ? impact.impact.name : 'N/A';
+    const conditionName = impact.condition && impact.condition.name ? impact.condition.name : 'N/A';
+    return `${impact.type}: ${impactName} (Condition: ${conditionName})`;
+  }).join('; ');
 }

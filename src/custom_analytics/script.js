@@ -52,14 +52,16 @@ function displayReportResults(data) {
     const reportResultsElement = document.getElementById('reportResults');
     reportResultsElement.innerHTML = '';
 
-    if (!data || !Array.isArray(data.data) || data.data.length === 0) {
+    // Update to correctly reference data.incidents
+    if (!data || !Array.isArray(data.incidents) || data.incidents.length === 0) {
         reportResultsElement.textContent = 'No data to display.';
         return;
     }
 
-    const table = createTable(data.data);
+    const table = createTable(data.incidents);
     reportResultsElement.appendChild(table);
 }
+
 
 function createTable(incidents) {
     const table = document.createElement('table');

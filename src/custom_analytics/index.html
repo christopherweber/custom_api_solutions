@@ -23,9 +23,9 @@
 
             <label for="endDate">End Date:</label>
             <input type="date" id="endDate" required>
-
-            <lable> Current milestone is one of:</lable>
-            <select multiple id="milestoneFilter">
+            <label> Current milestone is one of:</label>
+            <div id="milestoneSelection">
+              <select id="milestoneDropdown">
                 <option value="started">Started</option>
                 <option value="detected">Detected</option>
                 <option value="acknowledged">Acknowledged</option>
@@ -35,7 +35,13 @@
                 <option value="resolved">Resolved</option>
                 <option value="postmortem_started">Postmortem Started</option>
                 <option value="postmortem_completed">Postmortem Completed</option>
-            </select>            
+              </select>
+              <button type="button" onclick="addMilestone()">Add</button>
+            </div>
+            <div id="selectedMilestones">
+              <!-- Selected milestones will be displayed here -->
+            </div>
+                      
 
             <button type="submit">Fetch Data</button>
         </form>

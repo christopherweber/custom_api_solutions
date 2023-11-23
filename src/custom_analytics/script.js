@@ -19,13 +19,17 @@
       fetchAnalyticsData(authToken, startDate, endDate);
     });
   }
+
+    let currentPage = 1;
+    const pageSize = 10; // Adjust based on your API's pagination
+    let loadingMoreData = false;
   
-  function fetchAnalyticsData(authToken, startDate, endDate) {
+  function fetchAnalyticsData(authToken, startDate, endDate, page = 1) {
     showLoadingMessage();
     fetch('/.netlify/functions/getAnalytics', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ authToken, startDate, endDate })
+      body: JSON.stringify({ authToken, startDate, endDate, page })
     })
     .then(response => response.json())
     .then(data => {
@@ -37,7 +41,15 @@
       hideLoadingMessage();
     });
   }
-  
+
+  window.onscroll = function() {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && !loadingMoreData) {
+      loadingMoreData = true;
+      currentPage += 1;
+      fetchAnalyticsData(authToken, startDate, endDate, currentPage);
+    }
+  };
+
   function showLoadingMessage() {
     const loadingElement = document.getElementById('loadingMessage');
     loadingElement.textContent = 'Loading... Please wait.';
@@ -57,13 +69,14 @@
         return;
     }
 
-    const selectedMilestones = Array.from(document.getElementById('milestoneFilter').selectedOptions).map(option => option.value);
+    const selectedMilestones = Array.from(document.getElementById('selectedMilestones').selectedOptions).map(option => option.value);
     const filteredIncidents = data.incidents.filter(incident => 
         incident.milestones.some(milestone => selectedMilestones.includes(milestone.type))
     );
 
     const table = createTable(filteredIncidents);
     reportResultsElement.appendChild(table);
+    loadingMoreData = false;
 }
   
 function createTable(incidents) {
@@ -83,19 +96,55 @@ function createTable(incidents) {
     table.appendChild(thead);
 
     incidents.forEach(incident => {
-      const row = document.createElement('tr');
-      headers.forEach(header => {
-        const cell = document.createElement('td');
-        if (header === 'lessons_learned') {
-          cell.innerHTML = incident[header] ? incident[header] : 'N/A';
-        } else {
-          cell.textContent = incident[header] || 'N/A';
-        }
-        row.appendChild(cell);
-      });
-      tbody.appendChild(row);
+        const row = document.createElement('tr');
+        headers.forEach(header => {
+            const cell = document.createElement('td');
+
+            if (header === 'milestones') {
+                const text = incident[header] || 'N/A';
+                cell.textContent = text.length > 30 ? text.substring(0, 27) + '...' : text;
+                cell.style.cursor = 'pointer';
+                cell.onclick = function() {
+                    if (cell.textContent.endsWith('...')) {
+                        cell.textContent = incident[header];
+                    } else {
+                        cell.textContent = text.substring(0, 27) + '...';
+                    }
+                };
+            } else {
+                cell.textContent = incident[header] || 'N/A';
+            }
+
+            row.appendChild(cell);
+        });
+        tbody.appendChild(row);
     });
 
     table.appendChild(tbody);
     return table;
 }
+
+function addMilestone() {
+    const select = document.getElementById('milestoneDropdown');
+    const selectedValue = select.value;
+    const selectedDiv = document.getElementById('selectedMilestones');
+  
+    // Check if the milestone is already selected
+    if (Array.from(selectedDiv.children).some(child => child.textContent.includes(selectedValue))) {
+      alert('This milestone is already selected.');
+      return;
+    }
+  
+    // Create a new span element to display the selected milestone
+    const newMilestone = document.createElement('span');
+    newMilestone.textContent = selectedValue;
+    newMilestone.classList.add('selectedMilestone');
+    selectedDiv.appendChild(newMilestone);
+  
+    // Optionally, add a remove button to each milestone
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = 'Remove';
+    removeBtn.onclick = function() { newMilestone.remove(); };
+    newMilestone.appendChild(removeBtn);
+  }
+  

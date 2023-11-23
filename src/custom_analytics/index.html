@@ -24,6 +24,19 @@
             <label for="endDate">End Date:</label>
             <input type="date" id="endDate" required>
 
+            <lable> Current milestone is one of:</lable>
+            <select multiple id="milestoneFilter">
+                <option value="started">Started</option>
+                <option value="detected">Detected</option>
+                <option value="acknowledged">Acknowledged</option>
+                <option value="investigating">Investigating</option>
+                <option value="identified">Identified</option>
+                <option value="mitigated">Mitigated</option>
+                <option value="resolved">Resolved</option>
+                <option value="postmortem_started">Postmortem Started</option>
+                <option value="postmortem_completed">Postmortem Completed</option>
+            </select>            
+
             <button type="submit">Fetch Data</button>
         </form>
         <div id="loadingMessage"></div>

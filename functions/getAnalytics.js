@@ -12,8 +12,15 @@ exports.handler = async function(event) {
 
     const incidents = response.data.data || []; // Adjust based on actual API response structure
 
-    const formattedIncidents = incidents.map(incident => {
-      return {
+    const formattedIncidents = [];
+    for (const incident of incidents) {
+      let lessonsLearned = '';
+      if (incident.report_id) {
+        const retroResponse = await fetchRetrospective(incident.report_id, authToken);
+        lessonsLearned = formatLessonsLearned(retroResponse.questions);
+      }
+
+      formattedIncidents.push({
         id: incident.id,
         name: incident.name,
         created_at: incident.created_at,
@@ -24,11 +31,12 @@ exports.handler = async function(event) {
         custom_fields: formatCustomFields(incident.custom_fields),
         opened_by: incident.created_by ? incident.created_by.name : 'N/A',
         milestones: formatMilestones(incident.milestones),
-        impacts: formatImpacts(incident.impacts)
-      };
-    });
+        impacts: formatImpacts(incident.impacts),
+        lessons_learned: lessonsLearned
+      });
+    }
 
-    const fields = ['id', 'name', 'created_at', 'started_at', 'severity', 'priority', 'tags', 'custom_fields', 'opened_by', 'milestones', 'impacts'];
+    const fields = ['id', 'name', 'created_at', 'started_at', 'severity', 'priority', 'tags', 'custom_fields', 'opened_by', 'milestones', 'impacts', 'lessons_learned'];
     const csv = parse(formattedIncidents, { fields });
 
     return {
@@ -43,6 +51,19 @@ exports.handler = async function(event) {
     };
   }
 };
+
+async function fetchRetrospective(reportId, authToken) {
+  const reportUrl = `https://api.firehydrant.io/v1/post_mortems/reports/${reportId}`;
+  const reportResponse = await axios.get(reportUrl, { headers: { 'Authorization': authToken } });
+  return reportResponse.data;
+}
+
+function formatLessonsLearned(questions) {
+  return questions
+    .filter(question => question.title.toLowerCase().includes('lessons learned'))
+    .map(question => question.body)
+    .join(', ');
+}
 
 function formatCustomFields(fields) {
   // Ensure fields exist and is an array

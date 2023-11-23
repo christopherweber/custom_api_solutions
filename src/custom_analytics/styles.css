@@ -138,3 +138,7 @@ form label {
     margin-top: 10px;
 }
   
+#milestoneFilter {
+    width: 200px;
+    height: 150px;
+}

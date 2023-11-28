@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Status Update</title>
+</head>
+<body>
+
+<main>
+    <section id="component-update-form">
+        <h1>Component Status Update</h1>
+        <form id="componentForm">
+            <label for="componentName">Component Name:</label>
+            <input type="text" id="componentName" name="componentName">
+
+            <label for="componentGroup">Component Group:</label>
+            <input type="text" id="componentGroup" name="componentGroup">
+
+            <label for="csvFileUpload">Or Upload CSV File:</label>
+            <input type="file" id="csvFileUpload" accept=".csv">
+
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

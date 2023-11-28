@@ -99,14 +99,35 @@ async function fetchComponentGroupId(name, authToken, statusPageId) {
 }
 
 
-async function updateStatusPage(payload, authToken) {
+async function updateStatusPage(newComponent, authToken, statusPageId) {
     try {
-        const url = `https://api.firehydrant.io/v1/nunc_connections/${payload.id}`;
-        await axios.put(url, payload, {
+        // Fetch the current status page data
+        const getStatusPageUrl = `https://api.firehydrant.io/v1/nunc_connections/${statusPageId}`;
+        const response = await axios.get(getStatusPageUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
         });
+
+        let currentComponents = response.data.components || [];
+
+        // Check if the component already exists (based on some unique property, e.g., id)
+        const existingComponentIndex = currentComponents.findIndex(comp => comp.id === newComponent.id);
+
+        if (existingComponentIndex !== -1) {
+            // Update the existing component
+            currentComponents[existingComponentIndex] = newComponent;
+        } else {
+            // Add the new component
+            currentComponents.push(newComponent);
+        }
+
+        // Update the status page with the new list of components
+        const updateUrl = `https://api.firehydrant.io/v1/nunc_connections/${statusPageId}`;
+        await axios.put(updateUrl, { components: currentComponents }, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
     } catch (error) {
-        console.error('Error updating status:', error);
+        console.error('Error updating status page:', error);
         throw error;
     }
 }

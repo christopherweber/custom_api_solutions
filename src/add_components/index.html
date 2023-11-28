@@ -8,23 +8,22 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-
-<div id="sidebar-placeholder"></div>
-
 <main>
     <section id="component-update-form">
-        <h1>Component Status Update</h1>
-        <p>Update the status of your components, 
-            <br>
-            or use a CSV file for bulk upload.
-        </p>
+        <h1>Component StatusPage Update</h1>
         <form id="componentForm">
+            <label for="authToken">Authorization Token:</label>
+            <input type="text" id="authToken" name="authToken" placeholder="Enter Auth Token" required>
+
+            <label for="statusPageId">Status Page ID:</label>
+            <input type="text" id="statusPageId" name="statusPageId" placeholder="Enter Status Page ID" required>
+
             <div class="componentFields">
                 <label for="componentName">Component Name:</label>
-                <input type="text" id="componentName" name="componentName" placeholder="Enter Component Name" required>
+                <input type="text" id="componentName" name="componentName" placeholder="Enter Component Name">
 
                 <label for="componentGroup">Component Group:</label>
-                <input type="text" id="componentGroup" name="componentGroup" placeholder="Enter Component Group" required>
+                <input type="text" id="componentGroup" name="componentGroup" placeholder="Enter Component Group">
             </div>
 
             <label for="csvFileUpload">Upload CSV File:</label>
@@ -35,6 +34,5 @@
         </form>
     </section>
 </main>
-
 </body>
 </html>

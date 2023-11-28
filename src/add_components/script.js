@@ -1,49 +1,38 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('../sidebar.html')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.text();
-    })
-    .then(data => {
-        document.getElementById('sidebar-placeholder').innerHTML = data;
-        attachBulkServiceFormListener();
-        attachCSVUploadListener();
-    })
-    .catch(error => console.error('Error loading the sidebar:', error));
     const form = document.getElementById('componentForm');
     form.addEventListener('submit', function(e) {
         e.preventDefault();
 
+        const authToken = document.getElementById('authToken').value;
+        const statusPageId = document.getElementById('statusPageId').value;
         const componentName = document.getElementById('componentName').value;
         const componentGroup = document.getElementById('componentGroup').value;
         const csvFile = document.getElementById('csvFileUpload').files[0];
 
+        const data = { authToken, statusPageId };
+
         if (csvFile) {
-            handleCSVUpload(csvFile);
+            handleCSVUpload(csvFile, data);
         } else if (componentName && componentGroup) {
-            handleManualInput(componentName, componentGroup);
+            data.componentName = componentName;
+            data.componentGroup = componentGroup;
+            sendDataToBackend(data);
         } else {
             alert('Please enter component details or upload a CSV file.');
         }
     });
 });
 
-function handleCSVUpload(file) {
+function handleCSVUpload(file, data) {
     const reader = new FileReader();
     reader.onload = function(event) {
-        const csvContent = event.target.result;
-        sendToBackend({ csv: csvContent });
+        data.csv = event.target.result;
+        sendDataToBackend(data);
     };
     reader.readAsText(file);
 }
 
-function handleManualInput(componentName, componentGroup) {
-    sendToBackend({ componentName, componentGroup });
-}
-
-function sendToBackend(data) {
+function sendDataToBackend(data) {
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
         body: JSON.stringify(data),

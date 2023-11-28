@@ -6,37 +6,98 @@ exports.handler = async function(event) {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    const data = JSON.parse(event.body);
-    const components = data.csv ? processCSV(data.csv) : [await processSingleComponent(data.componentName, data.componentGroup)];
+    const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
+    const infrastructuresUrl = 'https://api.firehydrant.io/v1/infrastructures';
+    const componentGroupsUrl = `https://api.firehydrant.io/v1/nunc_connections/${statusPageId}`;
 
-    // Assuming a function to update status page
-    // Update accordingly based on your existing logic
-    // await updateStatusPage(components);
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ message: 'Components processed successfully', data: components })
-    };
+    if (csv) {
+        return processCSV(csv, authToken, statusPageId);
+    } else if (componentName && componentGroup) {
+        return processSingleComponent(componentName, componentGroup, authToken, statusPageId);
+    } else {
+        return { statusCode: 400, body: 'Invalid input data' };
+    }
 };
 
-function processCSV(csv) {
-    const records = parse(csv, {
-        columns: true,
-        skip_empty_lines: true
-    });
+async function processSingleComponent(componentName, componentGroup, authToken, statusPageId) {
+    try {
+        const infrastructureId = await fetchInfrastructureId(componentName, authToken);
+        const componentGroupId = await fetchComponentGroupId(componentGroup, authToken);
 
-    // Process each row
-    return records.map(record => ({
-        componentName: record.Component,
-        componentGroup: record['Component Group']
-        // ... other processing ...
-    }));
+        if (infrastructureId && componentGroupId) {
+            const component = {
+                "infrastructure_type": "functionality",
+                "infrastructure_id": infrastructureId,
+                "component_group_id": componentGroupId
+            };
+
+            await updateStatusPage({id: statusPageId, components: [component]}, authToken);
+            return { statusCode: 200, body: JSON.stringify({ message: 'Component processed successfully' }) };
+        } else {
+            return { statusCode: 404, body: 'Infrastructure or Component Group not found' };
+        }
+    } catch (error) {
+        return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+    }
 }
 
-async function processSingleComponent(componentName, componentGroup) {
-    // Implement logic to process single component
-    // This is a placeholder function, replace with actual logic
-    return { componentName, componentGroup };
+
+function processCSV(csv, authToken, statusPageId) {
+    try {
+        const records = parse(csv, {
+            columns: true,
+            skip_empty_lines: true
+        });
+
+        const processPromises = records.map(async (row) => {
+            return processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId);
+        });
+
+        return Promise.all(processPromises)
+            .then(() => {
+                return { statusCode: 200, body: JSON.stringify({ message: 'CSV processed successfully' }) };
+            })
+            .catch(error => {
+                return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+            });
+    } catch (error) {
+        return { statusCode: 500, body: JSON.stringify({ error: 'Error processing CSV' }) };
+    }
+}
+async function fetchInfrastructureId(name, authToken) {
+    try {
+        const response = await axios.get(infrastructuresUrl, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const infrastructure = response.data.data.find(item => item.infrastructure.name === name);
+        return infrastructure ? infrastructure.infrastructure.id : null;
+    } catch (error) {
+        console.error('Error fetching infrastructure ID:', error);
+        throw error;  // Rethrow to handle in the calling function
+    }
 }
 
-// Add other helper functions from your script as needed
+async function fetchComponentGroupId(name, authToken) {
+    try {
+        const response = await axios.get(componentGroupsUrl, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const componentGroup = response.data.component_groups.find(group => group.name === name);
+        return componentGroup ? componentGroup.id : null;
+    } catch (error) {
+        console.error('Error fetching component group ID:', error);
+        throw error;
+    }
+}
+
+async function updateStatusPage(payload, authToken) {
+    try {
+        const url = `https://api.firehydrant.io/v1/nunc_connections/${payload.id}`;
+        await axios.put(url, payload, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+    } catch (error) {
+        console.error('Error updating status:', error);
+        throw error;
+    }
+}

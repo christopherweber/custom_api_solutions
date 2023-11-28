@@ -101,30 +101,45 @@ async function fetchComponentGroupId(name, authToken, statusPageId) {
 
 async function updateStatusPage(newComponent, authToken, statusPageId) {
     try {
+        console.log("Received statusPageId:", statusPageId);
+        console.log("Received newComponent:", JSON.stringify(newComponent));
+
+        if (!statusPageId) {
+            throw new Error('Status Page ID is missing or undefined');
+        }
+
         // Fetch the current status page data
-        const getStatusPageUrl = `${componentGroupsBaseUrl}${statusPageId}`
+        const getStatusPageUrl = `https://api.firehydrant.io/v1/nunc_connections/${statusPageId}`;
+        console.log("Fetching current status page data from URL:", getStatusPageUrl);
+
         const response = await axios.get(getStatusPageUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
         });
 
         let currentComponents = response.data.components || [];
+        console.log("Current components:", JSON.stringify(currentComponents));
 
         // Check if the component already exists (based on some unique property, e.g., id)
         const existingComponentIndex = currentComponents.findIndex(comp => comp.id === newComponent.id);
-
         if (existingComponentIndex !== -1) {
             // Update the existing component
             currentComponents[existingComponentIndex] = newComponent;
+            console.log("Updated an existing component.");
         } else {
             // Add the new component
             currentComponents.push(newComponent);
+            console.log("Added a new component.");
         }
 
         // Update the status page with the new list of components
         const updateUrl = `https://api.firehydrant.io/v1/nunc_connections/${statusPageId}`;
+        console.log("Updating status page with URL:", updateUrl);
+
         await axios.put(updateUrl, { components: currentComponents }, {
             headers: { 'Authorization': `Bearer ${authToken}` }
         });
+
+        console.log("Status page updated successfully.");
 
     } catch (error) {
         console.error('Error updating status page:', error);

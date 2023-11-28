@@ -102,7 +102,7 @@ async function fetchComponentGroupId(name, authToken, statusPageId) {
 async function updateStatusPage(newComponent, authToken, statusPageId) {
     try {
         // Fetch the current status page data
-        const getStatusPageUrl = `https://api.firehydrant.io/v1/nunc_connections/${statusPageId}`;
+        const getStatusPageUrl = `${componentGroupsBaseUrl}${statusPageId}`
         const response = await axios.get(getStatusPageUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
         });

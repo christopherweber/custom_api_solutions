@@ -10,6 +10,11 @@ exports.handler = async function(event) {
 
     const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
 
+    if (!statusPageId) {
+        return { statusCode: 400, body: 'Status Page ID is missing' };
+    }
+
+    // Process based on the type of input (CSV or single component)
     if (csv) {
         return processCSV(csv, authToken, statusPageId);
     } else if (componentName && componentGroup) {
@@ -22,7 +27,7 @@ exports.handler = async function(event) {
 async function processSingleComponent(componentName, componentGroup, authToken, statusPageId) {
     try {
         const infrastructureId = await fetchInfrastructureId(componentName, authToken);
-        const componentGroupId = await fetchComponentGroupId(componentGroup, authToken);
+        const componentGroupId = await fetchComponentGroupId(componentGroup, authToken, statusPageId);
 
         if (infrastructureId && componentGroupId) {
             const component = {
@@ -80,7 +85,7 @@ async function fetchInfrastructureId(name, authToken) {
 }
 
 async function fetchComponentGroupId(name, authToken, statusPageId) {
-    const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`; ; // Correct use of componentGroupsUrl
+    const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`;
     try {
         const response = await axios.get(componentGroupsUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
@@ -92,6 +97,7 @@ async function fetchComponentGroupId(name, authToken, statusPageId) {
         throw error;
     }
 }
+
 
 async function updateStatusPage(payload, authToken) {
     try {

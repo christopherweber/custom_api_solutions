@@ -1,5 +1,5 @@
 const axios = require('axios');
-const parse = require('csv-parse/lib/sync');
+const { parse } = require('csv-parse/sync');
 
 exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') {
@@ -25,7 +25,7 @@ function processCSV(csv) {
         skip_empty_lines: true
     });
 
-    // Process each row - adapt this based on your current Node.js script
+    // Process each row
     return records.map(record => ({
         componentName: record.Component,
         componentGroup: record['Component Group']

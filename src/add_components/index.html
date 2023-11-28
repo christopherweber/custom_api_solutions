@@ -4,27 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Component Status Update</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
+
+<div id="sidebar-placeholder"></div>
 
 <main>
     <section id="component-update-form">
         <h1>Component Status Update</h1>
+        <p>Update the status of your components, 
+            <br>
+            or use a CSV file for bulk upload.
+        </p>
         <form id="componentForm">
-            <label for="componentName">Component Name:</label>
-            <input type="text" id="componentName" name="componentName">
+            <div class="componentFields">
+                <label for="componentName">Component Name:</label>
+                <input type="text" id="componentName" name="componentName" placeholder="Enter Component Name" required>
 
-            <label for="componentGroup">Component Group:</label>
-            <input type="text" id="componentGroup" name="componentGroup">
+                <label for="componentGroup">Component Group:</label>
+                <input type="text" id="componentGroup" name="componentGroup" placeholder="Enter Component Group" required>
+            </div>
 
-            <label for="csvFileUpload">Or Upload CSV File:</label>
+            <label for="csvFileUpload">Upload CSV File:</label>
             <input type="file" id="csvFileUpload" accept=".csv">
+            <small>Optional: Upload a CSV file for bulk update</small>
 
             <button type="submit">Submit</button>
         </form>
     </section>
 </main>
 
-<script src="script.js"></script>
 </body>
 </html>

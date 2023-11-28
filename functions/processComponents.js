@@ -1,8 +1,6 @@
 const axios = require('axios');
 const { parse } = require('csv-parse/sync');
 
-// Global constants for API endpoints
-const infrastructuresUrl = 'https://api.firehydrant.io/v1/infrastructures';
 const componentGroupsBaseUrl = 'https://api.firehydrant.io/v1/nunc_connections/';
 
 exports.handler = async function(event) {
@@ -66,7 +64,9 @@ function processCSV(csv, authToken, statusPageId) {
         return { statusCode: 500, body: JSON.stringify({ error: 'Error processing CSV' }) };
     }
 }
+
 async function fetchInfrastructureId(name, authToken) {
+    const infrastructuresUrl = 'https://api.firehydrant.io/v1/infrastructures'; // Define URL here
     try {
         const response = await axios.get(infrastructuresUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
@@ -75,12 +75,12 @@ async function fetchInfrastructureId(name, authToken) {
         return infrastructure ? infrastructure.infrastructure.id : null;
     } catch (error) {
         console.error('Error fetching infrastructure ID:', error);
-        throw error;  // Rethrow to handle in the calling function
+        throw error;
     }
 }
 
-async function fetchComponentGroupId(name, authToken) {
-    const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`; // Correct use of componentGroupsUrl
+async function fetchComponentGroupId(name, authToken, statusPageId) {
+    const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`; ; // Correct use of componentGroupsUrl
     try {
         const response = await axios.get(componentGroupsUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }

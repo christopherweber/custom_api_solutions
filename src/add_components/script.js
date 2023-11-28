@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         attachCSVUploadListener();
     })
     .catch(error => console.error('Error loading the sidebar:', error));
+    
     const form = document.getElementById('componentForm');
     form.addEventListener('submit', function(e) {
         e.preventDefault();

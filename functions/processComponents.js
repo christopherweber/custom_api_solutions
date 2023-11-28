@@ -1,14 +1,16 @@
 const axios = require('axios');
 const { parse } = require('csv-parse/sync');
 
+// Global constants for API endpoints
+const infrastructuresUrl = 'https://api.firehydrant.io/v1/infrastructures';
+const componentGroupsBaseUrl = 'https://api.firehydrant.io/v1/nunc_connections/';
+
 exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
     const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
-    const infrastructuresUrl = 'https://api.firehydrant.io/v1/infrastructures';
-    const componentGroupsUrl = `https://api.firehydrant.io/v1/nunc_connections/${statusPageId}`;
 
     if (csv) {
         return processCSV(csv, authToken, statusPageId);
@@ -78,6 +80,7 @@ async function fetchInfrastructureId(name, authToken) {
 }
 
 async function fetchComponentGroupId(name, authToken) {
+    const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`; // Correct use of componentGroupsUrl
     try {
         const response = await axios.get(componentGroupsUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }

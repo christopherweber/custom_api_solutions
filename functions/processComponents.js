@@ -89,6 +89,7 @@ async function fetchInfrastructureId(name, authToken) {
 
 async function fetchComponentGroupId(name, authToken, statusPageId) {
     const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`;
+    console.log("URL in FetchComp" = componentGroupsUrl)
     try {
         const response = await axios.get(componentGroupsUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
@@ -104,7 +105,8 @@ async function fetchComponentGroupId(name, authToken, statusPageId) {
 async function updateStatusPage(payload, authToken, statusPageId) {
     try {
         const getStatusPageUrl = `${componentGroupsBaseUrl}${statusPageId}`;
-        console.log("URL " = getStatusPageUrl)
+        console.log("Fetching current status page data from URL:", getStatusPageUrl);
+        
         const getResponse = await axios.get(getStatusPageUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
         });
@@ -112,20 +114,21 @@ async function updateStatusPage(payload, authToken, statusPageId) {
         let currentComponents = getResponse.data.components || [];
         const newComponents = payload.components;
 
-        // Combine new components with current components
         newComponents.forEach(newComp => {
             const existingIndex = currentComponents.findIndex(c => c.infrastructure_id === newComp.infrastructure_id);
             if (existingIndex !== -1) {
-                currentComponents[existingIndex] = newComp; // Update existing
+                currentComponents[existingIndex] = newComp;
             } else {
-                currentComponents.push(newComp); // Add new
+                currentComponents.push(newComp);
             }
         });
 
+        console.log("Updating status page with new component list.");
         const updateResponse = await axios.put(getStatusPageUrl, { components: currentComponents }, {
             headers: { 'Authorization': `Bearer ${authToken}` }
         });
 
+        console.log("Status page updated successfully.");
         return { statusCode: 200, body: JSON.stringify({ message: 'Status page updated successfully', updateResponse: updateResponse.data }) };
     } catch (error) {
         console.error('Error updating status page:', error);

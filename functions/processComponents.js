@@ -89,7 +89,7 @@ async function fetchInfrastructureId(name, authToken) {
 
 async function fetchComponentGroupId(name, authToken, statusPageId) {
     const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`;
-    console.log("URL in FetchComp" = componentGroupsUrl)
+    console.log("URL in FetchComp" + componentGroupsUrl)
     try {
         const response = await axios.get(componentGroupsUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }

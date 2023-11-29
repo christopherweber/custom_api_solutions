@@ -11,6 +11,7 @@ exports.handler = async function(event) {
     }
 
     const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
+    console.log('statusPageId:', statusPageId);
     console.log('Parsed body:', { csv, authToken, statusPageId, componentName, componentGroup });
 
     if (!statusPageId) {
@@ -27,6 +28,7 @@ exports.handler = async function(event) {
 };
 
 async function processSingleComponent(componentName, componentGroup, authToken, statusPageId) {
+    console.log('Processing single component with statusPageId:', statusPageId);
     try {
         const infrastructureId = await fetchInfrastructureId(componentName, authToken);
         const componentGroupId = await fetchComponentGroupId(componentGroup, authToken, statusPageId);
@@ -88,6 +90,7 @@ async function fetchInfrastructureId(name, authToken) {
 
 async function fetchComponentGroupId(name, authToken, statusPageId) {
     const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`;
+    console.log("FetchCompGroupdID: " = componentGroupsUrl)
     try {
         const response = await axios.get(componentGroupsUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }

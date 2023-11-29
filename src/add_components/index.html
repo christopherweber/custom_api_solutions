@@ -21,7 +21,7 @@
             <label for="statusPageId">Status Page ID:</label>
             <input type="text" id="statusPageId" name="statusPageId" placeholder="Enter Status Page ID" required>
 
-            <div class="componentFields">
+            <div id="componentFieldsContainer"> <!-- Changed from class to id for easier JS targeting -->
                 <label for="componentName">Component Name:</label>
                 <input type="text" id="componentName" name="componentName" placeholder="Enter Component Name">
 
@@ -32,6 +32,8 @@
             <label for="csvFileUpload">Upload CSV File:</label>
             <input type="file" id="csvFileUpload" accept=".csv">
             <small>Optional: Upload a CSV file for bulk update</small>
+
+            <div id="csvUploadMessage" style="display: none;"></div> <!-- Message container for CSV upload confirmation -->
 
             <button type="submit">Submit</button>
         </form>

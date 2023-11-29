@@ -1,7 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
     fetchSidebar();
     setupFormListener();
+    attachCSVUploadListener();
 });
+
+function attachCSVUploadListener() {
+    const csvUploadInput = document.getElementById('csvFileUpload');
+    const componentFieldsContainer = document.getElementById('componentFieldsContainer'); // Adjust the ID to match your form
+    const csvUploadMessage = document.getElementById('csvUploadMessage'); // Ensure you have a span/div for this message
+
+    csvUploadInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            componentFieldsContainer.style.display = 'none'; // Hide the component fields
+            csvUploadMessage.textContent = 'CSV file uploaded successfully.';
+            csvUploadMessage.style.display = 'block'; // Show the message
+        } else {
+            componentFieldsContainer.style.display = ''; // Show the component fields
+            csvUploadMessage.style.display = 'none'; // Hide the message
+        }
+    });
+}
 
 function fetchSidebar() {
     fetch('../sidebar.html')

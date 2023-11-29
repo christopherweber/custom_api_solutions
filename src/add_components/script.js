@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
+    fetchSidebar();
+    setupFormListener();
+});
+
+function fetchSidebar() {
     fetch('../sidebar.html')
     .then(response => {
         if (!response.ok) {
@@ -8,34 +13,36 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(data => {
         document.getElementById('sidebar-placeholder').innerHTML = data;
-        attachBulkServiceFormListener();
-        attachCSVUploadListener();
     })
     .catch(error => console.error('Error loading the sidebar:', error));
-    
+}
+
+function setupFormListener() {
     const form = document.getElementById('componentForm');
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+    form.addEventListener('submit', handleSubmit);
+}
 
-        const authToken = document.getElementById('authToken').value;
-        const statusPageId = document.getElementById('statusPageId').value;
-        const componentName = document.getElementById('componentName').value;
-        const componentGroup = document.getElementById('componentGroup').value;
-        const csvFile = document.getElementById('csvFileUpload').files[0];
+function handleSubmit(e) {
+    e.preventDefault();
 
-        const data = { authToken, statusPageId };
+    const authToken = document.getElementById('authToken').value;
+    const statusPageId = document.getElementById('statusPageId').value;
+    const componentName = document.getElementById('componentName').value;
+    const componentGroup = document.getElementById('componentGroup').value;
+    const csvFile = document.getElementById('csvFileUpload').files[0];
 
-        if (csvFile) {
-            handleCSVUpload(csvFile, data);
-        } else if (componentName && componentGroup) {
-            data.componentName = componentName;
-            data.componentGroup = componentGroup;
-            sendDataToBackend(data);
-        } else {
-            alert('Please enter component details or upload a CSV file.');
-        }
-    });
-});
+    const data = { authToken, statusPageId };
+
+    if (csvFile) {
+        handleCSVUpload(csvFile, data);
+    } else if (componentName && componentGroup) {
+        data.componentName = componentName;
+        data.componentGroup = componentGroup;
+        sendDataToBackend(data);
+    } else {
+        alert('Please enter component details or upload a CSV file.');
+    }
+}
 
 function handleCSVUpload(file, data) {
     const reader = new FileReader();
@@ -47,6 +54,7 @@ function handleCSVUpload(file, data) {
 }
 
 function sendDataToBackend(data) {
+    console.log('Sending data to backend:', JSON.stringify(data));
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
         body: JSON.stringify(data),

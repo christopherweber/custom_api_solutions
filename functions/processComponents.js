@@ -4,17 +4,19 @@ const { parse } = require('csv-parse/sync');
 const componentGroupsBaseUrl = 'https://api.firehydrant.io/v1/nunc_connections/';
 
 exports.handler = async function(event) {
+    console.log('Received event:', event);
+
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
     const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
+    console.log('Parsed body:', { csv, authToken, statusPageId, componentName, componentGroup });
 
     if (!statusPageId) {
         return { statusCode: 400, body: 'Status Page ID is missing' };
     }
 
-    // Process based on the type of input (CSV or single component)
     if (csv) {
         return processCSV(csv, authToken, statusPageId);
     } else if (componentName && componentGroup) {

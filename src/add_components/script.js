@@ -60,13 +60,18 @@ function sendDataToBackend(data) {
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => Promise.reject(errorData));
+        }
+        return response.json();
+    })
     .then(data => {
         console.log('Success:', data);
         alert('Components processed successfully.');
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error processing components.');
+        alert(`Error processing components: ${error.message || 'Unknown error'}`); // Provide more detailed error information
     });
 }

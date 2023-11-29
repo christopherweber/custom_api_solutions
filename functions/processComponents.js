@@ -55,21 +55,24 @@ function processCSV(csv, authToken, statusPageId) {
             skip_empty_lines: true
         });
 
-        const processPromises = records.map(async (row) => {
+        console.log('Parsed CSV records:', records); // Added logging for parsed records
+
+        const processPromises = records.map((row) => {
             return processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId);
         });
 
-        return Promise.all(processPromises)
+        return Promise.allSettled(processPromises)  // Changed to allSettled
             .then(results => {
-                return { statusCode: 200, body: JSON.stringify({ message: 'CSV processed successfully', results }) };
-            })
-            .catch(error => {
-                console.error('Error in processCSV:', error);
-                throw error;
+                const successfulResults = results.filter(result => result.status === 'fulfilled');
+                const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
+                if(errors.length > 0){
+                    return { statusCode: 207, body: JSON.stringify({ message: 'Some components failed to process', successfulResults, errors }) };
+                }
+                return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', results: successfulResults }) };
             });
     } catch (error) {
         console.error('Error parsing CSV:', error);
-        throw error;
+        return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Failed to parse CSV' }) }; // Changed to return an error response
     }
 }
 
@@ -129,9 +132,9 @@ async function updateStatusPage(payload, authToken, statusPageId) {
         });
 
         console.log("Status page updated successfully.");
-        return { statusCode: 200, body: JSON.stringify({ message: 'Status page updated successfully', updateResponse: updateResponse.data }) };
+        return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Status page updated successfully', updateResponse: updateResponse.data }) };
     } catch (error) {
         console.error('Error updating status page:', error);
-        throw error;
+        return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Failed to update status page' }) }; // Changed to return an error response
     }
 }

@@ -80,34 +80,33 @@ function handleCSVUpload(file, data) {
 
 function sendDataToBackend(data) {
     const loadingMessage = document.getElementById('loadingMessage');
+    const errorMessageDiv = document.getElementById('errorMessage');
     loadingMessage.style.display = 'block'; // Show loading message
+
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
     })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => {
-                displayErrorMessage(err.error || 'An unexpected error occurred.'); // Display the backend error message
-                return Promise.reject(err);
-            });
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
         console.log('Success:', data);
         alert('Components processed successfully.');
-        document.getElementById('errorMessage').style.display = 'none'; // Hide error message on success
-        resetForm()
-        loadingMessage.style.display = 'none';
+        resetForm();
+        errorMessageDiv.style.display = 'none'; // Hide error message on success
     })
     .catch(error => {
         console.error('Error:', error);
         displayErrorMessage(error.message || 'An unexpected error occurred.');
+    })
+    .finally(() => {
         loadingMessage.style.display = 'none';
     });
 }
+
 
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');

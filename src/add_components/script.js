@@ -99,8 +99,9 @@ function sendDataToBackend(data) {
         let errors = [];
         if (data.results) {
             data.results.forEach(result => {
-                if (result.status === 'rejected') {
-                    errors.push(JSON.parse(result.value.body).error);
+                if (result.status === 'fulfilled' && result.value.statusCode === 400) {
+                    const errorInfo = JSON.parse(result.value.body);
+                    errors.push(errorInfo.error);
                 }
             });
         }
@@ -118,8 +119,6 @@ function sendDataToBackend(data) {
         displayErrorMessage(error.error || 'An unexpected error occurred.');
     });
 }
-
-
 
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');

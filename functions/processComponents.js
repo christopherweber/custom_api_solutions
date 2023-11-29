@@ -90,13 +90,28 @@ async function fetchInfrastructureId(name, authToken) {
         const response = await axios.get(infrastructuresUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
         });
+
+        // Log the retrieved infrastructures
+        console.log(`Retrieved infrastructures: ${JSON.stringify(response.data.data)}`);
+
         const infrastructure = response.data.data.find(item => item.infrastructure.name === name);
-        return infrastructure ? infrastructure.infrastructure.id : null;
+
+        // Log the specific name being searched
+        console.log(`Searching for infrastructure with name: ${name}`);
+
+        if (infrastructure) {
+            console.log(`Found infrastructure: ${JSON.stringify(infrastructure)}`);
+            return infrastructure.infrastructure.id;
+        } else {
+            console.log(`Infrastructure with name '${name}' not found.`);
+            return null;
+        }
     } catch (error) {
         console.error('Error fetching infrastructure ID:', error);
         throw error;
     }
 }
+
 
 async function fetchComponentGroupId(name, authToken, statusPageId) {
     const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`;

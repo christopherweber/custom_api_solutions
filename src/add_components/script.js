@@ -88,7 +88,10 @@ function sendDataToBackend(data) {
     })
     .then(response => {
         if (!response.ok) {
-            return response.json().then(err => Promise.reject(err));
+            return response.json().then(err => {
+                displayErrorMessage(err.error || 'An unexpected error occurred.'); // Display the backend error message
+                return Promise.reject(err);
+            });
         }
         return response.json();
     })

@@ -47,7 +47,10 @@ async function processSingleComponent(componentName, componentGroup, authToken, 
         return await updateStatusPage({ components: [component] }, authToken, statusPageId);
     } catch (error) {
         console.error('Error in processSingleComponent:', error);
-        return { statusCode: 400, body: JSON.stringify({ error: error.message }) };
+        return { 
+            statusCode: 400, 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ error: error.message }) };
     }
 }
 

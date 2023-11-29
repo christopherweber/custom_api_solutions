@@ -79,6 +79,8 @@ function handleCSVUpload(file, data) {
 }
 
 function sendDataToBackend(data) {
+    const loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.style.display = 'block'; // Show loading message
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -94,10 +96,13 @@ function sendDataToBackend(data) {
         console.log('Success:', data);
         alert('Components processed successfully.');
         document.getElementById('errorMessage').style.display = 'none'; // Hide error message on success
+        resetForm()
+        loadingMessage.style.display = 'none';
     })
     .catch(error => {
         console.error('Error:', error);
         displayErrorMessage(error.message || 'An unexpected error occurred.');
+        loadingMessage.style.display = 'none';
     });
 }
 
@@ -105,4 +110,11 @@ function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block'; // Show the error message
+}
+
+function resetForm() {
+    document.getElementById('componentForm').reset(); // Reset the form inputs
+    document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
+    document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
+    // Add any other reset logic needed
 }

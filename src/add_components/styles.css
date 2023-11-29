@@ -113,3 +113,7 @@ form small {
 #csvUploadMessage {
     display: none;
 }
+
+#csvUploadMessage #csvFileUpload {
+    color: white;
+}

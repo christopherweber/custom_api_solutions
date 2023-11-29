@@ -112,8 +112,9 @@ form small {
 
 #csvUploadMessage {
     display: none;
+    color: white;
 }
 
-#csvUploadMessage #csvFileUpload {
+#csvFileUpload {
     color: white;
 }

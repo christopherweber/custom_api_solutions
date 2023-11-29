@@ -31,20 +31,23 @@ async function processSingleComponent(componentName, componentGroup, authToken, 
         const infrastructureId = await fetchInfrastructureId(componentName, authToken);
         const componentGroupId = await fetchComponentGroupId(componentGroup, authToken, statusPageId);
 
-        if (infrastructureId && componentGroupId) {
-            const component = {
-                "infrastructure_type": "functionality",
-                "infrastructure_id": infrastructureId,
-                "component_group_id": componentGroupId
-            };
-
-            return await updateStatusPage({ components: [component] }, authToken, statusPageId);
-        } else {
-            return { statusCode: 404, body: 'Infrastructure or Component Group not found' };
+        if (!infrastructureId) {
+            throw new Error(`Infrastructure '${componentName}' not found.`);
         }
+        if (!componentGroupId) {
+            throw new Error(`Component Group '${componentGroup}' not found.`);
+        }
+
+        const component = {
+            "infrastructure_type": "functionality",
+            "infrastructure_id": infrastructureId,
+            "component_group_id": componentGroupId
+        };
+
+        return await updateStatusPage({ components: [component] }, authToken, statusPageId);
     } catch (error) {
         console.error('Error in processSingleComponent:', error);
-        throw error;
+        return { statusCode: 400, body: JSON.stringify({ error: error.message }) };
     }
 }
 

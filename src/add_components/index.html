@@ -14,6 +14,8 @@
 <main>
     <section id="component-update-form">
         <h1>Component StatusPage Update</h1>
+        <div id="errorMessage" style="color: red; display: none;"></div>
+
         <form id="componentForm">
             <label for="authToken">Authorization Token:</label>
             <input type="text" id="authToken" name="authToken" placeholder="Enter Auth Token" required>
@@ -31,7 +33,7 @@
 
             <label for="csvFileUpload">Upload CSV File:</label>
             <input type="file" id="csvFileUpload" accept=".csv">
-            <small>Optional: Upload a CSV file for bulk update</small>
+            <small id="optionalCsvText">Optional: Upload a CSV file for bulk update</small>
 
             <div id="csvUploadMessage" style="display: none;"></div> <!-- Message container for CSV upload confirmation -->
 

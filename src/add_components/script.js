@@ -68,6 +68,7 @@ function handleCSVUpload(file, data) {
         data.csv = event.target.result;
         console.log(`CSV content being sent: ${data.csv}`); // Log the CSV content to be sure it's complete
         sendDataToBackend(data);
+        document.getElementById('optionalCsvText').style.display = 'none';
     };
     reader.onerror = function(error) {
         console.log('Error reading CSV:', error);
@@ -77,7 +78,6 @@ function handleCSVUpload(file, data) {
 }
 
 function sendDataToBackend(data) {
-    console.log('Sending data to backend:', JSON.stringify(data));
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -85,16 +85,23 @@ function sendDataToBackend(data) {
     })
     .then(response => {
         if (!response.ok) {
-            return response.json().then(errorData => Promise.reject(errorData));
+            return response.json().then(err => Promise.reject(err));
         }
         return response.json();
     })
     .then(data => {
         console.log('Success:', data);
         alert('Components processed successfully.');
+        document.getElementById('errorMessage').style.display = 'none'; // Hide error message on success
     })
     .catch(error => {
         console.error('Error:', error);
-        alert(`Error processing components: ${error.message || 'Unknown error'}`); // Provide more detailed error information
+        displayErrorMessage(error.message || 'An unexpected error occurred.');
     });
+}
+
+function displayErrorMessage(message) {
+    const errorMessageDiv = document.getElementById('errorMessage');
+    errorMessageDiv.textContent = message;
+    errorMessageDiv.style.display = 'block'; // Show the error message
 }

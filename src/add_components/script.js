@@ -67,8 +67,8 @@ function handleCSVUpload(file, data) {
     reader.onload = function(event) {
         data.csv = event.target.result;
         console.log(`CSV content being sent: ${data.csv}`); // Log the CSV content to be sure it's complete
-        sendDataToBackend(data);
         document.getElementById('optionalCsvText').style.display = 'none';
+        sendDataToBackend(data);
     };
     reader.onerror = function(error) {
         console.log('Error reading CSV:', error);

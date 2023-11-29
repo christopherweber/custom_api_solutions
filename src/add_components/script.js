@@ -79,6 +79,9 @@ function handleCSVUpload(file, data) {
 }
 
 function sendDataToBackend(data) {
+    const loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.style.display = 'block'; // Show loading message
+
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -86,27 +89,32 @@ function sendDataToBackend(data) {
     })
     .then(response => {
         if (!response.ok) {
-            return response.json().then(err => {
-                displayErrorMessage(err.error || 'An unexpected error occurred.');
-                return Promise.reject(err);
-            });
+            throw response; // Throw the response itself to handle it in the catch block
         }
         return response.json();
     })
     .then(data => {
-        if (!data.errors || data.errors.length === 0) {
+        if (data.errors && data.errors.length > 0) {
+            // Display the first error message
+            displayErrorMessage(data.errors[0].error || 'An error occurred while processing components.');
+        } else {
             alert('Components processed successfully.');
             resetForm();
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
-        displayErrorMessage(error.message || 'An unexpected error occurred.');
+    .catch(errorResponse => {
+        // Handle the error response here
+        errorResponse.json().then(error => {
+            displayErrorMessage(error.error || 'An unexpected error occurred.');
+        }).catch(() => {
+            displayErrorMessage('An unexpected error occurred.');
+        });
     })
     .finally(() => {
-        document.getElementById('loadingMessage').style.display = 'none';
+        loadingMessage.style.display = 'none'; // Hide loading message
     });
 }
+
 
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');

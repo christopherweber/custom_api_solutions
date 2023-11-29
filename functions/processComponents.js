@@ -87,6 +87,7 @@ function processCSV(csv, authToken, statusPageId) {
 async function fetchInfrastructureId(name, authToken) {
     const baseUrl = 'https://api.firehydrant.io/v1/infrastructures';
     let currentPage = 1;
+    let totalInfrastructuresProcessed = 0;
 
     try {
         while (true) {
@@ -95,17 +96,19 @@ async function fetchInfrastructureId(name, authToken) {
                 headers: { 'Authorization': `Bearer ${authToken}` }
             });
 
-            console.log(`Retrieved infrastructures for page ${currentPage}: ${JSON.stringify(response.data.data)}`);
+            const infrastructures = response.data.data;
+            totalInfrastructuresProcessed += infrastructures.length;
+            console.log(`Page ${currentPage}: Retrieved ${infrastructures.length} infrastructures (Total processed: ${totalInfrastructuresProcessed})`);
 
-            const infrastructure = response.data.data.find(item => item.infrastructure.name === name);
+            const infrastructure = infrastructures.find(item => item.infrastructure.name === name);
             if (infrastructure) {
                 console.log(`Found infrastructure: ${JSON.stringify(infrastructure)}`);
                 return infrastructure.infrastructure.id;
             }
 
             // Check if there are more pages to fetch
-            if (response.data.data.length === 0 || !response.data.pagination || !response.data.pagination.next_page) {
-                console.log(`No more pages to fetch. Infrastructure with name '${name}' not found.`);
+            if (infrastructures.length === 0 || !response.data.pagination || !response.data.pagination.next_page) {
+                console.log(`No more pages to fetch. Total infrastructures checked: ${totalInfrastructuresProcessed}. Infrastructure with name '${name}' not found.`);
                 return null;
             }
 
@@ -117,6 +120,7 @@ async function fetchInfrastructureId(name, authToken) {
         throw error;
     }
 }
+
 
 
 

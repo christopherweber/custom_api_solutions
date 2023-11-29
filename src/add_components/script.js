@@ -14,6 +14,8 @@ function attachCSVUploadListener() {
             componentFieldsContainer.style.display = 'none'; // Hide the component fields
             csvUploadMessage.textContent = 'CSV file uploaded successfully.';
             csvUploadMessage.style.display = 'block'; // Show the message
+            document.getElementById('optionalCsvText').style.display = 'none';
+
         } else {
             componentFieldsContainer.style.display = ''; // Show the component fields
             csvUploadMessage.style.display = 'none'; // Hide the message
@@ -67,7 +69,6 @@ function handleCSVUpload(file, data) {
     reader.onload = function(event) {
         data.csv = event.target.result;
         console.log(`CSV content being sent: ${data.csv}`); // Log the CSV content to be sure it's complete
-        document.getElementById('optionalCsvText').style.display = 'none';
         sendDataToBackend(data);
     };
     reader.onerror = function(error) {

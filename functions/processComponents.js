@@ -11,7 +11,6 @@ exports.handler = async function(event) {
     }
 
     const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
-    console.log('statusPageId:', statusPageId);
     console.log('Parsed body:', { csv, authToken, statusPageId, componentName, componentGroup });
 
     if (!statusPageId) {
@@ -28,7 +27,6 @@ exports.handler = async function(event) {
 };
 
 async function processSingleComponent(componentName, componentGroup, authToken, statusPageId) {
-    console.log('Processing single component with statusPageId:', statusPageId);
     try {
         const infrastructureId = await fetchInfrastructureId(componentName, authToken);
         const componentGroupId = await fetchComponentGroupId(componentGroup, authToken, statusPageId);
@@ -40,16 +38,15 @@ async function processSingleComponent(componentName, componentGroup, authToken, 
                 "component_group_id": componentGroupId
             };
 
-            await updateStatusPage({id: statusPageId, components: [component]}, authToken);
-            return { statusCode: 200, body: JSON.stringify({ message: 'Component processed successfully' }) };
+            return await updateStatusPage({ components: [component] }, authToken, statusPageId);
         } else {
             return { statusCode: 404, body: 'Infrastructure or Component Group not found' };
         }
     } catch (error) {
-        return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+        console.error('Error in processSingleComponent:', error);
+        throw error;
     }
 }
-
 
 function processCSV(csv, authToken, statusPageId) {
     try {
@@ -63,19 +60,21 @@ function processCSV(csv, authToken, statusPageId) {
         });
 
         return Promise.all(processPromises)
-            .then(() => {
-                return { statusCode: 200, body: JSON.stringify({ message: 'CSV processed successfully' }) };
+            .then(results => {
+                return { statusCode: 200, body: JSON.stringify({ message: 'CSV processed successfully', results }) };
             })
             .catch(error => {
-                return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+                console.error('Error in processCSV:', error);
+                throw error;
             });
     } catch (error) {
-        return { statusCode: 500, body: JSON.stringify({ error: 'Error processing CSV' }) };
+        console.error('Error parsing CSV:', error);
+        throw error;
     }
 }
 
 async function fetchInfrastructureId(name, authToken) {
-    const infrastructuresUrl = 'https://api.firehydrant.io/v1/infrastructures'; // Define URL here
+    const infrastructuresUrl = 'https://api.firehydrant.io/v1/infrastructures';
     try {
         const response = await axios.get(infrastructuresUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
@@ -90,7 +89,6 @@ async function fetchInfrastructureId(name, authToken) {
 
 async function fetchComponentGroupId(name, authToken, statusPageId) {
     const componentGroupsUrl = `${componentGroupsBaseUrl}${statusPageId}`;
-    console.log("FetchCompGroupdID: " = componentGroupsUrl)
     try {
         const response = await axios.get(componentGroupsUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
@@ -103,49 +101,32 @@ async function fetchComponentGroupId(name, authToken, statusPageId) {
     }
 }
 
-
-async function updateStatusPage(newComponent, authToken, statusPageId) {
+async function updateStatusPage(payload, authToken, statusPageId) {
     try {
-        console.log("Received statusPageId:", statusPageId);
-        console.log("Received newComponent:", JSON.stringify(newComponent));
-
-        if (!statusPageId) {
-            throw new Error('Status Page ID is missing or undefined');
-        }
-
-        // Fetch the current status page data
-        const getStatusPageUrl = `https://api.firehydrant.io/v1/nunc_connections/${statusPageId}`;
-        console.log("Fetching current status page data from URL:", getStatusPageUrl);
-
-        const response = await axios.get(getStatusPageUrl, {
+        const getStatusPageUrl = `${componentGroupsBaseUrl}${statusPageId}`;
+        console.log("URL " = getStatusPageUrl)
+        const getResponse = await axios.get(getStatusPageUrl, {
             headers: { 'Authorization': `Bearer ${authToken}` }
         });
 
-        let currentComponents = response.data.components || [];
-        console.log("Current components:", JSON.stringify(currentComponents));
+        let currentComponents = getResponse.data.components || [];
+        const newComponents = payload.components;
 
-        // Check if the component already exists (based on some unique property, e.g., id)
-        const existingComponentIndex = currentComponents.findIndex(comp => comp.id === newComponent.id);
-        if (existingComponentIndex !== -1) {
-            // Update the existing component
-            currentComponents[existingComponentIndex] = newComponent;
-            console.log("Updated an existing component.");
-        } else {
-            // Add the new component
-            currentComponents.push(newComponent);
-            console.log("Added a new component.");
-        }
+        // Combine new components with current components
+        newComponents.forEach(newComp => {
+            const existingIndex = currentComponents.findIndex(c => c.infrastructure_id === newComp.infrastructure_id);
+            if (existingIndex !== -1) {
+                currentComponents[existingIndex] = newComp; // Update existing
+            } else {
+                currentComponents.push(newComp); // Add new
+            }
+        });
 
-        // Update the status page with the new list of components
-        const updateUrl = `https://api.firehydrant.io/v1/nunc_connections/${statusPageId}`;
-        console.log("Updating status page with URL:", updateUrl);
-
-        await axios.put(updateUrl, { components: currentComponents }, {
+        const updateResponse = await axios.put(getStatusPageUrl, { components: currentComponents }, {
             headers: { 'Authorization': `Bearer ${authToken}` }
         });
 
-        console.log("Status page updated successfully.");
-
+        return { statusCode: 200, body: JSON.stringify({ message: 'Status page updated successfully', updateResponse: updateResponse.data }) };
     } catch (error) {
         console.error('Error updating status page:', error);
         throw error;

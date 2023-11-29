@@ -85,32 +85,39 @@ function processCSV(csv, authToken, statusPageId) {
 }
 
 async function fetchInfrastructureId(name, authToken) {
-    const infrastructuresUrl = 'https://api.firehydrant.io/v1/infrastructures';
+    const baseUrl = 'https://api.firehydrant.io/v1/infrastructures';
+    let currentPage = 1;
+
     try {
-        const response = await axios.get(infrastructuresUrl, {
-            headers: { 'Authorization': `Bearer ${authToken}` }
-        });
+        while (true) {
+            const url = `${baseUrl}?page=${currentPage}`;
+            const response = await axios.get(url, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
 
-        // Log the retrieved infrastructures
-        console.log(`Retrieved infrastructures: ${JSON.stringify(response.data.data)}`);
+            console.log(`Retrieved infrastructures for page ${currentPage}: ${JSON.stringify(response.data.data)}`);
 
-        const infrastructure = response.data.data.find(item => item.infrastructure.name === name);
+            const infrastructure = response.data.data.find(item => item.infrastructure.name === name);
+            if (infrastructure) {
+                console.log(`Found infrastructure: ${JSON.stringify(infrastructure)}`);
+                return infrastructure.infrastructure.id;
+            }
 
-        // Log the specific name being searched
-        console.log(`Searching for infrastructure with name: ${name}`);
+            // Check if there are more pages to fetch
+            if (response.data.data.length === 0 || !response.data.pagination || !response.data.pagination.next_page) {
+                console.log(`No more pages to fetch. Infrastructure with name '${name}' not found.`);
+                return null;
+            }
 
-        if (infrastructure) {
-            console.log(`Found infrastructure: ${JSON.stringify(infrastructure)}`);
-            return infrastructure.infrastructure.id;
-        } else {
-            console.log(`Infrastructure with name '${name}' not found.`);
-            return null;
+            // Move to the next page
+            currentPage++;
         }
     } catch (error) {
         console.error('Error fetching infrastructure ID:', error);
         throw error;
     }
 }
+
 
 
 async function fetchComponentGroupId(name, authToken, statusPageId) {

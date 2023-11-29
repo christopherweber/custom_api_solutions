@@ -88,32 +88,26 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
+        loadingMessage.style.display = 'none'; // Hide loading message in any case
         if (!response.ok) {
-            throw response; // Throw the response itself to handle it in the catch block
+            return response.json().then(err => Promise.reject(err));
         }
         return response.json();
     })
     .then(data => {
         if (data.errors && data.errors.length > 0) {
-            // Display the first error message
-            displayErrorMessage(data.errors[0].error || 'An error occurred while processing components.');
+            displayErrorMessage(data.errors[0]); // Display the first error message from the backend
         } else {
             alert('Components processed successfully.');
             resetForm();
         }
     })
-    .catch(errorResponse => {
-        // Handle the error response here
-        errorResponse.json().then(error => {
-            displayErrorMessage(error.error || 'An unexpected error occurred.');
-        }).catch(() => {
-            displayErrorMessage('An unexpected error occurred.');
-        });
-    })
-    .finally(() => {
-        loadingMessage.style.display = 'none'; // Hide loading message
+    .catch(error => {
+        console.error('Error:', error);
+        displayErrorMessage(error.error || 'An unexpected error occurred.');
     });
 }
+
 
 
 function displayErrorMessage(message) {

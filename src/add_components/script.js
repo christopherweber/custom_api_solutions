@@ -82,8 +82,6 @@ function sendDataToBackend(data) {
     const loadingMessage = document.getElementById('loadingMessage');
     loadingMessage.style.display = 'block'; // Show loading message
 
-    console.log('Sending data to backend:', data); // Log the data being sent
-
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -91,27 +89,32 @@ function sendDataToBackend(data) {
     })
     .then(response => {
         loadingMessage.style.display = 'none'; // Hide loading message in any case
-        console.log('Response received:', response); // Log the raw response
         if (!response.ok) {
-            return response.json().then(err => {
-                console.log('Error response:', err); // Log the parsed error response
-                return Promise.reject(err);
-            });
+            return response.json().then(err => Promise.reject(err));
         }
         return response.json();
     })
     .then(data => {
         console.log('Data:', data); // Log the success response data
-        if (data.errors && data.errors.length > 0) {
-            console.log('Displaying error message:', data.errors[0]); // Log the error message being displayed
-            displayErrorMessage(data.errors[0]); // Display the first error message from the backend
+        let errors = [];
+        if (data.results) {
+            data.results.forEach(result => {
+                if (result.status === 'rejected') {
+                    errors.push(JSON.parse(result.value.body).error);
+                }
+            });
+        }
+
+        if (errors.length > 0) {
+            console.log('Displaying error message:', errors.join(', ')); // Log the error message being displayed
+            displayErrorMessage(errors.join(', ')); // Display all error messages joined by a comma
         } else {
             alert('Components processed successfully.');
             resetForm();
         }
     })
     .catch(error => {
-        console.error('Error:', error); // Log the error caught
+        console.error('Error:', error);
         displayErrorMessage(error.error || 'An unexpected error occurred.');
     });
 }

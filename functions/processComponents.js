@@ -55,24 +55,25 @@ function processCSV(csv, authToken, statusPageId) {
             skip_empty_lines: true
         });
 
-        console.log('Parsed CSV records:', records); // Added logging for parsed records
+        console.log(`Parsed CSV records: ${JSON.stringify(records)}`);
 
-        const processPromises = records.map((row) => {
-            return processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId);
-        });
+        const processPromises = records.map((row, index) => 
+            new Promise(resolve => setTimeout(resolve, index * 1000))
+            .then(() => processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId))
+        );
 
-        return Promise.allSettled(processPromises)  // Changed to allSettled
+        return Promise.allSettled(processPromises)
             .then(results => {
                 const successfulResults = results.filter(result => result.status === 'fulfilled');
                 const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
                 if(errors.length > 0){
-                    return { statusCode: 207, body: JSON.stringify({ message: 'Some components failed to process', successfulResults, errors }) };
+                    return { statusCode: 207, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Some components failed to process', successfulResults, errors }) };
                 }
                 return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', results: successfulResults }) };
             });
     } catch (error) {
         console.error('Error parsing CSV:', error);
-        return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Failed to parse CSV' }) }; // Changed to return an error response
+        return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Failed to parse CSV' }) };
     }
 }
 

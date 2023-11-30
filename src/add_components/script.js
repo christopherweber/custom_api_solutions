@@ -80,7 +80,7 @@ function handleCSVUpload(file, data) {
 
 function sendDataToBackend(data) {
     const loadingMessage = document.getElementById('loadingMessage');
-    loadingMessage.style.display = 'block';
+    loadingMessage.style.display = 'block'; // Show loading message
 
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
@@ -88,20 +88,32 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
-        loadingMessage.style.display = 'none';
-        return response.json().then(body => ({ status: response.status, body }));
-    })
-    .then(({ status, body }) => {
-        if (status !== 200) {
-            throw new Error(body.error || 'An unexpected error occurred.');
+        loadingMessage.style.display = 'none'; // Hide loading message in any case
+        if (!response.ok) {
+            return response.json().then(err => Promise.reject(err));
         }
-        console.log('Data:', body);
-        alert('Components processed successfully.');
-        resetForm();
+        return response.json();
+    })
+    .then(data => {
+        let errors = [];
+        if (data.results) {
+            data.results.forEach(result => {
+                if (result.status === 'fulfilled' && result.value.statusCode === 400) {
+                    const errorInfo = JSON.parse(result.value.body);
+                    errors.push(errorInfo.error);
+                }
+            });
+        }
+
+        if (errors.length > 0) {
+            displayErrorMessage(errors.join(', ')); // Display all error messages joined by a comma
+        } else {
+            alert('Components processed successfully.');
+            resetForm();
+        }
     })
     .catch(error => {
-        console.error('Error:', error);
-        displayErrorMessage(error.message);
+        displayErrorMessage(error.error || 'An unexpected error occurred.');
     });
 }
 

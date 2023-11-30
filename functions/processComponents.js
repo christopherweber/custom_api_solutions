@@ -64,7 +64,9 @@ async function processCSV(csv, authToken, statusPageId, batchIndex) {
 
     console.log(`Parsed CSV records: ${JSON.stringify(records)}`);
 
-    const batchSize = 40; // Set an appropriate batch size
+    // Calculate the batch size based on the total number of records
+    const batchSize = calculateBatchSize(records.length);
+
     const start = batchIndex * batchSize;
     const end = Math.min(start + batchSize, records.length);
     const batchRecords = records.slice(start, end);
@@ -88,6 +90,17 @@ async function processCSV(csv, authToken, statusPageId, batchIndex) {
     return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Failed to parse CSV' }) };
   }
 }
+
+// Calculate the batch size based on the total number of records
+function calculateBatchSize(totalRecords) {
+  // You can set your own logic for calculating the batch size here
+  // For example, you can determine the batch size based on the totalRecords
+  // For demonstration, let's set a fixed batch size of 50
+  return 50;
+}
+
+// ... (rest of the code remains the same)
+
 
 async function fetchInfrastructureId(name, authToken) {
   const baseUrl = 'https://api.firehydrant.io/v1/infrastructures';

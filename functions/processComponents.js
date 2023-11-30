@@ -64,7 +64,7 @@ function chunkArray(array, chunkSize) {
   }
   
 
-async function processCSV(csv, authToken, statusPageId) {
+  async function processCSV(csv, authToken, statusPageId) {
     try {
       const records = parse(csv, {
         columns: true,

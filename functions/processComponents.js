@@ -82,7 +82,16 @@ function chunkArray(array, chunkSize) {
       let totalProcessed = 0;
       const successfullyProcessedComponents = [];
   
-      for (const batch of batches) {
+      async function processBatch(index) {
+        if (index >= batches.length) {
+          console.log('Here are all the components that were successfully sent over:');
+          successfullyProcessedComponents.forEach((component, i) => {
+            console.log(`${i + 1}. Name: ${component.infrastructure.name}`);
+          });
+          return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', successfulComponents: successfullyProcessedComponents }) };
+        }
+  
+        const batch = batches[index];
         const processPromises = batch.map((row) =>
           processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
         );
@@ -100,22 +109,20 @@ function chunkArray(array, chunkSize) {
         // Capture successfully processed components
         successfullyProcessedComponents.push(...batch);
   
-        // Return to avoid a timeout if all components have been processed
-        if (totalProcessed >= records.length) {
-          console.log('Here are all the components that were successfully sent over:');
-          successfullyProcessedComponents.forEach((component, index) => {
-            console.log(`${index + 1}. Name: ${component.infrastructure.name}`);
-          });
-          return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', successfulComponents: successfullyProcessedComponents }) };
-        }
+        // Continue processing the next batch after a delay (5 seconds)
+        setTimeout(() => {
+          processBatch(index + 1);
+        }, 5000);
       }
   
-      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', successfulComponents: successfullyProcessedComponents }) };
+      // Start processing the first batch
+      await processBatch(0);
     } catch (error) {
       console.error('Error processing CSV:', error);
       return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: error.message }) };
     }
   }
+
   
 
   

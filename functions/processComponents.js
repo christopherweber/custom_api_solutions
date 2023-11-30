@@ -77,6 +77,8 @@ function chunkArray(array, chunkSize) {
         throw new Error('CSV is empty');
       }
   
+      let totalProcessed = 0; // Variable to keep track of the total processed components
+  
       // Calculate the batch size based on the maximum execution time
       const batchSize = calculateBatchSize(records.length);
   
@@ -94,6 +96,9 @@ function chunkArray(array, chunkSize) {
         if (errors.length > 0) {
           throw new Error('Some components failed to process');
         }
+  
+        totalProcessed += batch.length; // Increment the total processed count
+        console.log(`Processed ${totalProcessed} components so far.`);
       }
   
       return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully' }) };
@@ -102,6 +107,7 @@ function chunkArray(array, chunkSize) {
       return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: error.message }) };
     }
   }
+  
   
   // Calculate the batch size based on the maximum execution time
   function calculateBatchSize(totalRecords) {

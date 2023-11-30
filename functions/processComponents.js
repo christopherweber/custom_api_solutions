@@ -121,6 +121,8 @@ function chunkArray(array, chunkSize) {
             }));
         }
 
+        console.log("Processed results:", processedResults);
+
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },

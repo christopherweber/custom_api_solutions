@@ -84,23 +84,25 @@ function chunkArray(array, chunkSize) {
           console.log('CSV processed successfully');
           return;
         }
-      
+  
         const batchRecords = records.slice(currentIndex, currentIndex + batchSize);
         currentIndex += batchSize;
-      
+  
         const processPromises = batchRecords.map((row) =>
           processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
         );
-      
-        try {
-          const results = await Promise.allSettled(processPromises);
-          const successfulResults = results.filter(result => result.status === 'fulfilled');
-          const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
-      
-          if (errors.length > 0) {
-            throw new Error('Some components failed to process');
-          }
-      
+  
+        const results = await Promise.allSettled(processPromises);
+        const successfulResults = results.filter(result => result.status === 'fulfilled');
+        const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
+  
+        if (errors.length > 0) {
+          console.error('Some components failed to process:', errors);
+          // Handle the errors as needed
+  
+          // Add a delay before retrying the batch
+          setTimeout(processBatch, 9000);
+        } else {
           console.log(`Successfully processed ${successfulResults.length} components.`);
           successfulResults.forEach((component, index) => {
             if (component.infrastructure && component.infrastructure.name) {
@@ -110,18 +112,12 @@ function chunkArray(array, chunkSize) {
               console.log(`${index + 1}. Name: Unknown`);
             }
           });
-      
-          // Add a delay between batches to avoid timeout (9 seconds)
-          setTimeout(processBatch, 9000);
-        } catch (error) {
-          console.error('Error processing batch:', error);
-          // Handle the error as needed
-      
-          // Add a delay before retrying the batch
+  
+          // Add a delay between batches to avoid API rate limits (adjust as needed)
           setTimeout(processBatch, 9000);
         }
       }
-      
+  
       // Start processing the first batch
       processBatch();
     } catch (error) {
@@ -129,7 +125,6 @@ function chunkArray(array, chunkSize) {
       return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: error.message }) };
     }
   }
-  
   
   
   

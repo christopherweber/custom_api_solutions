@@ -115,28 +115,27 @@ function chunkArray(array, chunkSize) {
             const results = await Promise.allSettled(processPromises);
             results.forEach(result => {
                 if (result.status === 'rejected') {
-                    // Collect error messages from processSingleComponent failures
                     errorMessages.push(result.reason.message);
                 }
             });
 
             totalProcessed += batch.length;
-            console.log(`Processed ${totalProcessed} components so far.`);
         }
 
         if (errorMessages.length > 0) {
-            // Return combined error messages if there were any errors
             return { 
                 statusCode: 400, 
-                body: JSON.stringify({ error: `Errors encountered: ${errorMessages.join(', ')}` }) 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ errors: errorMessages }) 
             };
         }
 
-        // Return success message if all components are processed without errors
-        return { 
-            statusCode: 200, 
-            body: JSON.stringify({ message: 'CSV processed successfully' }) 
-        };
+return { 
+    statusCode: 200, 
+    headers: { 'Content-Type': 'application/json' }, 
+    body: JSON.stringify({ message: 'CSV processed successfully' }) 
+};
+
     } catch (error) {
         console.error('Error processing CSV:', error);
         return { 

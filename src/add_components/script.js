@@ -80,7 +80,7 @@ function handleCSVUpload(file, data) {
 
 function sendDataToBackend(data) {
     const loadingMessage = document.getElementById('loadingMessage');
-    loadingMessage.style.display = 'block'; // Show loading message
+    loadingMessage.style.display = 'block'; 
 
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
@@ -88,23 +88,17 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
-        loadingMessage.style.display = 'none'; // Hide loading message in any case
-        return response.json().then(body => ({ status: response.status, body }));
+        loadingMessage.style.display = 'none';
+        return response.json().then(data => ({ status: response.status, body: data }));
     })
     .then(({ status, body }) => {
         if (status !== 200) {
-            console.error('Error from server:', body.error); // Log the server error
-            displayErrorMessage(body.error || 'An error occurred.');
-            return;
-        }
-
-        let errorMessages = body.results && body.results
-            .filter(result => result.status === 'rejected')
-            .map(result => result.reason);
-
-        if (errorMessages && errorMessages.length > 0) {
-            console.error('All errors:', errorMessages); // Log all errors
-            displayErrorMessage(errorMessages.join(', '));
+            // Check if the response contains errors array
+            if (body.errors && body.errors.length > 0) {
+                displayErrorMessage(body.errors.join(', '));
+            } else {
+                displayErrorMessage(body.error || 'An unexpected error occurred.');
+            }
             return;
         }
 
@@ -112,8 +106,8 @@ function sendDataToBackend(data) {
         resetForm();
     })
     .catch(error => {
-        console.error('Error:', error); // Log the caught error
-        displayErrorMessage(error.error || 'An unexpected error occurred.');
+        console.error('Error:', error);
+        displayErrorMessage(error.message || 'An unexpected error occurred.');
     });
 }
 

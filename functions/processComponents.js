@@ -10,15 +10,15 @@ exports.handler = async function (event) {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  const { csv, authToken, statusPageId, componentName, componentGroup, batchIndex } = JSON.parse(event.body);
-  console.log('Parsed body:', { csv, authToken, statusPageId, componentName, componentGroup, batchIndex });
+  const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
+  console.log('Parsed body:', { csv, authToken, statusPageId, componentName, componentGroup });
 
   if (!statusPageId) {
     return { statusCode: 400, body: 'Status Page ID is missing' };
   }
 
   if (csv) {
-    return processCSV(csv, authToken, statusPageId, batchIndex);
+    return processCSV(csv, authToken, statusPageId);
   } else if (componentName && componentGroup) {
     return processSingleComponent(componentName, componentGroup, authToken, statusPageId);
   } else {
@@ -55,7 +55,7 @@ async function processSingleComponent(componentName, componentGroup, authToken, 
   }
 }
 
-async function processCSV(csv, authToken, statusPageId, batchIndex) {
+async function processCSV(csv, authToken, statusPageId) {
   try {
     const records = parse(csv, {
       columns: true,
@@ -68,16 +68,8 @@ async function processCSV(csv, authToken, statusPageId, batchIndex) {
       throw new Error('CSV is empty');
     }
 
-    // Calculate the batch size based on the total number of records
-    const batchSize = calculateBatchSize(records.length);
-
-    const start = batchIndex * batchSize;
-    const end = Math.min(start + batchSize, records.length);
-    const batchRecords = records.slice(start, end);
-
-    const processPromises = batchRecords.map((row, index) =>
-      new Promise(resolve => setTimeout(resolve, index * 1000))
-        .then(() => processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId))
+    const processPromises = records.map((row) =>
+      processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
     );
 
     const results = await Promise.allSettled(processPromises);
@@ -95,16 +87,7 @@ async function processCSV(csv, authToken, statusPageId, batchIndex) {
   }
 }
 
-// Calculate the batch size based on the total number of records
-function calculateBatchSize(totalRecords) {
-  // You can set your own logic for calculating the batch size here
-  // For example, you can determine the batch size based on the totalRecords
-  // For demonstration, let's set a fixed batch size of 50
-  return 50;
-}
-
 // ... (rest of the code remains the same)
-
 
 async function fetchInfrastructureId(name, authToken) {
   const baseUrl = 'https://api.firehydrant.io/v1/infrastructures';

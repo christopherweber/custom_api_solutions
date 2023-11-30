@@ -90,16 +90,17 @@ function sendDataToBackend(data) {
     .then(response => {
         loadingMessage.style.display = 'none'; // Hide loading message
         if (!response.ok) {
-            // Parse and reject the error if response is not OK
+            // If the response is not OK, parse and reject the error
             return response.json().then(err => Promise.reject(err));
         }
         return response.json();
     })
     .then(data => {
         if (data.error) {
-            // If the response contains an error, display it
+            // If the response contains an error, throw it
             throw new Error(data.error);
         }
+        // Only show success message if there are no errors
         console.log('Data:', data); // Log the success response data
         alert('Components processed successfully.');
         resetForm();
@@ -120,6 +121,4 @@ function displayErrorMessage(message) {
 function resetForm() {
     document.getElementById('componentForm').reset(); // Reset the form inputs
     document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
-    document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
-}
-
+    document.getElementById('csvUploadMessage').style.display = 'none

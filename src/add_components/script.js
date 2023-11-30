@@ -88,25 +88,35 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
-        loadingMessage.style.display = 'none'; // Hide loading message
-        return response.json().then(body => ({
-            status: response.status,
-            body: body
-        }));
-    })
-    .then(({ status, body }) => {
-        if (status !== 200) {
-            // If status is not 200, there's an error
-            throw new Error(body.error || 'An unexpected error occurred.');
+        loadingMessage.style.display = 'none'; // Hide loading message in any case
+        if (!response.ok) {
+            return response.json().then(err => Promise.reject(err));
         }
-        console.log('Data:', body); // Log the success response data
-        alert('Components processed successfully.');
-        resetForm();
+        return response.json();
+    })
+    .then(data => {
+        console.log('Data:', data); // Log the success response data
+        let errors = [];
+        if (data.results) {
+            data.results.forEach(result => {
+                if (result.status === 'fulfilled' && result.value.statusCode === 400) {
+                    const errorInfo = JSON.parse(result.value.body);
+                    errors.push(errorInfo.error);
+                }
+            });
+        }
+
+        if (errors.length > 0) {
+            console.log('Displaying error message:', errors.join(', ')); // Log the error message being displayed
+            displayErrorMessage(errors.join(', ')); // Display all error messages joined by a comma
+        } else {
+            alert('Components processed successfully.');
+            resetForm();
+        }
     })
     .catch(error => {
         console.error('Error:', error);
-        // Display the error message
-        displayErrorMessage(error.message);
+        displayErrorMessage(error.error || 'An unexpected error occurred.');
     });
 }
 
@@ -120,4 +130,5 @@ function resetForm() {
     document.getElementById('componentForm').reset(); // Reset the form inputs
     document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
     document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
+    // Add any other reset logic needed
 }

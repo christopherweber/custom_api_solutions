@@ -97,8 +97,12 @@ function chunkArray(array, chunkSize) {
   
         console.log(`Successfully processed ${successfulResults.length} components.`);
         successfulResults.forEach((component, index) => {
-          console.log(`${index + 1}. Name: ${component.infrastructure.name}`);
-          // You can add more information about the component here if needed
+          if (component.infrastructure && component.infrastructure.name) {
+            console.log(`${index + 1}. Name: ${component.infrastructure.name}`);
+            // You can add more information about the component here if needed
+          } else {
+            console.log(`${index + 1}. Name: Unknown`);
+          }
         });
   
         // Add a delay between batches to avoid timeout
@@ -113,14 +117,10 @@ function chunkArray(array, chunkSize) {
   }
   
   
-  
-  
+
   
   // Calculate the batch size based on the maximum execution time
   function calculateBatchSize(totalRecords) {
-    // You can set your own logic for calculating the batch size here
-    // For example, you can determine the batch size based on the totalRecords
-    // For demonstration, let's set a fixed batch size of 50
     return 50;
   }
 

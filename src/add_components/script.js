@@ -97,19 +97,13 @@ function sendDataToBackend(data) {
     .then(data => {
         console.log('Data:', data); // Log the success response data
         let errors = [];
-
-        // Check if the response is valid JSON
-        if (typeof data === 'object') {
-            if (data.results) {
-                data.results.forEach(result => {
-                    if (result.status === 'fulfilled' && result.value.statusCode === 400) {
-                        const errorInfo = JSON.parse(result.value.body);
-                        errors.push(errorInfo.error);
-                    }
-                });
-            }
-        } else {
-            errors.push('Invalid response from the server.');
+        if (data.results) {
+            data.results.forEach(result => {
+                if (result.status === 'fulfilled' && result.value.statusCode === 400) {
+                    const errorInfo = JSON.parse(result.value.body);
+                    errors.push(errorInfo.error);
+                }
+            });
         }
 
         if (errors.length > 0) {
@@ -125,7 +119,6 @@ function sendDataToBackend(data) {
         displayErrorMessage(error.error || 'An unexpected error occurred.');
     });
 }
-
 
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');

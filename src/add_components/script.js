@@ -121,4 +121,5 @@ function displayErrorMessage(message) {
 function resetForm() {
     document.getElementById('componentForm').reset(); // Reset the form inputs
     document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
-    document.getElementById('csvUploadMessage').style.display = 'none
+    document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
+}

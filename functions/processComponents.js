@@ -104,7 +104,7 @@ function chunkArray(array, chunkSize) {
         const batches = chunkArray(records, batchSize);
 
         let totalProcessed = 0;
-        let errorMessages = [];
+        const resultsArray = [];
 
         for (let index = 0; index < batches.length; index++) {
             const batch = batches[index];
@@ -113,33 +113,26 @@ function chunkArray(array, chunkSize) {
             );
 
             const results = await Promise.allSettled(processPromises);
-            results.forEach(result => {
-                if (result.status === 'rejected') {
-                    errorMessages.push(result.reason.message);
-                }
-            });
+            resultsArray.push(...results.map(result => ({
+                status: result.status,
+                value: result.value ? JSON.parse(result.value.body) : null,
+                reason: result.reason ? result.reason.message : null
+            })));
 
             totalProcessed += batch.length;
+            console.log(`Processed ${totalProcessed} components so far.`);
         }
 
-        if (errorMessages.length > 0) {
-            return { 
-                statusCode: 400, 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ errors: errorMessages }) 
-            };
-        }
-
-return { 
-    statusCode: 200, 
-    headers: { 'Content-Type': 'application/json' }, 
-    body: JSON.stringify({ message: 'CSV processed successfully' }) 
-};
-
+        return { 
+            statusCode: 200, 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ message: 'CSV processed with some errors', results: resultsArray }) 
+        };
     } catch (error) {
         console.error('Error processing CSV:', error);
         return { 
             statusCode: 500, 
+            headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify({ error: error.message }) 
         };
     }

@@ -87,17 +87,22 @@ function sendDataToBackend(data) {
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                throw new Error(data.error || 'No response from server or malformed response.');
+            });
+        }
+        return response.json();
+    })
     .then(data => {
         loadingMessage.style.display = 'none';
-        console.log('Response data:', data); // For debugging
+        console.log('Processed data:', data); // Detailed log for debugging
 
         if (data && data.results) {
-            let errorMessages = data.results
-                                  .filter(result => result.status === 'fulfilled' && result.value.error)
-                                  .map(result => result.value.error);
-
-            console.log('Error messages:', errorMessages); // Console log for debugging
+            let errorMessages = data.results.filter(result => result.status === 'fulfilled' && result.value.error)
+                                            .map(result => result.value.error);
+            console.log('Error messages:', errorMessages); // Log for debugging
 
             if (errorMessages.length > 0) {
                 displayErrorMessage(`Errors: ${errorMessages.join(', ')}`);
@@ -106,6 +111,7 @@ function sendDataToBackend(data) {
                 resetForm();
             }
         } else {
+            console.log('Unexpected data structure:', data); // Log unexpected data structure
             alert('No response from server or malformed response.');
         }
     })

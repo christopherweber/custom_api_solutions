@@ -102,31 +102,27 @@ function chunkArray(array, chunkSize) {
 
         const batchSize = calculateBatchSize(records.length);
         const batches = chunkArray(records, batchSize);
+        let processedResults = [];
 
-        let totalProcessed = 0;
-        const resultsArray = [];
-
-        for (let index = 0; index < batches.length; index++) {
-            const batch = batches[index];
+        for (let batch of batches) {
             const processPromises = batch.map(row => 
                 processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
             );
 
-            const results = await Promise.allSettled(processPromises);
-            resultsArray.push(...results.map(result => ({
-                status: result.status,
-                value: result.value ? JSON.parse(result.value.body) : null,
-                reason: result.reason ? result.reason.message : null
-            })));
-
-            totalProcessed += batch.length;
-            console.log(`Processed ${totalProcessed} components so far.`);
+            let results = await Promise.allSettled(processPromises);
+            processedResults.push(...results.map(result => {
+                if (result.status === 'fulfilled') {
+                    return { status: 'fulfilled', value: JSON.parse(result.value.body) };
+                } else if (result.status === 'rejected') {
+                    return { status: 'rejected', reason: result.reason.message };
+                }
+            }));
         }
 
-        return { 
-            statusCode: 200, 
-            headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify({ message: 'CSV processed with some errors', results: resultsArray }) 
+        return {
+            statusCode: 200,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'CSV processing completed', results: processedResults })
         };
     } catch (error) {
         console.error('Error processing CSV:', error);

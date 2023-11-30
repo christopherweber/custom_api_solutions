@@ -88,34 +88,30 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
-        console.log('Raw response:', response); // Log the raw response
         if (!response.ok) {
             return response.json().then(data => {
-                console.log('Error data:', data); // Log the error data
-                if (data && data.error) {
-                    throw new Error(data.error);
-                } else {
-                    throw new Error('No response from server or malformed response 1.');
-                }
+                throw new Error(data.error || 'No response from server or malformed response.');
             });
         }
         return response.json();
     })
     .then(data => {
-        console.log('Processed data:', data); // Log the processed data
         loadingMessage.style.display = 'none';
 
         if (data && data.results) {
-            let isSuccess = data.results.every(result => result.status === 'fulfilled' && result.value.statusCode === 200);
-            
-            if (isSuccess) {
-                alert('Components processed successfully.');
+            let errors = data.results.filter(result => result.status === 'rejected');
+            let successes = data.results.filter(result => result.status === 'fulfilled');
+
+            if (errors.length > 0) {
+                displayErrorMessage(`Errors: ${errors.map(e => e.reason).join(', ')}`);
+            } else if (successes.length > 0) {
+                alert(`Components processed successfully: ${successes.length}`);
                 resetForm();
             } else {
-                displayErrorMessage('Some components failed to process.');
+                alert('No response from server or malformed response.');
             }
         } else {
-            alert('No response from server or malformed response 2.');
+            alert('No response from server or malformed response.');
         }
     })
     .catch(error => {
@@ -123,6 +119,7 @@ function sendDataToBackend(data) {
         displayErrorMessage(error.message);
     });
 }
+
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');
     errorMessageDiv.textContent = message;

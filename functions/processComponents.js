@@ -64,7 +64,7 @@ function chunkArray(array, chunkSize) {
   }
   
 
-  async function processCSV(csv, authToken, statusPageId) {
+  async function processCSV(csv, authToken, statusPageId, startRow) {
     try {
       const records = parse(csv, {
         columns: true,
@@ -77,12 +77,17 @@ function chunkArray(array, chunkSize) {
         throw new Error('CSV is empty');
       }
   
-      let totalProcessed = 0; // Variable to keep track of the total processed components
-  
       // Calculate the batch size based on the maximum execution time
       const batchSize = calculateBatchSize(records.length);
   
       const batches = chunkArray(records, batchSize);
+  
+      // Skip rows up to startRow
+      const startIndex = Math.min(startRow, records.length);
+      records.splice(0, startIndex);
+  
+      let totalProcessed = 0;
+      const successfullyProcessedComponents = []; // Array to capture successful components
   
       for (const batch of batches) {
         const processPromises = batch.map((row) =>
@@ -90,23 +95,32 @@ function chunkArray(array, chunkSize) {
         );
   
         const results = await Promise.allSettled(processPromises);
-        const successfulResults = results.filter(result => result.status === 'fulfilled');
         const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
   
         if (errors.length > 0) {
           throw new Error('Some components failed to process');
         }
   
-        totalProcessed += batch.length; // Increment the total processed count
+        totalProcessed += batch.length;
         console.log(`Processed ${totalProcessed} components so far.`);
+  
+        // Capture successfully processed components
+        successfullyProcessedComponents.push(...batch);
+  
+        // Check if the maximum execution time is approaching, and if so, return to avoid a timeout
+        if (context.getRemainingTimeInMillis() < 2000) {
+          return { statusCode: 202, body: JSON.stringify({ message: 'Processing in progress', startRow: startIndex + totalProcessed, successfulComponents: successfullyProcessedComponents }) };
+        }
       }
   
-      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully' }) };
+      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', successfulComponents: successfullyProcessedComponents }) };
     } catch (error) {
       console.error('Error processing CSV:', error);
       return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: error.message }) };
     }
   }
+  
+  
   
   
   // Calculate the batch size based on the maximum execution time

@@ -105,6 +105,7 @@ function sendDataToBackend(data) {
         loadingMessage.style.display = 'none';
 
         if (data && data.results) {
+            console.log("this is true that data exists")
             let errors = data.results
                 .filter(result => result.status === 'rejected')
                 .map(result => result.reason);

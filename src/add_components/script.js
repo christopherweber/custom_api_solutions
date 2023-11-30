@@ -88,35 +88,26 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
-        loadingMessage.style.display = 'none'; // Hide loading message in any case
+        loadingMessage.style.display = 'none'; // Hide loading message
         if (!response.ok) {
+            // Parse and reject the error if response is not OK
             return response.json().then(err => Promise.reject(err));
         }
         return response.json();
     })
     .then(data => {
+        if (data.error) {
+            // If the response contains an error, display it
+            throw new Error(data.error);
+        }
         console.log('Data:', data); // Log the success response data
-        let errors = [];
-        if (data.results) {
-            data.results.forEach(result => {
-                if (result.status === 'fulfilled' && result.value.statusCode === 400) {
-                    const errorInfo = JSON.parse(result.value.body);
-                    errors.push(errorInfo.error);
-                }
-            });
-        }
-
-        if (errors.length > 0) {
-            console.log('Displaying error message:', errors.join(', ')); // Log the error message being displayed
-            displayErrorMessage(errors.join(', ')); // Display all error messages joined by a comma
-        } else {
-            alert('Components processed successfully.');
-            resetForm();
-        }
+        alert('Components processed successfully.');
+        resetForm();
     })
     .catch(error => {
         console.error('Error:', error);
-        displayErrorMessage(error.error || 'An unexpected error occurred.');
+        // Display the error message
+        displayErrorMessage(error.message || 'An unexpected error occurred.');
     });
 }
 
@@ -130,6 +121,5 @@ function resetForm() {
     document.getElementById('componentForm').reset(); // Reset the form inputs
     document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
     document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
-    // Add any other reset logic needed
 }
 

@@ -88,35 +88,32 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
-        loadingMessage.style.display = 'none'; // Hide loading message
+        loadingMessage.style.display = 'none'; // Hide loading message in any case
         return response.json().then(body => ({ status: response.status, body }));
     })
     .then(({ status, body }) => {
         if (status !== 200) {
-            // Handle non-OK responses
+            console.error('Error from server:', body.error); // Log the server error
             displayErrorMessage(body.error || 'An error occurred.');
             return;
         }
 
-        if (body.results && Array.isArray(body.results)) {
-            // Process individual component errors
-            let errors = body.results
-                .filter(result => result.status === 'rejected')
-                .map(result => JSON.parse(result.reason.body).error);
+        let errorMessages = body.results && body.results
+            .filter(result => result.status === 'rejected')
+            .map(result => result.reason);
 
-            if (errors.length > 0) {
-                displayErrorMessage(errors.join(', '));
-                return;
-            }
+        if (errorMessages && errorMessages.length > 0) {
+            console.error('All errors:', errorMessages); // Log all errors
+            displayErrorMessage(errorMessages.join(', '));
+            return;
         }
 
-        // Default success message
         alert('Components processed successfully.');
         resetForm();
     })
     .catch(error => {
-        console.error('Error:', error);
-        displayErrorMessage(error.message || 'An unexpected error occurred.');
+        console.error('Error:', error); // Log the caught error
+        displayErrorMessage(error.error || 'An unexpected error occurred.');
     });
 }
 
@@ -126,11 +123,8 @@ function displayErrorMessage(message) {
     errorMessageDiv.style.display = 'block';
 }
 
-
-
 function resetForm() {
-    document.getElementById('componentForm').reset(); // Reset the form inputs
-    document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
-    document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
-    // Add any other reset logic needed
+    document.getElementById('componentForm').reset();
+    document.getElementById('componentFieldsContainer').style.display = '';
+    document.getElementById('csvUploadMessage').style.display = 'none';
 }

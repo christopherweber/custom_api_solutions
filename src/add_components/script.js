@@ -88,26 +88,35 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
-        loadingMessage.style.display = 'none'; // Hide loading message
+        loadingMessage.style.display = 'none'; // Hide loading message in any case
         if (!response.ok) {
-            // When response is not ok, parse the error message and reject it
             return response.json().then(err => Promise.reject(err));
         }
         return response.json();
     })
     .then(data => {
-        if (data.error) {
-            // If there is an error message in the response, display it
-            throw new Error(data.error);
-        }
         console.log('Data:', data); // Log the success response data
-        alert('Components processed successfully.');
-        resetForm();
+        let errors = [];
+        if (data.results) {
+            data.results.forEach(result => {
+                if (result.status === 'fulfilled' && result.value.statusCode === 400) {
+                    const errorInfo = JSON.parse(result.value.body);
+                    errors.push(errorInfo.error);
+                }
+            });
+        }
+
+        if (errors.length > 0) {
+            console.log('Displaying error message:', errors.join(', ')); // Log the error message being displayed
+            displayErrorMessage(errors.join(', ')); // Display all error messages joined by a comma
+        } else {
+            alert('Components processed successfully.');
+            resetForm();
+        }
     })
     .catch(error => {
         console.error('Error:', error);
-        // Display error message from the catch block
-        displayErrorMessage(error.message || 'An unexpected error occurred.');
+        displayErrorMessage(error.error || 'An unexpected error occurred.');
     });
 }
 
@@ -121,4 +130,6 @@ function resetForm() {
     document.getElementById('componentForm').reset(); // Reset the form inputs
     document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
     document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
+    // Add any other reset logic needed
 }
+

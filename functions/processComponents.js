@@ -63,8 +63,7 @@ function chunkArray(array, chunkSize) {
     return chunkedArray;
   }
   
-
-  async function processCSV(csv, authToken, statusPageId, startRow) {
+  async function processCSV(csv, authToken, statusPageId) {
     try {
       const records = parse(csv, {
         columns: true,
@@ -77,17 +76,11 @@ function chunkArray(array, chunkSize) {
         throw new Error('CSV is empty');
       }
   
-      // Calculate the batch size based on the maximum execution time
       const batchSize = calculateBatchSize(records.length);
-  
       const batches = chunkArray(records, batchSize);
   
-      // Skip rows up to startRow
-      const startIndex = Math.min(startRow, records.length);
-      records.splice(0, startIndex);
-  
       let totalProcessed = 0;
-      const successfullyProcessedComponents = []; // Array to capture successful components
+      const successfullyProcessedComponents = [];
   
       for (const batch of batches) {
         const processPromises = batch.map((row) =>
@@ -107,9 +100,13 @@ function chunkArray(array, chunkSize) {
         // Capture successfully processed components
         successfullyProcessedComponents.push(...batch);
   
-        // Check if the maximum execution time is approaching, and if so, return to avoid a timeout
-        if (context.getRemainingTimeInMillis() < 2000) {
-          return { statusCode: 202, body: JSON.stringify({ message: 'Processing in progress', startRow: startIndex + totalProcessed, successfulComponents: successfullyProcessedComponents }) };
+        // Return to avoid a timeout if all components have been processed
+        if (totalProcessed >= records.length) {
+          console.log('Here are all the components that were successfully sent over:');
+          successfullyProcessedComponents.forEach((component, index) => {
+            console.log(`${index + 1}. Name: ${component.infrastructure.name}`);
+          });
+          return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', successfulComponents: successfullyProcessedComponents }) };
         }
       }
   

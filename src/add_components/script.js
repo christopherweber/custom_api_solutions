@@ -117,6 +117,7 @@ function sendDataToBackend(data) {
             }
         } else {
             alert('No response from server or malformed response.');
+            displayErrorMessage(`Errors encountered: ${errors.join(', ')}`);
         }
     })
     .catch(error => {

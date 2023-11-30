@@ -92,17 +92,28 @@ function sendDataToBackend(data) {
         loadingMessage.style.display = 'none';
 
         if (data.results) {
-            const errors = data.results
-                            .filter(result => result.status === 'rejected')
-                            .map(result => result.reason);
-            const successes = data.results
-                               .filter(result => result.status === 'fulfilled' && result.value.statusCode === 200);
+            let errors = [];
+            let successes = 0;
+
+            data.results.forEach(result => {
+                if (result.status === 'rejected') {
+                    errors.push(result.reason);
+                } else if (result.status === 'fulfilled' && result.value.statusCode === 200) {
+                    successes++;
+                } else if (result.status === 'fulfilled' && result.value.statusCode >= 400) {
+                    // Handle error inside a fulfilled promise
+                    const errorInfo = JSON.parse(result.value.body);
+                    errors.push(errorInfo.error);
+                }
+            });
 
             if (errors.length > 0) {
-                displayErrorMessage(`Errors: ${errors.join(', ')}`);
-            } else {
-                alert(`Components processed successfully: ${successes.length}`);
+                displayErrorMessage(`Errors encountered: ${errors.join(', ')}`);
+            } else if (successes > 0) {
+                alert(`Components processed successfully: ${successes}`);
                 resetForm();
+            } else {
+                alert('No response from server or malformed response.');
             }
         } else {
             alert('No response from server or malformed response.');

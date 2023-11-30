@@ -91,19 +91,22 @@ function sendDataToBackend(data) {
     .then(data => {
         loadingMessage.style.display = 'none';
 
-        if (data.results) {
-            let errors = [];
-            let successes = 0;
+        let errors = [];
+        let successes = 0;
 
+        if (data.results) {
             data.results.forEach(result => {
                 if (result.status === 'rejected') {
+                    // Direct rejection, error should be in result.reason
                     errors.push(result.reason);
-                } else if (result.status === 'fulfilled' && result.value.statusCode === 200) {
-                    successes++;
-                } else if (result.status === 'fulfilled' && result.value.statusCode >= 400) {
-                    // Handle error inside a fulfilled promise
-                    const errorInfo = JSON.parse(result.value.body);
-                    errors.push(errorInfo.error);
+                } else if (result.status === 'fulfilled') {
+                    if (result.value.statusCode === 200) {
+                        successes++;
+                    } else if (result.value.statusCode >= 400) {
+                        // Error inside a fulfilled promise
+                        const errorInfo = JSON.parse(result.value.body);
+                        errors.push(errorInfo.error);
+                    }
                 }
             });
 
@@ -117,7 +120,6 @@ function sendDataToBackend(data) {
             }
         } else {
             alert('No response from server or malformed response.');
-            displayErrorMessage(`Errors encountered: ${errors.join(', ')}`);
         }
     })
     .catch(error => {

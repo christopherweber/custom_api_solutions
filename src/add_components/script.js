@@ -87,36 +87,30 @@ function sendDataToBackend(data) {
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            // If response is not OK, parse the response and extract error messages
+            return response.json().then(data => {
+                if (data && data.error) {
+                    throw new Error(data.error);
+                } else {
+                    throw new Error('No response from server or malformed response.');
+                }
+            });
+        }
+        return response.json();
+    })
     .then(data => {
         loadingMessage.style.display = 'none';
 
-        let errors = [];
-        let successes = 0;
-
-        if (data.results) {
-            data.results.forEach(result => {
-                if (result.status === 'rejected') {
-                    // Direct rejection, error should be in result.reason
-                    errors.push(result.reason);
-                } else if (result.status === 'fulfilled') {
-                    if (result.value.statusCode === 200) {
-                        successes++;
-                    } else if (result.value.statusCode >= 400) {
-                        // Error inside a fulfilled promise
-                        const errorInfo = JSON.parse(result.value.body);
-                        errors.push(errorInfo.error);
-                    }
-                }
-            });
-
-            if (errors.length > 0) {
-                displayErrorMessage(`Errors encountered: ${errors.join(', ')}`);
-            } else if (successes > 0) {
-                alert(`Components processed successfully: ${successes}`);
+        if (data && data.results) {
+            let isSuccess = data.results.every(result => result.status === 'fulfilled' && result.value.statusCode === 200);
+            
+            if (isSuccess) {
+                alert('Components processed successfully.');
                 resetForm();
             } else {
-                alert('No response from server or malformed response.');
+                displayErrorMessage('Some components failed to process.');
             }
         } else {
             alert('No response from server or malformed response.');
@@ -124,7 +118,7 @@ function sendDataToBackend(data) {
     })
     .catch(error => {
         console.error('Error:', error);
-        displayErrorMessage('An unexpected error occurred.');
+        displayErrorMessage(error.message);
     });
 }
 

@@ -55,6 +55,15 @@ async function processSingleComponent(componentName, componentGroup, authToken, 
   }
 }
 
+function chunkArray(array, chunkSize) {
+    const chunkedArray = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunkedArray.push(array.slice(i, i + chunkSize));
+    }
+    return chunkedArray;
+  }
+  
+
 async function processCSV(csv, authToken, statusPageId) {
     try {
       const records = parse(csv, {

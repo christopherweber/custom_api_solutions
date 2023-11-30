@@ -91,56 +91,60 @@ function chunkArray(array, chunkSize) {
   
   async function processCSV(csv, authToken, statusPageId) {
     try {
-      //... existing code ...
-
+      const records = parse(csv, {
+        columns: true,
+        skip_empty_lines: true
+      });
+  
+      if (records.length === 0) {
+        throw new Error('CSV is empty');
+      }
+  
+      const batchSize = calculateBatchSize(records.length);
+      const batches = chunkArray(records, batchSize);
+  
       let totalProcessed = 0;
-      const successfullyProcessedComponents = [];
-      let errorMessages = [];  // Array to store error messages
+      let errorMessages = [];
 
-      async function processBatch(index) {
-        //... existing code ...
+      for (let index = 0; index < batches.length; index++) {
+        const batch = batches[index];
+        const processPromises = batch.map(row => 
+            processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
+        );
 
         const results = await Promise.allSettled(processPromises);
         results.forEach(result => {
             if (result.status === 'rejected') {
-                errorMessages.push(result.reason.message); // Store error messages
-            } else {
-                // Capture successfully processed components
-                successfullyProcessedComponents.push(result.value);
+                errorMessages.push(result.reason.message);
             }
         });
 
         totalProcessed += batch.length;
         console.log(`Processed ${totalProcessed} components so far.`);
-
-        // Continue processing the next batch after a delay (5 seconds)
-        setTimeout(() => {
-          processBatch(index + 1);
-        }, 5000);
       }
 
-      await processBatch(0);
-
-      // Check if there were any errors
       if (errorMessages.length > 0) {
-          throw new Error(`Errors encountered: ${errorMessages.join(', ')}`);
+          return { 
+              statusCode: 400, 
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ error: `Errors encountered: ${errorMessages.join(', ')}` }) 
+          };
       }
 
       return { 
           statusCode: 200, 
           headers: { 'Content-Type': 'application/json' }, 
-          body: JSON.stringify({ message: 'CSV processed successfully', successfulComponents: successfullyProcessedComponents }) 
+          body: JSON.stringify({ message: 'CSV processed successfully' }) 
       };
-
     } catch (error) {
       console.error('Error processing CSV:', error);
       return { 
           statusCode: 500, 
           headers: { 'Content-Type': 'application/json' }, 
-          body: JSON.stringify({ error: error.message })  // Send error message back
+          body: JSON.stringify({ error: error.message }) 
       };
     }
-  }
+}
 
   
   // Calculate the batch size based on the maximum execution time

@@ -104,7 +104,11 @@ function sendDataToBackend(data) {
         }
 
         console.log('Data:', body); // Log the success response data
-        alert('Components processed successfully.');
+        if (body.message) {
+            alert(body.message); // Display success message from the server
+        } else {
+            alert('Components processed successfully.');
+        }
         resetForm();
     })
     .catch(error => {
@@ -119,6 +123,7 @@ function displayErrorMessage(message) {
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block';
 }
+
 
 
 function resetForm() {

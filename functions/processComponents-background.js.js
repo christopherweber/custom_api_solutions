@@ -3,28 +3,37 @@ const { parse } = require('csv-parse/sync');
 
 const componentGroupsBaseUrl = 'https://api.firehydrant.io/v1/nunc_connections/';
 
-exports.handler = async function (event) {
+exports.handler = async function (event, context) {
   console.log('Received event:', event);
 
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+      console.error('Method Not Allowed');
+      return; // No direct response, just log the error
   }
 
   const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
   console.log('Parsed body:', { csv, authToken, statusPageId, componentName, componentGroup });
 
   if (!statusPageId) {
-    return { statusCode: 400, body: 'Status Page ID is missing' };
+      console.error('Status Page ID is missing');
+      return; // No direct response, just log the error
   }
 
   if (csv) {
-    return processCSV(csv, authToken, statusPageId);
+      processCSV(csv, authToken, statusPageId)
+          .then(() => console.log('CSV processing completed'))
+          .catch(error => console.error('Error in CSV processing:', error));
   } else if (componentName && componentGroup) {
-    return processSingleComponent(componentName, componentGroup, authToken, statusPageId);
+      processSingleComponent(componentName, componentGroup, authToken, statusPageId)
+          .then(() => console.log('Single component processing completed'))
+          .catch(error => console.error('Error in single component processing:', error));
   } else {
-    return { statusCode: 400, body: 'Invalid input data' };
+      console.error('Invalid input data');
   }
+
+  // No return statement as the function now runs in the background
 };
+
 
 async function processSingleComponent(componentName, componentGroup, authToken, statusPageId) {
   try {

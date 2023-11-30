@@ -79,47 +79,54 @@ function chunkArray(array, chunkSize) {
       const batchSize = 10; // Set your desired batch size here
       let currentIndex = 0;
   
-      // Function to process a batch of records
-      const processBatch = async (batchRecords) => {
+      async function processBatch() {
+        if (currentIndex >= records.length) {
+          console.log('CSV processed successfully');
+          return;
+        }
+  
+        const batchRecords = records.slice(currentIndex, currentIndex + batchSize);
+        currentIndex += batchSize;
+  
         const processPromises = batchRecords.map((row) =>
           processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
         );
   
-        const results = await Promise.allSettled(processPromises);
-        const successfulResults = results.filter(result => result.status === 'fulfilled');
-        const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
+        try {
+          const results = await Promise.allSettled(processPromises);
+          const successfulResults = results.filter(result => result.status === 'fulfilled');
+          const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
   
-        if (errors.length > 0) {
-          throw new Error('Some components failed to process');
-        }
-  
-        console.log(`Successfully processed ${successfulResults.length} components.`);
-        successfulResults.forEach((component, index) => {
-          if (component.infrastructure && component.infrastructure.name) {
-            console.log(`${index + 1}. Name: ${component.infrastructure.name}`);
-            // You can add more information about the component here if needed
-          } else {
-            console.log(`${index + 1}. Name: Unknown`);
+          if (errors.length > 0) {
+            throw new Error('Some components failed to process');
           }
-        });
-      };
   
-      while (currentIndex < records.length) {
-        const batchRecords = records.slice(currentIndex, currentIndex + batchSize);
-        currentIndex += batchSize;
+          console.log(`Successfully processed ${successfulResults.length} components.`);
+          successfulResults.forEach((component, index) => {
+            if (component.infrastructure && component.infrastructure.name) {
+              console.log(`${index + 1}. Name: ${component.infrastructure.name}`);
+              // You can add more information about the component here if needed
+            } else {
+              console.log(`${index + 1}. Name: Unknown`);
+            }
+          });
   
-        await processBatch(batchRecords);
-  
-        // Add a delay between batches to avoid timeout
-        await new Promise(resolve => setTimeout(resolve, 5000)); // Adjust the delay as needed
+          // Add a delay between batches to avoid timeout (9 seconds)
+          setTimeout(processBatch, 9000);
+        } catch (error) {
+          console.error('Error processing batch:', error);
+          // Handle the error as needed
+        }
       }
   
-      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully' }) };
+      // Start processing the first batch
+      processBatch();
     } catch (error) {
       console.error('Error processing CSV:', error);
       return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: error.message }) };
     }
   }
+  
   
   
   

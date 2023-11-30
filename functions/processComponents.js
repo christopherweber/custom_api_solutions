@@ -7,31 +7,48 @@ exports.handler = async function (event) {
   console.log('Received event:', event);
 
   if (event.httpMethod !== 'POST') {
-      console.error('Method Not Allowed');
-      return; // No direct response, just log the error
+      return { 
+          statusCode: 405, 
+          body: JSON.stringify({ error: 'Method Not Allowed' }) 
+      };
   }
 
   const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
   console.log('Parsed body:', { csv, authToken, statusPageId, componentName, componentGroup });
 
   if (!statusPageId) {
-      console.error('Status Page ID is missing');
-      return; // No direct response, just log the error
+      return { 
+          statusCode: 400, 
+          body: JSON.stringify({ error: 'Status Page ID is missing' }) 
+      };
   }
 
-  if (csv) {
-      processCSV(csv, authToken, statusPageId)
-          .then(() => console.log('CSV processing completed'))
-          .catch(error => console.error('Error in CSV processing:', error));
-  } else if (componentName && componentGroup) {
-      processSingleComponent(componentName, componentGroup, authToken, statusPageId)
-          .then(() => console.log('Single component processing completed'))
-          .catch(error => console.error('Error in single component processing:', error));
-  } else {
-      console.error('Invalid input data');
+  try {
+      if (csv) {
+          await processCSV(csv, authToken, statusPageId);
+          return { 
+              statusCode: 200, 
+              body: JSON.stringify({ message: 'CSV processing completed' }) 
+          };
+      } else if (componentName && componentGroup) {
+          await processSingleComponent(componentName, componentGroup, authToken, statusPageId);
+          return { 
+              statusCode: 200, 
+              body: JSON.stringify({ message: 'Single component processing completed' }) 
+          };
+      } else {
+          return { 
+              statusCode: 400, 
+              body: JSON.stringify({ error: 'Invalid input data' }) 
+          };
+      }
+  } catch (error) {
+      console.error('Error:', error);
+      return { 
+          statusCode: 500, 
+          body: JSON.stringify({ error: 'Internal Server Error' }) 
+      };
   }
-
-  // No return statement as the function now runs in the background
 };
 
 

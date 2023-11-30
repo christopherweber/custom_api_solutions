@@ -122,10 +122,11 @@ function chunkArray(array, chunkSize) {
         }
 
         return {
-            statusCode: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'CSV processing completed', results: processedResults })
+          statusCode: 200,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ results: processedResults })
         };
+
     } catch (error) {
         console.error('Error processing CSV:', error);
         return { 

@@ -107,9 +107,8 @@ async function fetchInfrastructureId(name, authToken) {
             }
 
             // Check if there are more pages to fetch
-            if (infrastructures.length === 0 || !response.data.pagination || !response.data.pagination.next_page) {
+            if (infrastructures.length < 20) {
                 console.log(`No more pages to fetch. Total infrastructures checked: ${totalInfrastructuresProcessed}. Infrastructure with name '${name}' not found.`);
-                console.log(":)")
                 return null;
             }
 
@@ -121,6 +120,7 @@ async function fetchInfrastructureId(name, authToken) {
         throw error;
     }
 }
+
 
 
 

@@ -90,50 +90,36 @@ function sendDataToBackend(data) {
     .then(response => {
         loadingMessage.style.display = 'none'; // Hide loading message in any case
 
-        // Check if the response status is not OK (e.g., 502 Bad Gateway)
-        if (!response.ok) {
-            // Handle non-OK responses here
-            console.error('Request failed with status:', response.status);
-            displayErrorMessage('An unexpected error occurred.');
-            throw new Error('Non-OK response from the server');
-        }
-
         // Parse the response as JSON
-        return response.json();
+        return response.json().then(data => ({ 
+            status: response.status, 
+            body: data 
+        }));
     })
-    .then(data => {
-        console.log('Data:', data); // Log the success response data
-        let errors = [];
-        if (data.results) {
-            data.results.forEach(result => {
-                if (result.status === 'fulfilled' && result.value.statusCode === 400) {
-                    const errorInfo = JSON.parse(result.value.body);
-                    errors.push(errorInfo.error);
-                }
-            });
+    .then(({ status, body }) => {
+        if (status !== 200) {
+            // Display the error message from the server
+            displayErrorMessage(body.error || 'An unexpected error occurred.');
+            return;
         }
 
-        if (errors.length > 0) {
-            console.log('Displaying error message:', errors.join(', ')); // Log the error message being displayed
-            displayErrorMessage(errors.join(', ')); // Display all error messages joined by a comma
-        } else {
-            alert('Components processed successfully.');
-            resetForm();
-        }
+        console.log('Data:', body); // Log the success response data
+        alert('Components processed successfully.');
+        resetForm();
     })
     .catch(error => {
         // Handle network errors, JSON parsing errors, and other unexpected errors
         console.error('Error:', error);
-        displayErrorMessage('An unexpected error occurred.');
+        displayErrorMessage(error.message || 'An unexpected error occurred.');
     });
 }
-
 
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block';
 }
+
 
 function resetForm() {
     document.getElementById('componentForm').reset(); // Reset the form inputs

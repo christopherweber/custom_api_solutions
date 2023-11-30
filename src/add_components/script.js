@@ -89,31 +89,30 @@ function sendDataToBackend(data) {
     })
     .then(response => {
         loadingMessage.style.display = 'none'; // Hide loading message in any case
-        if (!response.ok) {
-            return response.json().then(err => Promise.reject(err));
-        }
-        return response.json();
+        return response.json().then(body => ({ status: response.status, body }));
     })
-    .then(data => {
-        let errors = [];
-        if (data.results) {
-            data.results.forEach(result => {
-                if (result.status === 'fulfilled' && result.value.statusCode === 400) {
-                    const errorInfo = JSON.parse(result.value.body);
-                    errors.push(errorInfo.error);
-                }
-            });
+    .then(({ status, body }) => {
+        if (status !== 200) {
+            // Error handling for non-200 status codes
+            displayErrorMessage(body.error || 'An error occurred.');
+            return;
         }
 
+        // Check for individual component processing errors
+        let errors = body.results
+            .filter(result => result.status === 'rejected')
+            .map(result => JSON.parse(result.reason.body).error);
+
         if (errors.length > 0) {
-            displayErrorMessage(errors.join(', ')); // Display all error messages joined by a comma
+            displayErrorMessage(errors.join(', '));
         } else {
             alert('Components processed successfully.');
             resetForm();
         }
     })
     .catch(error => {
-        displayErrorMessage(error.error || 'An unexpected error occurred.');
+        console.error('Error:', error);
+        displayErrorMessage(error.message || 'An unexpected error occurred.');
     });
 }
 
@@ -122,6 +121,7 @@ function displayErrorMessage(message) {
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block';
 }
+
 
 
 function resetForm() {

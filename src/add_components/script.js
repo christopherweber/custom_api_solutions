@@ -89,26 +89,24 @@ function sendDataToBackend(data) {
     })
     .then(response => {
         loadingMessage.style.display = 'none'; // Hide loading message
-        if (!response.ok) {
-            // If the response is not OK, parse and reject the error
-            return response.json().then(err => Promise.reject(err));
-        }
-        return response.json();
+        return response.json().then(body => ({
+            status: response.status,
+            body: body
+        }));
     })
-    .then(data => {
-        if (data.error) {
-            // If the response contains an error, throw it
-            throw new Error(data.error);
+    .then(({ status, body }) => {
+        if (status !== 200) {
+            // If status is not 200, there's an error
+            throw new Error(body.error || 'An unexpected error occurred.');
         }
-        // Only show success message if there are no errors
-        console.log('Data:', data); // Log the success response data
+        console.log('Data:', body); // Log the success response data
         alert('Components processed successfully.');
         resetForm();
     })
     .catch(error => {
         console.error('Error:', error);
         // Display the error message
-        displayErrorMessage(error.message || 'An unexpected error occurred.');
+        displayErrorMessage(error.message);
     });
 }
 
@@ -116,10 +114,4 @@ function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block';
-}
-
-function resetForm() {
-    document.getElementById('componentForm').reset(); // Reset the form inputs
-    document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
-    document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
 }

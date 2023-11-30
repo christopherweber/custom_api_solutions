@@ -76,7 +76,7 @@ async function processSingleComponent(componentName, componentGroup, authToken, 
     return {
       statusCode: 400,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: error.message })
+      body: JSON.stringify({ error: 'Infrastructure ' + componentName + ' not found.' })
     };
   }
 }

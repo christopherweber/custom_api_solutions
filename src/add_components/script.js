@@ -96,13 +96,16 @@ function sendDataToBackend(data) {
         return response.json();
     })
     .then(data => {
+        console.log("Response data:", data); // Added log
         loadingMessage.style.display = 'none';
 
         if (data && data.results) {
             let errors = data.results.filter(result => result.status === 'rejected');
             let successes = data.results.filter(result => result.status === 'fulfilled');
+            console.log("Here are errors:" + errors)
 
             if (errors.length > 0) {
+                console.log("Errors found:", errors); // Added log
                 displayErrorMessage(`Errors: ${errors.map(e => e.reason).join(', ')}`);
             } else if (successes.length > 0) {
                 alert(`Components processed successfully: ${successes.length}`);

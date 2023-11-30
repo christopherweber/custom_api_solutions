@@ -124,8 +124,6 @@ function chunkArray(array, chunkSize) {
   }
 
   
-
-  
   // Calculate the batch size based on the maximum execution time
   function calculateBatchSize(totalRecords) {
     return 50;

@@ -111,14 +111,16 @@ function chunkArray(array, chunkSize) {
 
             let results = await Promise.allSettled(processPromises);
             processedResults.push(...results.map(result => {
-                if (result.status === 'fulfilled') {
+                if (result.status === 'fulfilled' && result.value.statusCode === 200) {
                     return { status: 'fulfilled', value: JSON.parse(result.value.body) };
+                } else if (result.status === 'fulfilled' && result.value.statusCode !== 200) {
+                    return { status: 'rejected', reason: JSON.parse(result.value.body).error };
                 } else if (result.status === 'rejected') {
                     return { status: 'rejected', reason: result.reason.message };
                 }
             }));
         }
-        console.log("Processed results:", processedResults);
+
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },

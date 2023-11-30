@@ -87,23 +87,27 @@ function sendDataToBackend(data) {
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
     })
-    .then(response => response.json().then(data => ({
-        status: response.status,
-        body: data
-    })))
-    .then(({ status, body }) => {
+    .then(response => {
         loadingMessage.style.display = 'none'; // Hide loading message
-
-        if (status !== 200) {
-            throw new Error(body.error || 'An unexpected error occurred.');
+        if (!response.ok) {
+            // When response is not ok, parse the error message and reject it
+            return response.json().then(err => Promise.reject(err));
         }
-
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            // If there is an error message in the response, display it
+            throw new Error(data.error);
+        }
+        console.log('Data:', data); // Log the success response data
         alert('Components processed successfully.');
         resetForm();
     })
     .catch(error => {
         console.error('Error:', error);
-        displayErrorMessage(error.message);
+        // Display error message from the catch block
+        displayErrorMessage(error.message || 'An unexpected error occurred.');
     });
 }
 
@@ -113,10 +117,8 @@ function displayErrorMessage(message) {
     errorMessageDiv.style.display = 'block';
 }
 
-
 function resetForm() {
     document.getElementById('componentForm').reset(); // Reset the form inputs
     document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
     document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
-    // Add any other reset logic needed
 }

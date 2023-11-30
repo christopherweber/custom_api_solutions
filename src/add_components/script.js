@@ -106,13 +106,13 @@ function sendDataToBackend(data) {
 
         if (data && data.results) {
             let errors = data.results
-                .filter(result => result.status === 'fulfilled' && result.value.error)
-                .map(result => result.value.error);
+                .filter(result => result.status === 'rejected')
+                .map(result => result.reason);
 
             if (errors.length > 0) {
                 displayErrorMessage(`Errors: ${errors.join(', ')}`);
             } else {
-                alert(`Components processed successfully: ${successes.length}`);
+                alert(`Components processed successfully`);
                 resetForm();
             }
         } else {
@@ -124,6 +124,7 @@ function sendDataToBackend(data) {
         displayErrorMessage(error.message);
     });
 }
+
 
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');

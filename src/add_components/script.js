@@ -115,3 +115,9 @@ function displayErrorMessage(message) {
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block';
 }
+
+function resetForm() {
+    document.getElementById('componentForm').reset(); // Reset the form inputs
+    document.getElementById('componentFieldsContainer').style.display = ''; // Show the component fields
+    document.getElementById('csvUploadMessage').style.display = 'none'; // Hide the CSV upload message
+}

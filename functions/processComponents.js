@@ -64,7 +64,7 @@ async function processCSV(csv, authToken, statusPageId, batchIndex) {
 
     console.log(`Parsed CSV records: ${JSON.stringify(records)}`);
 
-    const batchSize = 100; // Set an appropriate batch size
+    const batchSize = 40; // Set an appropriate batch size
     const start = batchIndex * batchSize;
     const end = Math.min(start + batchSize, records.length);
     const batchRecords = records.slice(start, end);

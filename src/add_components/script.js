@@ -105,18 +105,15 @@ function sendDataToBackend(data) {
         loadingMessage.style.display = 'none';
 
         if (data && data.results) {
-            console.log('here is the data:' + data)
-            console.log('here is the data results :' + data.results)
-            let errors = data.results.filter(result => result.status === 'rejected');
-            let successes = data.results.filter(result => result.status === 'fulfilled');
+            let errors = data.results
+                .filter(result => result.status === 'fulfilled' && result.value.error)
+                .map(result => result.value.error);
 
             if (errors.length > 0) {
-                displayErrorMessage(`Errors: ${errors.map(e => e.reason).join(', ')}`);
-            } else if (successes.length > 0) {
+                displayErrorMessage(`Errors: ${errors.join(', ')}`);
+            } else {
                 alert(`Components processed successfully: ${successes.length}`);
                 resetForm();
-            } else {
-                alert('No response from server or malformed response.');
             }
         } else {
             alert('No response from server or malformed response.');
@@ -139,4 +136,3 @@ function resetForm() {
     document.getElementById('componentFieldsContainer').style.display = '';
     document.getElementById('csvUploadMessage').style.display = 'none';
 }
-

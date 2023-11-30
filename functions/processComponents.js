@@ -56,38 +56,51 @@ async function processSingleComponent(componentName, componentGroup, authToken, 
 }
 
 async function processCSV(csv, authToken, statusPageId) {
-  try {
-    const records = parse(csv, {
-      columns: true,
-      skip_empty_lines: true
-    });
-
-    console.log(`Parsed CSV records: ${JSON.stringify(records)}`);
-
-    if (records.length === 0) {
-      throw new Error('CSV is empty');
+    try {
+      const records = parse(csv, {
+        columns: true,
+        skip_empty_lines: true
+      });
+  
+      console.log(`Parsed CSV records: ${JSON.stringify(records)}`);
+  
+      if (records.length === 0) {
+        throw new Error('CSV is empty');
+      }
+  
+      // Calculate the batch size based on the maximum execution time
+      const batchSize = calculateBatchSize(records.length);
+  
+      const batches = chunkArray(records, batchSize);
+  
+      for (const batch of batches) {
+        const processPromises = batch.map((row) =>
+          processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
+        );
+  
+        const results = await Promise.allSettled(processPromises);
+        const successfulResults = results.filter(result => result.status === 'fulfilled');
+        const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
+  
+        if (errors.length > 0) {
+          throw new Error('Some components failed to process');
+        }
+      }
+  
+      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully' }) };
+    } catch (error) {
+      console.error('Error processing CSV:', error);
+      return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: error.message }) };
     }
-
-    const processPromises = records.map((row) =>
-      processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
-    );
-
-    const results = await Promise.allSettled(processPromises);
-    const successfulResults = results.filter(result => result.status === 'fulfilled');
-    const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
-
-    if (errors.length > 0) {
-      throw new Error('Some components failed to process');
-    }
-
-    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', results: successfulResults }) };
-  } catch (error) {
-    console.error('Error processing CSV:', error);
-    return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: error.message }) };
   }
-}
-
-// ... (rest of the code remains the same)
+  
+  // Calculate the batch size based on the maximum execution time
+  function calculateBatchSize(totalRecords) {
+    // You can set your own logic for calculating the batch size here
+    // For example, you can determine the batch size based on the totalRecords
+    // For demonstration, let's set a fixed batch size of 50
+    return 50;
+  }
 
 async function fetchInfrastructureId(name, authToken) {
   const baseUrl = 'https://api.firehydrant.io/v1/infrastructures';

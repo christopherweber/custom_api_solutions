@@ -88,27 +88,31 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
-        loadingMessage.style.display = 'none'; // Hide loading message in any case
+        loadingMessage.style.display = 'none'; // Hide loading message
         return response.json().then(body => ({ status: response.status, body }));
     })
     .then(({ status, body }) => {
         if (status !== 200) {
-            // Error handling for non-200 status codes
+            // Handle non-OK responses
             displayErrorMessage(body.error || 'An error occurred.');
             return;
         }
 
-        // Check for individual component processing errors
-        let errors = body.results
-            .filter(result => result.status === 'rejected')
-            .map(result => JSON.parse(result.reason.body).error);
+        if (body.results && Array.isArray(body.results)) {
+            // Process individual component errors
+            let errors = body.results
+                .filter(result => result.status === 'rejected')
+                .map(result => JSON.parse(result.reason.body).error);
 
-        if (errors.length > 0) {
-            displayErrorMessage(errors.join(', '));
-        } else {
-            alert('Components processed successfully.');
-            resetForm();
+            if (errors.length > 0) {
+                displayErrorMessage(errors.join(', '));
+                return;
+            }
         }
+
+        // Default success message
+        alert('Components processed successfully.');
+        resetForm();
     })
     .catch(error => {
         console.error('Error:', error);

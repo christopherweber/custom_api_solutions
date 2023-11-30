@@ -64,6 +64,10 @@ async function processCSV(csv, authToken, statusPageId, batchIndex) {
 
     console.log(`Parsed CSV records: ${JSON.stringify(records)}`);
 
+    if (records.length === 0) {
+      throw new Error('CSV is empty');
+    }
+
     // Calculate the batch size based on the total number of records
     const batchSize = calculateBatchSize(records.length);
 
@@ -76,18 +80,18 @@ async function processCSV(csv, authToken, statusPageId, batchIndex) {
         .then(() => processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId))
     );
 
-    return Promise.allSettled(processPromises)
-      .then(results => {
-        const successfulResults = results.filter(result => result.status === 'fulfilled');
-        const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
-        if (errors.length > 0) {
-          return { statusCode: 207, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Some components failed to process', successfulResults, errors }) };
-        }
-        return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', results: successfulResults }) };
-      });
+    const results = await Promise.allSettled(processPromises);
+    const successfulResults = results.filter(result => result.status === 'fulfilled');
+    const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
+
+    if (errors.length > 0) {
+      throw new Error('Some components failed to process');
+    }
+
+    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'CSV processed successfully', results: successfulResults }) };
   } catch (error) {
-    console.error('Error parsing CSV:', error);
-    return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Failed to parse CSV' }) };
+    console.error('Error processing CSV:', error);
+    return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: error.message }) };
   }
 }
 

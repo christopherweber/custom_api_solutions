@@ -89,9 +89,16 @@ function sendDataToBackend(data) {
     })
     .then(response => {
         loadingMessage.style.display = 'none'; // Hide loading message in any case
+
+        // Check if the response status is not OK (e.g., 502 Bad Gateway)
         if (!response.ok) {
-            return response.json().then(err => Promise.reject(err));
+            // Handle non-OK responses here
+            console.error('Request failed with status:', response.status);
+            displayErrorMessage('An unexpected error occurred.');
+            throw new Error('Non-OK response from the server');
         }
+
+        // Parse the response as JSON
         return response.json();
     })
     .then(data => {
@@ -115,10 +122,12 @@ function sendDataToBackend(data) {
         }
     })
     .catch(error => {
+        // Handle network errors, JSON parsing errors, and other unexpected errors
         console.error('Error:', error);
-        displayErrorMessage(error.error || 'An unexpected error occurred.');
+        displayErrorMessage('An unexpected error occurred.');
     });
 }
+
 
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');

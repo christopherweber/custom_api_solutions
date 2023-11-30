@@ -3,7 +3,7 @@ const { parse } = require('csv-parse/sync');
 
 const componentGroupsBaseUrl = 'https://api.firehydrant.io/v1/nunc_connections/';
 
-exports.handler = async function (event, context) {
+exports.handler = async function (event) {
   console.log('Received event:', event);
 
   if (event.httpMethod !== 'POST') {

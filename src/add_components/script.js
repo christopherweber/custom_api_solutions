@@ -82,6 +82,8 @@ function sendDataToBackend(data) {
     const loadingMessage = document.getElementById('loadingMessage');
     loadingMessage.style.display = 'block';
 
+    console.log('Sending data to backend:', JSON.stringify(data)); // Log the data being sent
+
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -89,29 +91,34 @@ function sendDataToBackend(data) {
     })
     .then(response => {
         if (!response.ok) {
+            // If response is not OK, parse the response and extract error messages
             return response.json().then(data => {
+                console.log('Error response from server:', data); // Log the error response
                 throw new Error(data.error || 'No response from server or malformed response.');
             });
         }
         return response.json();
     })
     .then(data => {
+        console.log('Response data from server:', data); // Log the full response data
+
         loadingMessage.style.display = 'none';
-        console.log('Processed data:', data); // Detailed log for debugging
 
         if (data && data.results) {
-            let errorMessages = data.results.filter(result => result.status === 'fulfilled' && result.value.error)
-                                            .map(result => result.value.error);
-            console.log('Error messages:', errorMessages); // Log for debugging
+            console.log('here is the data:' + data)
+            console.log('here is the data results :' + data.results)
+            let errors = data.results.filter(result => result.status === 'rejected');
+            let successes = data.results.filter(result => result.status === 'fulfilled');
 
-            if (errorMessages.length > 0) {
-                displayErrorMessage(`Errors: ${errorMessages.join(', ')}`);
-            } else {
-                alert('Components processed successfully.');
+            if (errors.length > 0) {
+                displayErrorMessage(`Errors: ${errors.map(e => e.reason).join(', ')}`);
+            } else if (successes.length > 0) {
+                alert(`Components processed successfully: ${successes.length}`);
                 resetForm();
+            } else {
+                alert('No response from server or malformed response.');
             }
         } else {
-            console.log('Unexpected data structure:', data); // Log unexpected data structure
             alert('No response from server or malformed response.');
         }
     })
@@ -120,7 +127,6 @@ function sendDataToBackend(data) {
         displayErrorMessage(error.message);
     });
 }
-
 
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');
@@ -133,3 +139,4 @@ function resetForm() {
     document.getElementById('componentFieldsContainer').style.display = '';
     document.getElementById('csvUploadMessage').style.display = 'none';
 }
+

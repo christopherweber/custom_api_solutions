@@ -88,9 +88,10 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
+        console.log('Raw response:', response); // Log the raw response
         if (!response.ok) {
-            // If response is not OK, parse the response and extract error messages
             return response.json().then(data => {
+                console.log('Error data:', data); // Log the error data
                 if (data && data.error) {
                     throw new Error(data.error);
                 } else {
@@ -101,6 +102,7 @@ function sendDataToBackend(data) {
         return response.json();
     })
     .then(data => {
+        console.log('Processed data:', data); // Log the processed data
         loadingMessage.style.display = 'none';
 
         if (data && data.results) {
@@ -121,7 +123,6 @@ function sendDataToBackend(data) {
         displayErrorMessage(error.message);
     });
 }
-
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');
     errorMessageDiv.textContent = message;

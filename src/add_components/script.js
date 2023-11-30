@@ -94,7 +94,7 @@ function sendDataToBackend(data) {
                 if (data && data.error) {
                     throw new Error(data.error);
                 } else {
-                    throw new Error('No response from server or malformed response.');
+                    throw new Error('No response from server or malformed response 1.');
                 }
             });
         }
@@ -113,7 +113,7 @@ function sendDataToBackend(data) {
                 displayErrorMessage('Some components failed to process.');
             }
         } else {
-            alert('No response from server or malformed response.');
+            alert('No response from server or malformed response 2.');
         }
     })
     .catch(error => {

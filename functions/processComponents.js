@@ -91,60 +91,61 @@ function chunkArray(array, chunkSize) {
   
   async function processCSV(csv, authToken, statusPageId) {
     try {
-      const records = parse(csv, {
-        columns: true,
-        skip_empty_lines: true
-      });
-  
-      if (records.length === 0) {
-        throw new Error('CSV is empty');
-      }
-  
-      const batchSize = calculateBatchSize(records.length);
-      const batches = chunkArray(records, batchSize);
-  
-      let totalProcessed = 0;
-      let errorMessages = [];
-
-      for (let index = 0; index < batches.length; index++) {
-        const batch = batches[index];
-        const processPromises = batch.map(row => 
-            processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
-        );
-
-        const results = await Promise.allSettled(processPromises);
-        results.forEach(result => {
-            if (result.status === 'rejected') {
-                errorMessages.push(result.reason.message);
-            }
+        const records = parse(csv, {
+            columns: true,
+            skip_empty_lines: true
         });
 
-        totalProcessed += batch.length;
-        console.log(`Processed ${totalProcessed} components so far.`);
-      }
+        if (records.length === 0) {
+            throw new Error('CSV is empty');
+        }
 
-      if (errorMessages.length > 0) {
-          return { 
-              statusCode: 400, 
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ error: `Errors encountered: ${errorMessages.join(', ')}` }) 
-          };
-      }
+        const batchSize = calculateBatchSize(records.length);
+        const batches = chunkArray(records, batchSize);
 
-      return { 
-          statusCode: 200, 
-          headers: { 'Content-Type': 'application/json' }, 
-          body: JSON.stringify({ message: 'CSV processed successfully' }) 
-      };
+        let totalProcessed = 0;
+        let errorMessages = [];
+
+        for (let index = 0; index < batches.length; index++) {
+            const batch = batches[index];
+            const processPromises = batch.map(row => 
+                processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
+            );
+
+            const results = await Promise.allSettled(processPromises);
+            results.forEach(result => {
+                if (result.status === 'rejected') {
+                    // Collect error messages from processSingleComponent failures
+                    errorMessages.push(result.reason.message);
+                }
+            });
+
+            totalProcessed += batch.length;
+            console.log(`Processed ${totalProcessed} components so far.`);
+        }
+
+        if (errorMessages.length > 0) {
+            // Return combined error messages if there were any errors
+            return { 
+                statusCode: 400, 
+                body: JSON.stringify({ error: `Errors encountered: ${errorMessages.join(', ')}` }) 
+            };
+        }
+
+        // Return success message if all components are processed without errors
+        return { 
+            statusCode: 200, 
+            body: JSON.stringify({ message: 'CSV processed successfully' }) 
+        };
     } catch (error) {
-      console.error('Error processing CSV:', error);
-      return { 
-          statusCode: 500, 
-          headers: { 'Content-Type': 'application/json' }, 
-          body: JSON.stringify({ error: error.message }) 
-      };
+        console.error('Error processing CSV:', error);
+        return { 
+            statusCode: 500, 
+            body: JSON.stringify({ error: error.message }) 
+        };
     }
 }
+
 
   
   // Calculate the batch size based on the maximum execution time

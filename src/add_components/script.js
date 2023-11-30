@@ -80,7 +80,7 @@ function handleCSVUpload(file, data) {
 
 function sendDataToBackend(data) {
     const loadingMessage = document.getElementById('loadingMessage');
-    loadingMessage.style.display = 'block'; // Show loading message
+    loadingMessage.style.display = 'block';
 
     fetch('/.netlify/functions/processComponents', {
         method: 'POST',
@@ -88,35 +88,20 @@ function sendDataToBackend(data) {
         headers: { 'Content-Type': 'application/json' }
     })
     .then(response => {
-        loadingMessage.style.display = 'none'; // Hide loading message in any case
-        if (!response.ok) {
-            return response.json().then(err => Promise.reject(err));
-        }
-        return response.json();
+        loadingMessage.style.display = 'none';
+        return response.json().then(body => ({ status: response.status, body }));
     })
-    .then(data => {
-        console.log('Data:', data); // Log the success response data
-        let errors = [];
-        if (data.results) {
-            data.results.forEach(result => {
-                if (result.status === 'fulfilled' && result.value.statusCode === 400) {
-                    const errorInfo = JSON.parse(result.value.body);
-                    errors.push(errorInfo.error);
-                }
-            });
+    .then(({ status, body }) => {
+        if (status !== 200) {
+            throw new Error(body.error || 'An unexpected error occurred.');
         }
-
-        if (errors.length > 0) {
-            console.log('Displaying error message:', errors.join(', ')); // Log the error message being displayed
-            displayErrorMessage(errors.join(', ')); // Display all error messages joined by a comma
-        } else {
-            alert('Components processed successfully.');
-            resetForm();
-        }
+        console.log('Data:', body);
+        alert('Components processed successfully.');
+        resetForm();
     })
     .catch(error => {
         console.error('Error:', error);
-        displayErrorMessage(error.error || 'An unexpected error occurred.');
+        displayErrorMessage(error.message);
     });
 }
 
@@ -125,6 +110,7 @@ function displayErrorMessage(message) {
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block';
 }
+
 
 function resetForm() {
     document.getElementById('componentForm').reset(); // Reset the form inputs

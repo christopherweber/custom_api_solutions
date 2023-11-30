@@ -79,10 +79,8 @@ function chunkArray(array, chunkSize) {
       const batchSize = 10; // Set your desired batch size here
       let currentIndex = 0;
   
-      while (currentIndex < records.length) {
-        const batchRecords = records.slice(currentIndex, currentIndex + batchSize);
-        currentIndex += batchSize;
-  
+      // Function to process a batch of records
+      const processBatch = async (batchRecords) => {
         const processPromises = batchRecords.map((row) =>
           processSingleComponent(row.Component, row['Component Group'], authToken, statusPageId)
         );
@@ -104,6 +102,13 @@ function chunkArray(array, chunkSize) {
             console.log(`${index + 1}. Name: Unknown`);
           }
         });
+      };
+  
+      while (currentIndex < records.length) {
+        const batchRecords = records.slice(currentIndex, currentIndex + batchSize);
+        currentIndex += batchSize;
+  
+        await processBatch(batchRecords);
   
         // Add a delay between batches to avoid timeout
         await new Promise(resolve => setTimeout(resolve, 5000)); // Adjust the delay as needed
@@ -115,6 +120,7 @@ function chunkArray(array, chunkSize) {
       return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: error.message }) };
     }
   }
+  
   
   
 

@@ -24,24 +24,20 @@ exports.handler = async function (event) {
   }
 
   try {
+      let response;
       if (csv) {
-          await processCSV(csv, authToken, statusPageId);
-          return { 
-              statusCode: 200, 
-              body: JSON.stringify({ message: 'CSV processing completed' }) 
-          };
+          response = await processCSV(csv, authToken, statusPageId);
       } else if (componentName && componentGroup) {
-          await processSingleComponent(componentName, componentGroup, authToken, statusPageId);
-          return { 
-              statusCode: 200, 
-              body: JSON.stringify({ message: 'Single component processing completed' }) 
-          };
+          response = await processSingleComponent(componentName, componentGroup, authToken, statusPageId);
       } else {
           return { 
               statusCode: 400, 
               body: JSON.stringify({ error: 'Invalid input data' }) 
           };
       }
+
+      return response; // Return the response from processCSV or processSingleComponent
+
   } catch (error) {
       console.error('Error:', error);
       return { 
@@ -50,6 +46,7 @@ exports.handler = async function (event) {
       };
   }
 };
+
 
 
 async function processSingleComponent(componentName, componentGroup, authToken, statusPageId) {

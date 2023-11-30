@@ -87,34 +87,23 @@ function sendDataToBackend(data) {
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
     })
-    .then(response => {
-        loadingMessage.style.display = 'none'; // Hide loading message in any case
-
-        // Parse the response as JSON
-        return response.json().then(data => ({ 
-            status: response.status, 
-            body: data 
-        }));
-    })
+    .then(response => response.json().then(data => ({
+        status: response.status,
+        body: data
+    })))
     .then(({ status, body }) => {
+        loadingMessage.style.display = 'none'; // Hide loading message
+
         if (status !== 200) {
-            // Display the error message from the server
-            displayErrorMessage(body.error || 'An unexpected error occurred.');
-            return;
+            throw new Error(body.error || 'An unexpected error occurred.');
         }
 
-        console.log('Data:', body); // Log the success response data
-        if (body.message) {
-            alert(body.message); // Display success message from the server
-        } else {
-            alert('Components processed successfully.');
-        }
+        alert('Components processed successfully.');
         resetForm();
     })
     .catch(error => {
-        // Handle network errors, JSON parsing errors, and other unexpected errors
         console.error('Error:', error);
-        displayErrorMessage(error.message || 'An unexpected error occurred.');
+        displayErrorMessage(error.message);
     });
 }
 
@@ -123,7 +112,6 @@ function displayErrorMessage(message) {
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block';
 }
-
 
 
 function resetForm() {

@@ -2,51 +2,67 @@ const axios = require('axios');
 const { parse } = require('csv-parse/sync');
 
 const componentGroupsBaseUrl = 'https://api.firehydrant.io/v1/nunc_connections/';
+const rateLimitDelay = 10000; // 10 seconds delay for rate limit retry
 
 exports.handler = async function (event) {
-  console.log('Received event:', event);
+    console.log('Received event:', event);
 
-  if (event.httpMethod !== 'POST') {
-      return { 
-          statusCode: 405, 
-          body: JSON.stringify({ error: 'Method Not Allowed' }) 
-      };
-  }
+    if (event.httpMethod !== 'POST') {
+        return { 
+            statusCode: 405, 
+            body: JSON.stringify({ error: 'Method Not Allowed' }) 
+        };
+    }
 
-  const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
-  console.log('Parsed body:', { csv, authToken, statusPageId, componentName, componentGroup });
+    const { csv, authToken, statusPageId, componentName, componentGroup } = JSON.parse(event.body);
+    console.log('Parsed body:', { csv, authToken, statusPageId, componentName, componentGroup });
 
-  if (!statusPageId) {
-      return { 
-          statusCode: 400, 
-          body: JSON.stringify({ error: 'Status Page ID is missing' }) 
-      };
-  }
+    if (!statusPageId) {
+        return { 
+            statusCode: 400, 
+            body: JSON.stringify({ error: 'Status Page ID is missing' }) 
+        };
+    }
 
-  try {
-      let response;
-      if (csv) {
-          response = await processCSV(csv, authToken, statusPageId);
-      } else if (componentName && componentGroup) {
-          response = await processSingleComponent(componentName, componentGroup, authToken, statusPageId);
-      } else {
-          return { 
-              statusCode: 400, 
-              body: JSON.stringify({ error: 'Invalid input data' }) 
-          };
-      }
+    try {
+        let response;
+        if (csv) {
+            response = await processWithRetries(() => processCSV(csv, authToken, statusPageId));
+        } else if (componentName && componentGroup) {
+            response = await processWithRetries(() => processSingleComponent(componentName, componentGroup, authToken, statusPageId));
+        } else {
+            return { 
+                statusCode: 400, 
+                body: JSON.stringify({ error: 'Invalid input data' }) 
+            };
+        }
 
-      return response; // Return the response from processCSV or processSingleComponent
-
-  } catch (error) {
-      console.error('Error:', error);
-      return { 
-          statusCode: 500, 
-          body: JSON.stringify({ error: 'Internal Server Error' }) 
-      };
-  }
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
+        return { 
+            statusCode: 500, 
+            body: JSON.stringify({ error: 'Internal Server Error' }) 
+        };
+    }
 };
 
+async function processWithRetries(processFunction, retries = 3) {
+    try {
+        return await processFunction();
+    } catch (error) {
+        if (retries > 0 && error.response && error.response.status === 429) {
+            console.log("Rate limit reached. Retrying after delay...");
+            await delay(rateLimitDelay);
+            return processWithRetries(processFunction, retries - 1);
+        }
+        throw error; // Rethrow error if not a rate limit issue or retries exhausted
+    }
+}
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};
 
 
 async function processSingleComponent(componentName, componentGroup, authToken, statusPageId) {
@@ -194,36 +210,45 @@ async function fetchComponentGroupId(name, authToken, statusPageId) {
   }
 }
 
-async function updateStatusPage(payload, authToken, statusPageId) {
+async function updateStatusPage(payload, authToken, statusPageId, retries = 3) {
+  const getStatusPageUrl = `${componentGroupsBaseUrl}${statusPageId}`;
+  const rateLimitDelay = 10000; // Delay in milliseconds (10 seconds)
+
   try {
-    const getStatusPageUrl = `${componentGroupsBaseUrl}${statusPageId}`;
-    console.log("Fetching current status page data from URL:", getStatusPageUrl);
+      // Fetch current status page data
+      const getResponse = await axios.get(getStatusPageUrl, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+      });
 
-    const getResponse = await axios.get(getStatusPageUrl, {
-      headers: { 'Authorization': `Bearer ${authToken}` }
-    });
+      let currentComponents = getResponse.data.components || [];
+      const newComponents = payload.components;
 
-    let currentComponents = getResponse.data.components || [];
-    const newComponents = payload.components;
+      // Merge new components with existing ones
+      newComponents.forEach(newComp => {
+          const existingIndex = currentComponents.findIndex(c => c.infrastructure_id === newComp.infrastructure_id);
+          if (existingIndex !== -1) {
+              currentComponents[existingIndex] = newComp;
+          } else {
+              currentComponents.push(newComp);
+          }
+      });
 
-    newComponents.forEach(newComp => {
-      const existingIndex = currentComponents.findIndex(c => c.infrastructure_id === newComp.infrastructure_id);
-      if (existingIndex !== -1) {
-        currentComponents[existingIndex] = newComp;
-      } else {
-        currentComponents.push(newComp);
-      }
-    });
+      // Update the status page with merged components
+      const updateResponse = await axios.put(getStatusPageUrl, { components: currentComponents }, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+      });
 
-    console.log("Updating status page with new component list.");
-    const updateResponse = await axios.put(getStatusPageUrl, { components: currentComponents }, {
-      headers: { 'Authorization': `Bearer ${authToken}` }
-    });
-
-    console.log("Status page updated successfully.");
-    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Status page updated successfully', updateResponse: updateResponse.data }) };
+      console.log("Status page updated successfully.");
+      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updateResponse.data) };
   } catch (error) {
-    console.error('Error updating status page:', error);
-    return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Failed to update status page' }) }; // Changed to return an error response
+      // Handle rate limiting
+      if (retries > 0 && error.response && error.response.status === 429) {
+          console.log("Rate limit reached. Retrying after delay...");
+          await new Promise(resolve => setTimeout(resolve, rateLimitDelay)); // Wait for the specified delay
+          return updateStatusPage(payload, authToken, statusPageId, retries - 1); // Recursive call with decremented retries
+      }
+      console.error('Error updating status page:', error);
+      return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Failed to update status page' }) };
   }
 }
+

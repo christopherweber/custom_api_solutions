@@ -78,7 +78,9 @@ function handleCSVUpload(file, data) {
     reader.readAsText(file);
 }
 
-function sendDataToBackend(data) {
+const rateLimitDelay = 10000; // Delay in milliseconds (10 seconds)
+
+function sendDataToBackend(data, retries = 3) {
     const loadingMessage = document.getElementById('loadingMessage');
     const errorMessageDiv = document.getElementById('errorMessage'); // Get the error message div
     loadingMessage.style.display = 'block';
@@ -92,8 +94,12 @@ function sendDataToBackend(data) {
     })
     .then(response => {
         if (!response.ok) {
-            // If response is not OK, parse the response and extract error messages
             return response.json().then(data => {
+                if (data.error === 'rate limit exceeded' && retries > 0) {
+                    console.log("Rate limit exceeded. Retrying after delay...");
+                    setTimeout(() => sendDataToBackend(data, retries - 1), rateLimitDelay); // Retry after delay
+                    return;
+                }
                 console.log('Error response from server:', data); // Log the error response
                 throw new Error(data.error || 'No response from server or malformed response.');
             });
@@ -125,8 +131,6 @@ function sendDataToBackend(data) {
         displayErrorMessage(error.message);
     });
 }
-
-
 
 function displayErrorMessage(message) {
     const errorMessageDiv = document.getElementById('errorMessage');

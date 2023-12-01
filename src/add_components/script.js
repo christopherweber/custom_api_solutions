@@ -80,6 +80,7 @@ function handleCSVUpload(file, data) {
 
 function sendDataToBackend(data) {
     const loadingMessage = document.getElementById('loadingMessage');
+    const errorMessageDiv = document.getElementById('errorMessage'); // Get the error message div
     loadingMessage.style.display = 'block';
 
     console.log('Sending data to backend:', JSON.stringify(data)); // Log the data being sent
@@ -101,11 +102,9 @@ function sendDataToBackend(data) {
     })
     .then(data => {
         console.log('Response data from server:', data); // Log the full response data
-
         loadingMessage.style.display = 'none';
 
         if (data && data.results) {
-            console.log("this is true that data exists")
             let errors = data.results
                 .filter(result => result.status === 'rejected')
                 .map(result => result.reason);
@@ -113,6 +112,7 @@ function sendDataToBackend(data) {
             if (errors.length > 0) {
                 displayErrorMessage(`Errors: ${errors.join(', ')}`);
             } else {
+                errorMessageDiv.style.display = 'none'; // Hide the error message div on success
                 alert(`Components processed successfully`);
                 resetForm();
             }
@@ -125,6 +125,7 @@ function sendDataToBackend(data) {
         displayErrorMessage(error.message);
     });
 }
+
 
 
 function displayErrorMessage(message) {

@@ -3,6 +3,12 @@ function getSelectedFunctionalities() {
     return Array.from(selectedOptions).map(opt => ({ id: opt.value }));
 }
 
+document.getElementById('csv-instructions-link').addEventListener('click', function(event) {
+    event.preventDefault();
+    var instructions = document.getElementById('csv-instructions');
+    instructions.style.display = instructions.style.display === 'none' ? '' : 'none';
+});
+
 function fetchFunctionalities() {
     const authToken = document.getElementById('authToken').value;
     console.log("Fetching functionalities with authToken:", authToken);

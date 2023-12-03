@@ -61,7 +61,7 @@ header h1 {
 }
 
 .disclaimer {
-    background-color: #dad6bb; /* Light yellow to draw attention */
+    background-color: #c8c8c8; /* Light yellow to draw attention */
     color: #333;
     padding: 10px;
     margin-bottom: 20px; /* Spacing before the next content block */

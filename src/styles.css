@@ -59,3 +59,12 @@ header h1 {
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+
+.disclaimer {
+    background-color: #ffeb3b; /* Light yellow to draw attention */
+    color: #333;
+    padding: 10px;
+    margin-bottom: 20px; /* Spacing before the next content block */
+    border-left: 4px solid #ffa000; /* Accent bar on the side */
+    font-size: 0.9em; /* Adjust the font size as needed */
+}

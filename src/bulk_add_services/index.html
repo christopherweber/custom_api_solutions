@@ -83,13 +83,13 @@
             <ul>
                 <li><strong>name:</strong> The name of the service (Required).</li>
                 <li><strong>description:</strong> A brief description of the service (Optional).</li>
-                <li><strong>remoteId:</strong> Unique identifier for the service (Required).</li>
-                <li><strong>connectionType:</strong> Type of service connection, e.g., 'pager_duty' (Required).</li>
-                <li><strong>alertOnAdd:</strong> 'true' or 'false' to enable/disable alerts on add (Required).</li>
-                <li><strong>autoAddRespondingTeam:</strong> 'true' or 'false' for auto addition of responding team (Required).</li>
+                <li><strong>remoteId:</strong> Unique identifier for the service from alerting provider (Required).</li>
+                <li><strong>connectionType:</strong> Type of service connection, e.g., 'pager_duty', 'victorops', 'opsgenie', 'github' (Required).</li>
+                <li><strong>alertOnAdd:</strong> 'true' or 'false' to enable/disable alerts on add (Optional).</li>
+                <li><strong>autoAddRespondingTeam:</strong> 'true' or 'false' for auto addition of responding team (Optional).</li>
                 <li><strong>ownerId:</strong> ID of the service owner (Optional).</li>
                 <li><strong>teamsId:</strong> ID of the associated team (Optional).</li>
-                <li><strong>functionalitiesId:</strong> ID of related functionalities (Optional).</li>
+                <li><strong>functionalitiesId:</strong> ID of related functionalities from FireHydrant. Can be found <a href="https://api.firehydrant.io/v1/functionalities">here.</a> (Optional).</li>
             </ul>
         </div>
 

@@ -3,11 +3,10 @@ function getSelectedFunctionalities() {
     return Array.from(selectedOptions).map(opt => ({ id: opt.value }));
 }
 
-    document.getElementById('csv-instructions-link').addEventListener('click', function() {
-        var instructions = document.querySelector('.instructions-container');
-        instructions.style.display = instructions.style.display === 'none' ? 'block' : 'none';
-    });
-
+document.getElementById('csv-instructions-link').addEventListener('click', function() {
+    var instructions = document.querySelector('.instructions-container');
+    instructions.style.display = instructions.style.display === 'none' ? 'block' : 'none';
+});
 
 function fetchFunctionalities() {
     const authToken = document.getElementById('authToken').value;

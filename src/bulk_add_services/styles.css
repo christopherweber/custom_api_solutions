@@ -9,21 +9,20 @@ aside {
     width: 20%;
     overflow-y: scroll;
     position: fixed;
-    height: 100vh;
-    background-color: #EBEEF5; /* Updated background color */
+    height: calc(100vh - 20px); /* Adjusted for scrollbar */
+    background-color: #EBEEF5;
     padding: 10px;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Style for hyperlinks to remove purple color and underline */
-aside a {
-    color: #333; /* Text color */
-    text-decoration: none; /* Removes underline */
+aside a, nav li a {
+    color: #333;
+    text-decoration: none;
     word-break: break-word;
 }
 
-aside a:hover {
-    color: #555; /* Text color on hover */
+aside a:hover, nav li a:hover {
+    color: #555;
 }
 
 nav ul {
@@ -31,35 +30,46 @@ nav ul {
     padding: 0;
 }
 
-nav li a {
-    text-decoration: none;
-    color: #333;
-    display: block;
-    padding: 0.5em;
-    transition: background-color 0.3s;
-}
-
-nav li a:hover {
-    background-color: #f4f4f4;
-}
-
 main {
     margin-left: 22%;
     padding: 20px;
 }
 
-#remove-priority h1 {
-    margin-bottom: 0;
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
 }
 
-#remove-priority form {
-    margin-top: 10px; 
-    margin-left: 0px;
+.form-container {
+    width: 60%;
+    max-width: 600px;
+}
+
+.instructions-container {
+    width: 35%;
+    margin-left: 5%;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .form-container,
+    .instructions-container {
+        width: 100%;
+        max-width: none;
+        margin-left: 0;
+    }
 }
 
 form {
-    max-width: 400px;
-    margin: 20px auto;
+    margin: 0 auto;
     padding: 15px;
     background: #2D394A;
     border-radius: 5px;
@@ -81,50 +91,51 @@ form label {
     margin-bottom: 5px;
     font-weight: 600;
     font-size: 0.9em;
-    color: white;
+    color: #FFF; /* Ensures visibility on dark background */
 }
 
-/* Updated button styles */
-#remove-priority form button, #btnNodeJs, #btnPython {
-    padding: 6px 10px; /* Smaller padding for a smaller button */
-    font-size: 0.8em; /* Smaller font size for the text inside the button */
+form button {
+    padding: 6px 10px;
+    font-size: 0.8em;
     border: none;
     border-radius: 4px;
-    background-color: #12A0F3; /* New button background color */
+    background-color: #12A0F3;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
+form button:hover {
+    background-color: #0F87C9;
+}
 
-.fields {
+form button[type="submit"] {
+    margin-top: 10px;
+}
+
+.fields, .serviceFields + .serviceFields {
     border-top: 1px solid #eee;
     padding-top: 10px;
     margin-top: 10px;
 }
 
-#remove-priority form button:hover {
-    background-color: #0F87C9; /* Darker shade on hover */
+form small {
+    display: block;
+    margin-top: 5px;
+    color: #cfcfcf;
+    font-size: 0.85em;
 }
 
-#remove-priority form button[type="submit"] {
-    margin-top: 10px;
+#csvUploadMessage {
+    display: none;
 }
 
-.snippet-container {
+.snippet-container, .code-snippet {
     background-color: #f5f5f5;
     border: 1px solid #ddd;
     border-radius: 4px;
-    position: relative;
     padding: 20px;
     margin-top: 10px;
-}
-
-.code-snippet {
-    white-space: pre-wrap;
-    word-break: break-word;
-    overflow-x: auto;
-    margin-top: 30px;
 }
 
 .copy-btn {
@@ -141,48 +152,4 @@ form label {
 
 .copy-btn:hover {
     background-color: #2980b9;
-}
-
-.serviceFields + .serviceFields {
-    margin-top: 20px;
-    border-top: 1px solid #ccc;
-    padding-top: 20px;
-}
-
-form small {
-    display: block;
-    margin-top: 5px;
-    color: #cfcfcf; /* Lighter color for visibility */
-    font-size: 0.85em; /* Slightly larger font size for readability */
-}
-
-#csvUploadMessage {
-    display: none;
-}
-
-
-#bulk-add-services form button, #btnNodeJs, #btnPython {
-    padding: 6px 10px; /* Smaller padding for a smaller button */
-    font-size: 0.8em; /* Smaller font size for the text inside the button */
-    border: none;
-    border-radius: 4px;
-    background-color: #12A0F3; /* New button background color */
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-
-.fields {
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-    margin-top: 10px;
-}
-
-#bulk-add-services form button:hover {
-    background-color: #0F87C9; /* Darker shade on hover */
-}
-
-#bulk-add-services form button[type="submit"] {
-    margin-top: 10px;
 }

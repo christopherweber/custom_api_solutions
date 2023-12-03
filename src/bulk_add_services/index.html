@@ -18,13 +18,11 @@
             <br>
             or use a CSV file for bulk upload.
         </p>
-        <p>
+        <p id="csv-upload-note">
             <strong>Note:</strong> For CSV uploads, please ensure proper formatting. 
-            <a href="#csv-instructions" id="csv-instructions-link">View CSV instructions</a>.
+            <a href="javascript:void(0);" id="csv-instructions-link">View CSV instructions</a>.
         </p>
-    
-        <!-- Hidden by default, shown when the link is clicked -->
-        <div id="csv-instructions" style="display:none;">
+        <div class="instructions-container" style="display:none;">
             <h2>CSV Upload Instructions:</h2>
             <ul>
                 <li><strong>name:</strong> The name of the service (Required).</li>
@@ -38,6 +36,7 @@
                 <li><strong>functionalitiesId:</strong> ID of related functionalities (Optional).</li>
             </ul>
         </div>
+
     
         <form id="bulkServiceForm">
             <label for="authToken">Authorization Token:</label>
@@ -92,6 +91,7 @@
             <small id="csvUploadMessage"></small>
             <button type="submit">Submit</button>
         </form>
+
     </section>
 </main>
 

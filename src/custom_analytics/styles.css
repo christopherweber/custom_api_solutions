@@ -31,10 +31,10 @@ body {
     left: 0;
     top: 0;
     overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
     background-color: #EBEEF5;
     padding: 10px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
 }
 
 .sidebar.collapsed {
@@ -42,18 +42,17 @@ body {
 }
 
 .main-content {
-    margin-left: 250px;
+    flex-grow: 1;
     padding: 20px;
-    transition: margin-left 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
-.sidebar.collapsed + .main-content {
+.main-content > #analytics-dashboard {
+    margin-left: 250px;
+}
+
+.sidebar.collapsed + .main-content > #analytics-dashboard {
     margin-left: 0;
-}
-
-#analytics-dashboard {
-    position: relative;
-    padding-left: 280px;
 }
 
 #analytics-dashboard h1 {
@@ -61,22 +60,12 @@ body {
 }
 
 #analytics-dashboard form {
-    position: absolute;
-    top: 20px;
-    left: 20px;
     max-width: 400px;
     padding: 15px;
     background: #2D394A;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    font-size: 0.9em;
-    color: white;
+    transition: all 0.3s ease-in-out;
 }
 
 form input[type="text"],
@@ -87,6 +76,14 @@ form select {
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: white;
 }
 
 form button, #btnNodeJs, #btnPython {
@@ -108,15 +105,8 @@ form button[type="submit"] {
     margin-top: 10px;
 }
 
-.fields {
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-    margin-top: 10px;
-}
-
-#milestoneFilter {
-    width: 200px;
-    height: 150px;
+#data-display {
+    margin-top: 20px;
 }
 
 aside a {
@@ -146,7 +136,20 @@ nav li a:hover {
     background-color: #f4f4f4;
 }
 
-#data-display {
-    margin-top: 20px;
+#app {
+    margin: 20px;
 }
 
+label {
+    margin-top: 10px;
+    display: inline-block;
+}
+
+input, select, button {
+    margin-bottom: 10px;
+}
+
+#milestoneFilter {
+    width: 200px;
+    height: 150px;
+}

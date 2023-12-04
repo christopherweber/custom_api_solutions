@@ -73,17 +73,41 @@ function hideLoadingMessage() {
 
 function displayReportResults(data) {
   const reportResultsElement = document.getElementById('reportResults');
-  if (!data || !data.length) {
-    reportResultsElement.textContent = 'No data to display.';
-    return;
+  reportResultsElement.innerHTML = ''; // Clear previous results
+
+  if (!data || !data.incidents || data.incidents.length === 0) {
+      reportResultsElement.textContent = 'No data to display.';
+      return;
   }
 
-  const table = createTable(data);
+  // Create and display the table with incident data
+  const table = createTable(data.incidents);
   reportResultsElement.appendChild(table);
 
-  const downloadCsvButton = document.getElementById('downloadCsv');
-  downloadCsvButton.style.display = 'block';
+  // Create and show the CSV download button
+  createAndShowDownloadButton(data.csv);
 }
+
+function createAndShowDownloadButton(csvData) {
+  const reportResultsElement = document.getElementById('reportResults');
+  const downloadCsvButton = document.createElement('button');
+  downloadCsvButton.id = 'exportCsv';
+  downloadCsvButton.textContent = 'Export to CSV';
+  downloadCsvButton.addEventListener('click', function() {
+      if (!csvData) {
+          alert('No CSV data available to download.');
+          return;
+      }
+      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'analytics-report.csv';
+      link.click();
+  });
+
+  reportResultsElement.appendChild(downloadCsvButton);
+}
+
   
 function createTable(incidents) {
     const table = document.createElement('table');

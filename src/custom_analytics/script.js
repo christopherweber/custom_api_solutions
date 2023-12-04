@@ -1,12 +1,12 @@
-// document.addEventListener('DOMContentLoaded', () => {
-//     fetch('../sidebar.html')
-//       .then(response => response.text())
-//       .then(data => {
-//         document.getElementById('sidebar-placeholder').innerHTML = data;
-//         attachFormSubmitListener();
-//       })
-//       .catch(error => console.error('Error loading the sidebar:', error));
-//   });
+ document.addEventListener('DOMContentLoaded', () => {
+     fetch('../sidebar.html')
+       .then(response => response.text())
+       .then(data => {
+         document.getElementById('sidebar-placeholder').innerHTML = data;
+        attachFormSubmitListener();
+       })
+       .catch(error => console.error('Error loading the sidebar:', error));
+   });
   
   function attachFormSubmitListener() {
     const form = document.getElementById('analyticsForm');
@@ -24,31 +24,32 @@
     const pageSize = 10; // Adjust based on your API's pagination
     let loadingMoreData = false;
   
-  function fetchAnalyticsData(authToken, startDate, endDate, page = 1) {
-    showLoadingMessage();
-    fetch('/.netlify/functions/getAnalytics', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ authToken, startDate, endDate, page })
-    })
-    .then(response => response.json())
-    .then(data => {
-      hideLoadingMessage();
-      displayReportResults(data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      hideLoadingMessage();
-    });
-  }
-
-  window.onscroll = function() {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && !loadingMoreData) {
-      loadingMoreData = true;
-      currentPage += 1;
-      fetchAnalyticsData(authToken, startDate, endDate, currentPage);
+    function fetchAnalyticsData(authToken, startDate, endDate) {
+      showLoadingMessage();
+      fetch('/.netlify/functions/getAnalytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ authToken, startDate, endDate })
+      })
+      .then(response => response.json())
+      .then(data => {
+        hideLoadingMessage();
+        displayReportResults(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        hideLoadingMessage();
+      });
     }
-  };
+    
+
+  //window.onscroll = function() {
+  //  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && !loadingMoreData) {
+  //    loadingMoreData = true;
+  //    currentPage += 1;
+  //    fetchAnalyticsData(authToken, startDate, endDate, currentPage);
+// }
+  // };
 
   function showLoadingMessage() {
     const loadingElement = document.getElementById('loadingMessage');

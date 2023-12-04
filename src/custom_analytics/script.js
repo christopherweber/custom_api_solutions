@@ -64,21 +64,20 @@
   function displayReportResults(data) {
     const reportResultsElement = document.getElementById('reportResults');
     reportResultsElement.innerHTML = '';
-    
+
     if (!data || !Array.isArray(data.incidents) || data.incidents.length === 0) {
         reportResultsElement.textContent = 'No data to display.';
         return;
     }
 
-    const selectedMilestones = Array.from(document.getElementById('selectedMilestones').selectedOptions).map(option => option.value);
-    const filteredIncidents = data.incidents.filter(incident => 
-        incident.milestones.some(milestone => selectedMilestones.includes(milestone.type))
-    );
+    // Tempo
+    const filteredIncidents = data.incidents;
 
     const table = createTable(filteredIncidents);
     reportResultsElement.appendChild(table);
     loadingMoreData = false;
 }
+
   
 function createTable(incidents) {
     const table = document.createElement('table');

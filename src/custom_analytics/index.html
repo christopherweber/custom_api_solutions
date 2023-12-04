@@ -27,10 +27,12 @@
     <div id="additionalFilters" style="display: none;">
         <!-- Additional filters will be added here -->
     </div>
-
     <div id="reportResults">
-        <!-- Report results will go here -->
-    </div>
+      <div class="csv-export">
+          <button id="exportCsv" style="display: none;" onclick="exportToCSV()">Export to CSV</button>
+      </div>
+      <!-- Data results will be inserted here by your JavaScript logic -->
+  </div>
 </main>
 
 <script src="script.js" defer></script>

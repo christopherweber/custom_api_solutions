@@ -1,11 +1,14 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     background: #fff;
 }
 
 main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
 }
 
@@ -13,6 +16,7 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
 #backToActions,
@@ -31,23 +35,28 @@ main {
     background-color: #0F87C9;
 }
 
-h1 {
-    margin: 0;
-    font-family: 'Press Start 2P', cursive;
+#analyticsForm {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    width: calc(100% - 40px); /* Adjust width based on padding */
+    box-sizing: border-box;
 }
 
-.form-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
+.form-field {
+    margin-bottom: 10px;
+    width: 100%;
 }
 
-#analyticsForm input[type="text"],
-#analyticsForm input[type="date"] {
-    padding: 8px;
+.form-field input[type="text"],
+.form-field input[type="date"],
+.form-field select {
+    width: calc(100% - 22px); /* Adjust width based on padding and border */
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    margin-right: 10px;
 }
 
 #addFilter {
@@ -56,9 +65,14 @@ h1 {
     color: white;
     border: none;
     border-radius: 4px;
+    margin-right: 10px;
 }
 
-#analyticsForm button[type="submit"] {
+#addFilter:hover {
+    background-color: #0F87C9;
+}
+
+#searchButton {
     padding: 10px 15px;
     background-color: #12A0F3;
     color: white;
@@ -66,8 +80,18 @@ h1 {
     border-radius: 4px;
 }
 
+#searchButton:hover {
+    background-color: #0F87C9;
+}
+
 #reportResults {
-    margin-top: 20px;
+    width: 100%;
+}
+
+#reportResults .csv-export {
+    display: none; /* Initially hidden */
+    justify-content: flex-end;
+    padding-bottom: 10px;
 }
 
 /* Additional styles as needed */

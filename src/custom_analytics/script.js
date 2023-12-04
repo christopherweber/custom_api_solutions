@@ -141,6 +141,14 @@ function attachFormSubmitListener() {
       // Create and display the table with incident data
       const table = createTable(data.incidents);
       reportResultsElement.appendChild(table);
+      const exportButton = document.getElementById('exportCsv');
+      if (data && data.length > 0) {
+          // Show the export button if data is present
+          exportButton.style.display = 'block';
+      } else {
+          // Hide the export button if no data is present
+          exportButton.style.display = 'none';
+      }
   }
   
 function createTable(incidents) {

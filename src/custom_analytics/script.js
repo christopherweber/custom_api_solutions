@@ -5,46 +5,46 @@ document.addEventListener('DOMContentLoaded', () => {
       // Set the inner HTML of the sidebar
       document.getElementById('sidebar').innerHTML = data;
 
-      // Attach form submit listener and other necessary event listeners
       attachFormSubmitListener();
-
-      // Setup the sidebar toggle button now that the sidebar content is loaded
-      setupSidebarToggle();
+      // setupSidebarToggle();
     })
     .catch(error => console.error('Error loading the sidebar:', error));
 });
 
-function setupSidebarToggle() {
-  const toggleButton = document.getElementById('toggleSidebar');
-  toggleButton.addEventListener('click', toggleSidebar);
-
-  // Initialize sidebar state based on localStorage or default to shown
-  const sidebarState = localStorage.getItem('sidebarState') || 'shown';
-  setSidebarState(sidebarState);
+function goBack() {
+  window.history.back(); // Go back to the previous page
 }
 
-function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const dashboard = document.getElementById('analytics-dashboard');
-  sidebar.classList.toggle('collapsed');
-  dashboard.classList.toggle('collapsed'); // Toggle the class on the dashboard as well
+// function setupSidebarToggle() {
+//   const toggleButton = document.getElementById('toggleSidebar');
+//   toggleButton.addEventListener('click', toggleSidebar);
 
-  // Update the text of the toggle button based on the state
-  document.getElementById('toggleSidebar').textContent = sidebar.classList.contains('collapsed') ? '❯' : '❮';
-}
+//   const sidebarState = localStorage.getItem('sidebarState') || 'shown';
+//   setSidebarState(sidebarState);
+// }
+
+// function toggleSidebar() {
+//   const sidebar = document.getElementById('sidebar');
+//   const dashboard = document.getElementById('analytics-dashboard');
+//   sidebar.classList.toggle('collapsed');
+//   dashboard.classList.toggle('collapsed'); 
 
 
-function setSidebarState(state) {
-  const sidebar = document.getElementById('sidebar');
-  const toggleButton = document.getElementById('toggleSidebar');
-  if (state === 'collapsed') {
-    sidebar.classList.add('collapsed');
-    toggleButton.textContent = '❯';
-  } else {
-    sidebar.classList.remove('collapsed');
-    toggleButton.textContent = '❮';
-  }
-}
+//   document.getElementById('toggleSidebar').textContent = sidebar.classList.contains('collapsed') ? '❯' : '❮';
+// }
+
+
+// function setSidebarState(state) {
+//   const sidebar = document.getElementById('sidebar');
+//   const toggleButton = document.getElementById('toggleSidebar');
+//   if (state === 'collapsed') {
+//     sidebar.classList.add('collapsed');
+//     toggleButton.textContent = '❯';
+//   } else {
+//     sidebar.classList.remove('collapsed');
+//     toggleButton.textContent = '❮';
+//   }
+// }
 
   
   function attachFormSubmitListener() {

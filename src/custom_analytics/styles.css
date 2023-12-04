@@ -2,65 +2,38 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: row;
-    min-height: 100vh;
 }
 
-aside {
-    width: 20%;
-    overflow-y: scroll;
-    position: fixed;
-    height: 100vh;
-    background-color: #EBEEF5;
+#backToActions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     padding: 10px;
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+    background-color: #12A0F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-aside a {
-    color: #333;
-    text-decoration: none;
-    word-break: break-word;
-}
-
-aside a:hover {
-    color: #555;
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-nav li a {
-    text-decoration: none;
-    color: #333;
-    display: block;
-    padding: 0.5em;
-    transition: background-color 0.3s;
-}
-
-nav li a:hover {
-    background-color: #f4f4f4;
+#backToActions:hover {
+    background-color: #0F87C9;
 }
 
 main {
-    margin-left: 22%;
     padding: 20px;
 }
 
 #analytics-dashboard h1 {
-    margin-bottom: 0;
+    margin-bottom: 20px;
 }
 
 #analytics-dashboard form {
     margin-top: 10px;
-    margin-left: 0px;
 }
 
 form {
-    max-width: 400px;
-    margin: 20px auto;
+    max-width: 100%;
     padding: 15px;
     background: #2D394A;
     border-radius: 5px;
@@ -68,6 +41,7 @@ form {
 }
 
 form input[type="text"],
+form input[type="date"],
 form select {
     width: 100%;
     padding: 8px;
@@ -81,13 +55,12 @@ form label {
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
-    font-size: 0.9em;
     color: white;
 }
 
-#analytics-dashboard form button, #btnNodeJs, #btnPython {
-    padding: 6px 10px;
-    font-size: 0.8em;
+form button {
+    padding: 10px 15px;
+    font-size: 0.9em;
     border: none;
     border-radius: 4px;
     background-color: #12A0F3;
@@ -96,20 +69,17 @@ form label {
     transition: background-color 0.3s ease;
 }
 
-#analytics-dashboard form button:hover {
+form button:hover {
     background-color: #0F87C9;
 }
 
-#analytics-dashboard form button[type="submit"] {
+form button[type="submit"] {
     margin-top: 10px;
 }
 
 #data-display {
     margin-top: 20px;
-}
-
-#app {
-    margin: 20px;
+    /* Additional styles for data display if needed */
 }
 
 label {
@@ -120,6 +90,9 @@ label {
 input, select, button {
     margin-bottom: 10px;
 }
+
+/* Additional styles if needed */
+/* ... */
 
 #milestoneFilter {
     width: 200px;

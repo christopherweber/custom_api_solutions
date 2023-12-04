@@ -61,23 +61,32 @@
     document.getElementById('loadingMessage').style.display = 'none';
   }
   
+  let csvData = ''; // Global variable to store CSV data
+
   function displayReportResults(data) {
-    const reportResultsElement = document.getElementById('reportResults');
-    reportResultsElement.innerHTML = '';
-
-    if (!data || !Array.isArray(data.incidents) || data.incidents.length === 0) {
-        reportResultsElement.textContent = 'No data to display.';
-        return;
-    }
-
-    // Tempo
-    const filteredIncidents = data.incidents;
-
-    const table = createTable(filteredIncidents);
-    reportResultsElement.appendChild(table);
-    loadingMoreData = false;
-}
-
+      const reportResultsElement = document.getElementById('reportResults');
+      const downloadCsvButton = document.getElementById('downloadCsv');
+      reportResultsElement.innerHTML = '';
+  
+      // Check if data is empty or undefined
+      if (!data || !Array.isArray(data.incidents) || data.incidents.length === 0) {
+          reportResultsElement.textContent = 'No data to display.';
+          downloadCsvButton.style.display = 'none'; // Hide the CSV download button
+          return;
+      }
+  
+      // Data is present, show the CSV download button
+      downloadCsvButton.style.display = 'block';
+  
+      // Store the CSV data for download
+      if (data && data.csv) {
+          csvData = data.csv;
+      }
+  
+      // Create and display the table with incident data
+      const table = createTable(data.incidents);
+      reportResultsElement.appendChild(table);
+  }
   
 function createTable(incidents) {
     const table = document.createElement('table');
@@ -148,3 +157,15 @@ function addMilestone() {
     newMilestone.appendChild(removeBtn);
   }
   
+  document.getElementById('downloadCsv').addEventListener('click', function() {
+    if (!csvData) {
+        alert('No CSV data available to download.');
+        return;
+    }
+
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'analytics-report.csv';
+    link.click();
+});

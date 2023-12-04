@@ -42,23 +42,32 @@ body {
 }
 
 .main-content {
-    transition: margin-left 0.3s ease-in-out;
+    flex-grow: 1;
     padding: 20px;
+    transition: margin-left 0.3s ease-in-out;
     margin-left: 250px; /* Space for the sidebar */
-    width: calc(100% - 250px); /* Adjust width when sidebar is visible */
 }
 
 .sidebar.collapsed + .main-content {
     margin-left: 0; /* Remove margin when sidebar is collapsed */
-    width: 100%; /* Full width when sidebar is collapsed */
 }
 
 #analytics-dashboard {
-    max-width: 600px; /* Adjust width of the form container */
-    margin: 0 auto; /* Centering the form container */
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 250px; /* Space for the sidebar when it is expanded */
+}
+
+.sidebar.collapsed + #analytics-dashboard {
+    margin-left: 0; /* Remove margin when sidebar is collapsed */
+}
+
+#analytics-dashboard h1 {
+    margin-bottom: 0;
 }
 
 #analytics-dashboard form {
+    max-width: 600px; /* Adjust width of the form container */
+    margin-top: 20px; /* Space from the top */
     padding: 15px;
     background: #2D394A;
     border-radius: 5px;

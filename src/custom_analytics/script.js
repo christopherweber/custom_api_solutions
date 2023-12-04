@@ -1,12 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('analyticsForm');
-  form.addEventListener('submit', handleSubmit);
+  if (form) {
+    form.addEventListener('submit', handleSubmit);
+  }
 
-  const addFilterBtn = document.getElementById('addFilter');
-  addFilterBtn.addEventListener('click', addFilter);
+  const addFilterBtn = document.getElementById('addFilterBtn');
+  if (addFilterBtn) {
+    addFilterBtn.addEventListener('click', addFilter);
+  }
 
   const backToActionsBtn = document.getElementById('backToActions');
-  backToActionsBtn.addEventListener('click', goBack);
+  if (backToActionsBtn) {
+    backToActionsBtn.addEventListener('click', goBack);
+  }
 });
 
 function goBack() {

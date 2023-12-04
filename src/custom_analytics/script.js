@@ -6,35 +6,62 @@ function goBack() {
   window.history.back();
 }
 
-function toggleMilestoneField() {
-  const milestoneField = document.getElementById('milestoneField');
-  const toggleButton = document.getElementById('toggleMilestone');
-  if (milestoneField.style.display === 'none') {
-      milestoneField.style.display = 'block';
-      toggleButton.textContent = '-';
-  } else {
-      milestoneField.style.display = 'none';
-      toggleButton.textContent = '+';
+function addFilter() {
+  const additionalFilters = document.getElementById('additionalFilters');
+  // If the additional filters section is hidden, show it
+  if (additionalFilters.style.display === 'none') {
+      additionalFilters.style.display = 'block';
   }
+
+  // Create a new filter for the milestone dropdown
+  const newFilter = document.createElement('div');
+  newFilter.innerHTML = `
+      <label for="milestoneDropdown">Milestone:</label>
+      <select id="milestoneDropdown">
+          <option value="started">Started</option>
+          <option value="detected">Detected</option>
+          <option value="acknowledged">Acknowledged</option>
+          <option value="investigating">Investigating</option>
+          <option value="identified">Identified</option>
+          <option value="mitigated">Mitigated</option>
+          <option value="resolved">Resolved</option>
+          <option value="postmortem_started">Postmortem Started</option>
+          <option value="postmortem_completed">Postmortem Completed</option>
+      </select>
+  `;
+  additionalFilters.appendChild(newFilter);
 }
 
-function addMilestone() {
-  const select = document.getElementById('milestoneDropdown');
-  const selectedValue = select.value;
-  const selectedDiv = document.getElementById('selectedMilestones');
-  if (Array.from(selectedDiv.children).some(child => child.textContent.includes(selectedValue))) {
-      alert('This milestone is already selected.');
-      return;
-  }
-  const newMilestone = document.createElement('span');
-  newMilestone.textContent = selectedValue;
-  newMilestone.classList.add('selectedMilestone');
-  selectedDiv.appendChild(newMilestone);
-  const removeBtn = document.createElement('button');
-  removeBtn.textContent = 'Remove';
-  removeBtn.onclick = function() { newMilestone.remove(); };
-  newMilestone.appendChild(removeBtn);
-}
+
+// function toggleMilestoneField() {
+//   const milestoneField = document.getElementById('milestoneField');
+//   const toggleButton = document.getElementById('toggleMilestone');
+//   if (milestoneField.style.display === 'none') {
+//       milestoneField.style.display = 'block';
+//       toggleButton.textContent = '-';
+//   } else {
+//       milestoneField.style.display = 'none';
+//       toggleButton.textContent = '+';
+//   }
+// }
+
+// function addMilestone() {
+//   const select = document.getElementById('milestoneDropdown');
+//   const selectedValue = select.value;
+//   const selectedDiv = document.getElementById('selectedMilestones');
+//   if (Array.from(selectedDiv.children).some(child => child.textContent.includes(selectedValue))) {
+//       alert('This milestone is already selected.');
+//       return;
+//   }
+//   const newMilestone = document.createElement('span');
+//   newMilestone.textContent = selectedValue;
+//   newMilestone.classList.add('selectedMilestone');
+//   selectedDiv.appendChild(newMilestone);
+//   const removeBtn = document.createElement('button');
+//   removeBtn.textContent = 'Remove';
+//   removeBtn.onclick = function() { newMilestone.remove(); };
+//   newMilestone.appendChild(removeBtn);
+// }
 
 function attachFormSubmitListener() {
   const form = document.getElementById('analyticsForm');

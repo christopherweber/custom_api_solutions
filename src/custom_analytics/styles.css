@@ -2,68 +2,21 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #fff; /* Assuming a light background for the whole page */
+    background: #fff;
 }
 
 main {
     padding: 20px;
 }
 
-#backToActions {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 10px;
-    background-color: #12A0F3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    z-index: 1000;
-}
-
-#backToActions:hover {
-    background-color: #0F87C9;
-}
-
-#analytics-dashboard h1 {
-    margin-bottom: 20px;
-}
-
-#analytics-dashboard {
+#dashboard-header {
     display: flex;
-    flex-direction: column;
-    width: 100%;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#analyticsForm {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    background: #2D394A;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-field {
-    flex-basis: calc(33.333% - 20px); /* Adjust the percentage as per the number of fields per row */
-    display: flex;
-    flex-direction: column;
-    color: white;
-}
-
-#analyticsForm input[type="text"],
-#analyticsForm input[type="date"] {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-#toggleMilestone,
-#analyticsForm button[type="submit"],
-#downloadCsv {
+#backToActions,
+#exportCsv {
     padding: 10px 15px;
     background-color: #12A0F3;
     color: white;
@@ -73,25 +26,48 @@ main {
     transition: background-color 0.3s ease;
 }
 
-#toggleMilestone:hover,
-#analyticsForm button[type="submit"]:hover,
-#downloadCsv:hover {
+#backToActions:hover,
+#exportCsv:hover {
     background-color: #0F87C9;
 }
 
-#milestoneField {
-    display: none; /* Hide the milestone field by default */
-    flex-basis: 100%; /* Milestone field should take the full width when visible */
+h1 {
+    margin: 0;
+    font-family: 'Press Start 2P', cursive;
 }
 
-#selectedMilestones {
+.form-controls {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
-    margin-top: 10px;
+    margin-top: 20px;
+}
+
+#analyticsForm input[type="text"],
+#analyticsForm input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#addFilter {
+    padding: 10px 15px;
+    background-color: #12A0F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+#analyticsForm button[type="submit"] {
+    padding: 10px 15px;
+    background-color: #12A0F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
 }
 
 #reportResults {
     margin-top: 20px;
 }
 
+/* Additional styles as needed */

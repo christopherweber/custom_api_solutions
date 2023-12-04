@@ -10,50 +10,27 @@
 <body>
 
 <main>
-    <button id="backToActions" onclick="goBack()">Back to Actions</button>
-    <section id="analytics-dashboard">
+    <div id="dashboard-header">
+        <button id="backToActions" onclick="goBack()">Back to Actions</button>
         <h1>Custom Analytics Dashboard</h1>
-        <form id="analyticsForm">
-            <div class="form-field">
-                <label for="authToken">Authorization Token:</label>
-                <input type="text" id="authToken" placeholder="Enter API key here" required>
-            </div>
-            <div class="form-field">
-                <label for="startDate">Start Date:</label>
-                <input type="date" id="startDate" required>
-            </div>
-            <div class="form-field">
-                <label for="endDate">End Date:</label>
-                <input type="date" id="endDate" required>
-            </div>
-            <div class="form-field">
-                <button type="button" id="toggleMilestone" onclick="toggleMilestoneField()">+</button>
-                <div id="milestoneField" style="display: none;">
-                    <label for="milestoneDropdown">Milestone:</label>
-                    <select id="milestoneDropdown">
-                        <option value="started">Started</option>
-                        <option value="detected">Detected</option>
-                        <option value="acknowledged">Acknowledged</option>
-                        <option value="investigating">Investigating</option>
-                        <option value="identified">Identified</option>
-                        <option value="mitigated">Mitigated</option>
-                        <option value="resolved">Resolved</option>
-                        <option value="postmortem_started">Postmortem Started</option>
-                        <option value="postmortem_completed">Postmortem Completed</option>
-                    </select>
-                    <button type="button" onclick="addMilestone()">Add</button>
-                </div>
-            </div>
-            <div id="selectedMilestones">
-                <!-- Selected milestones will be displayed here -->
-            </div>
-            <button type="submit">Fetch Data</button>
-        </form>
-        <div id="loadingMessage"></div>
-        <div id="successMessage"></div>
-        <button type="button" id="downloadCsv" style="display: none;">Download CSV</button>
-        <div id="reportResults"></div>
-    </section>
+        <button id="exportCsv" onclick="exportToCSV()">Export to CSV</button>
+    </div>
+
+    <form id="analyticsForm" class="form-controls">
+        <input type="text" id="authToken" placeholder="Authorization Token" required>
+        <input type="date" id="startDate" placeholder="Start Date" required>
+        <input type="date" id="endDate" placeholder="End Date" required>
+        <button type="button" id="addFilter" onclick="addFilter()">+ Add filter</button>
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="additionalFilters" style="display: none;">
+        <!-- Additional filters will be added here -->
+    </div>
+
+    <div id="reportResults">
+        <!-- Report results will go here -->
+    </div>
 </main>
 
 <script src="script.js" defer></script>

@@ -11,7 +11,7 @@
 
 <main>
     <div id="dashboard-header">
-        <button id="backToActions" onclick="goBack()">Back to Actions</button>
+        <button id="backToActions">Back to Actions</button>
         <h1>Custom Analytics Dashboard</h1>
     </div>
 
@@ -19,20 +19,19 @@
         <input type="text" id="authToken" placeholder="Authorization Token" required>
         <input type="date" id="startDate" placeholder="Start Date" required>
         <input type="date" id="endDate" placeholder="End Date" required>
-        <button type="button" id="addFilter">+ Add filter</button>
-
-        <button type="submit">Fetch data</button>
+        <button type="button" id="addFilterBtn">+ Add filter</button>
+        <button type="submit">Fetch Data</button>
     </form>
 
-    <div id="additionalFilters" style="display: none;">
+    <div id="filtersContainer" style="display: none;">
         <!-- Additional filters will be added here -->
     </div>
+
     <div id="reportResults">
-      <div class="csv-export">
-          <button id="exportCsv" style="display: none;" onclick="exportToCSV()">Export to CSV</button>
-      </div>
-      <!-- Data results will be inserted here by your JavaScript logic -->
-  </div>
+        <!-- Data results will be inserted here by your JavaScript logic -->
+    </div>
+
+    <button id="exportCsv" style="display: none;">Export to CSV</button>
 </main>
 
 <script src="script.js" defer></script>

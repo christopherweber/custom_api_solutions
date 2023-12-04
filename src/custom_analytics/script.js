@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   attachFormSubmitListener();
+  const addFilterBtn = document.getElementById('addFilter');
+  if (addFilterBtn) {
+      addFilterBtn.addEventListener('click', addFilter);
+  }
 });
 
 function goBack() {

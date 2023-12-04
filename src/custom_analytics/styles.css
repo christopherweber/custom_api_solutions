@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     background: #fff;
+    display: flex;
 }
 
 #toggleSidebar {
@@ -41,22 +42,25 @@ body {
 .main-content {
     flex-grow: 1;
     padding: 20px;
-    transition: padding-left 0.3s ease-in-out;
-    padding-left: 250px;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(250px); /* Initially positioned to the right of the sidebar */
 }
 
 .sidebar.collapsed + .main-content {
-    padding-left: 0;
+    transform: translateX(0); /* Align to the left when sidebar is collapsed */
 }
 
 #analytics-dashboard {
-    max-width: 600px;
-    margin: 20px auto;
+    max-width: 600px; /* Set the max width of the form */
+    margin: 0 auto; /* Center the form in the available main content space */
     padding: 15px;
     background: #2D394A;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+/* Other selectors from your previous CSS can go here */
+
 
 form input[type="text"], form select {
     width: 100%;

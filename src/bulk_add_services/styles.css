@@ -196,3 +196,12 @@ form small {
     margin-bottom: 10px; 
     line-height: 1.4; 
 }
+
+#errorMessage {
+    color: red; 
+    background-color: #ffdddd; 
+    border: 1px solid #ff0000; 
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px; 
+}

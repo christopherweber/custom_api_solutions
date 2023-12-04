@@ -109,7 +109,6 @@ function attachBulkServiceFormListener() {
             submitServices(authToken, services);
         }
 
-        // Clear form fields after submission
         form.reset();
         setFieldsRequired(true);
         serviceFieldsContainer.style.display = '';
@@ -133,11 +132,11 @@ function attachCSVUploadListener() {
             setFieldsRequired(false);
             serviceFieldsContainer.style.display = 'none';
             csvUploadMessage.textContent = 'CSV file uploaded successfully.';
-            csvUploadMessage.style.display = 'block'; // Show the message
+            csvUploadMessage.style.display = 'block'; 
         } else {
             setFieldsRequired(true);
             serviceFieldsContainer.style.display = '';
-            csvUploadMessage.style.display = 'none'; // Hide the message
+            csvUploadMessage.style.display = 'none'; 
         }
     });
 }
@@ -212,15 +211,29 @@ function submitServices(authToken, services) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`Network response was not ok. Status: ${response.status}`);
+            return response.json().then(errData => {
+                throw new Error(errData.message || `Status: ${response.status}`);
+            });
         }
         return response.json();
     })
     .then(data => {
-        alert('Services added successfully');
+        if (data.statusCode !== 200) {
+            showError(data.message);
+        } else {
+            alert('Services added successfully');
+            showError('');
+        }
     })
     .catch(error => {
-        alert(`An error occurred: ${error.message}`);
+        showError(`An error occurred: ${error.message}`);
         console.error('Service addition failed:', error);
     });
+}
+
+
+function showError(message) {
+    var errorMessageDiv = document.getElementById('error-message');
+    errorMessageDiv.textContent = message; 
+    errorMessageDiv.style.display = 'block'; 
 }

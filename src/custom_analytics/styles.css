@@ -10,7 +10,7 @@ main {
 }
 
 #backToActions {
-    position: fixed;
+    position: absolute;
     top: 10px;
     right: 10px;
     padding: 10px;
@@ -19,6 +19,7 @@ main {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    z-index: 1000;
 }
 
 #backToActions:hover {
@@ -29,85 +30,68 @@ main {
     margin-bottom: 20px;
 }
 
-#analytics-dashboard form {
+#analytics-dashboard {
+    display: flex;
+    flex-direction: column;
     width: 100%;
 }
 
+#analyticsForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: #2D394A;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .form-field {
-    margin-bottom: 10px;
+    flex-basis: calc(33.333% - 20px); /* Adjust the percentage as per the number of fields per row */
+    display: flex;
+    flex-direction: column;
+    color: white;
 }
 
 #analyticsForm input[type="text"],
-#analyticsForm input[type="date"],
-#analyticsForm select,
-#analyticsForm button {
+#analyticsForm input[type="date"] {
     padding: 8px;
-    margin-right: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
 }
 
-#analyticsForm label {
-    display: inline-block;
-    margin-right: 10px;
-    color: #333;
-}
-
-#analyticsForm button {
+#toggleMilestone,
+#analyticsForm button[type="submit"],
+#downloadCsv {
+    padding: 10px 15px;
     background-color: #12A0F3;
     color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-#analyticsForm button:hover {
+#toggleMilestone:hover,
+#analyticsForm button[type="submit"]:hover,
+#downloadCsv:hover {
     background-color: #0F87C9;
 }
 
 #milestoneField {
+    display: none; /* Hide the milestone field by default */
+    flex-basis: 100%; /* Milestone field should take the full width when visible */
+}
+
+#selectedMilestones {
     display: flex;
-    align-items: center;
-}
-
-#toggleMilestone {
-    padding: 6px 10px;
-    background-color: #12A0F3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-#toggleMilestone:hover {
-    background-color: #0F87C9;
-}
-
-.selectedMilestone {
-    background-color: #EBEEF5;
-    padding: 5px;
-    margin-top: 5px;
-    border-radius: 4px;
-    display: inline-block;
-}
-
-#downloadCsv {
-    padding: 6px 10px;
-    background-color: #12A0F3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    display: none; /* Initially hidden */
-}
-
-#downloadCsv:hover {
-    background-color: #0F87C9;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
 }
 
 #reportResults {
     margin-top: 20px;
 }
-
 

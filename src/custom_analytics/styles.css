@@ -6,22 +6,39 @@ body {
 }
 
 main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     padding: 20px;
+    width: 100%; /* Full width */
 }
 
-#dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+#analytics-dashboard {
+    max-width: 600px; /* Adjust to your preference */
+    margin: 20px auto;
+}
+
+#analyticsForm {
+    background: #2D394A; /* Dark background for the form */
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.form-field input[type="text"],
+.form-field input[type="date"],
+.form-field select {
     width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-#backToActions,
-#exportCsv {
-    padding: 10px 15px;
+.form-field label {
+    color: white;
+    font-weight: 600;
+}
+
+button {
+    padding: 6px 10px;
+    font-size: 0.8em;
     background-color: #12A0F3;
     color: white;
     border: none;
@@ -30,65 +47,13 @@ main {
     transition: background-color 0.3s ease;
 }
 
-#backToActions:hover,
-#exportCsv:hover {
-    background-color: #0F87C9;
-}
-
-#analyticsForm {
-    background: #2D394A;
-    padding: 20px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    width: calc(100% - 40px); /* Adjust width based on padding */
-    box-sizing: border-box;
-}
-
-.form-field {
-    width: 100%;
-    margin-bottom: 10px;
-    color: white;
-}
-
-.form-field input[type="text"],
-.form-field input[type="date"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.form-field label {
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-#addFilter {
-    padding: 10px 15px;
-    background-color: #12A0F3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-#addFilter:hover {
-    background-color: #0F87C9;
-}
-
-#searchButton {
-    padding: 10px 15px;
-    background-color: #12A0F3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-}
-
-
-
 button:hover {
-    background-color: #0F87C9; 
+    background-color: #0F87C9;
+}
+
+#exportCsv {
+    display: none; /* Initially hidden */
+    margin-left: auto; /* Align to the right */
 }
 
 #reportResults {

@@ -7,14 +7,10 @@ function goBack() {
 }
 
 function addFilter() {
-  const additionalFilters = document.getElementById('additionalFilters');
-  // If the additional filters section is hidden, show it
-  if (additionalFilters.style.display === 'none') {
-      additionalFilters.style.display = 'block';
-  }
-
-  // Create a new filter for the milestone dropdown
+  // Assuming you want to add a milestone filter
+  const filtersContainer = document.getElementById('additionalFilters'); // Make sure this container exists in your HTML
   const newFilter = document.createElement('div');
+  newFilter.className = 'form-field';
   newFilter.innerHTML = `
       <label for="milestoneDropdown">Milestone:</label>
       <select id="milestoneDropdown">
@@ -29,8 +25,9 @@ function addFilter() {
           <option value="postmortem_completed">Postmortem Completed</option>
       </select>
   `;
-  additionalFilters.appendChild(newFilter);
+  filtersContainer.appendChild(newFilter);
 }
+
 
 
 // function toggleMilestoneField() {

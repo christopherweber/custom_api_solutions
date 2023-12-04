@@ -15,6 +15,14 @@ function goBack() {
   window.history.back(); // Go back to the previous page
 }
 
+function showMilestoneField() {
+  const milestoneField = document.getElementById('milestoneField');
+  milestoneField.style.display = 'block'; // Show the milestone field
+  const addMilestoneButton = document.getElementById('addMilestone');
+  addMilestoneButton.style.display = 'none'; // Hide the "+" button
+}
+
+
 // function setupSidebarToggle() {
 //   const toggleButton = document.getElementById('toggleSidebar');
 //   toggleButton.addEventListener('click', toggleSidebar);

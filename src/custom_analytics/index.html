@@ -9,46 +9,36 @@
 </head>
 <body>
 
-<!-- Toggle button for the sidebar -->
-<!-- <button id="toggleSidebar" onclick="toggleSidebar()">❮</button> -->
-
-
-<!-- The sidebar container where the sidebar.html content will be loaded -->
-<!-- <div id="sidebar" class="sidebar"></div> -->
-
-
-<main>
-  <button id="backToActions" onclick="goBack()">Back to Actions</button>
+  <main>
+    <button id="backToActions" onclick="goBack()">Back to Actions</button>
     <section id="analytics-dashboard">
         <h1>Custom Analytics Dashboard</h1>
         <p>Select parameters and generate reports for incidents.</p>
         <form id="analyticsForm">
             <label for="authToken">Authorization Token:</label>
             <input type="text" id="authToken" placeholder="Enter API key here" required>
+            
             <label for="startDate">Start Date:</label>
             <input type="date" id="startDate" required>
 
             <label for="endDate">End Date:</label>
             <input type="date" id="endDate" required>
-            <label> Current milestone is one of (This field is currently deprecated):</label>
-            <div id="milestoneSelection">
-              <select id="milestoneDropdown">
-                <option value="started">Started</option>
-                <option value="detected">Detected</option>
-                <option value="acknowledged">Acknowledged</option>
-                <option value="investigating">Investigating</option>
-                <option value="identified">Identified</option>
-                <option value="mitigated">Mitigated</option>
-                <option value="resolved">Resolved</option>
-                <option value="postmortem_started">Postmortem Started</option>
-                <option value="postmortem_completed">Postmortem Completed</option>
-              </select>
-              <button type="button" onclick="addMilestone()">Add</button>
+            
+            <button type="button" id="addMilestone" onclick="showMilestoneField()">+</button>
+            <div id="milestoneField" style="display:none;">
+                <label for="milestoneDropdown">Milestone:</label>
+                <select id="milestoneDropdown">
+                    <option value="started">Started</option>
+                    <option value="detected">Detected</option>
+                    <option value="acknowledged">Acknowledged</option>
+                    <option value="investigating">Investigating</option>
+                    <option value="identified">Identified</option>
+                    <option value="mitigated">Mitigated</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="postmortem_started">Postmortem Started</option>
+                    <option value="postmortem_completed">Postmortem Completed</option>
+                </select>
             </div>
-            <div id="selectedMilestones">
-              <!-- Selected milestones will be displayed here -->
-            </div>
-                      
 
             <button type="submit">Fetch Data</button>
         </form>

@@ -226,6 +226,7 @@ function submitServices(authToken, services) {
         }
     })
     .catch(error => {
+        alert(`An error occurred: ${error.message}`);
         showError(`An error occurred: ${error.message}`);
         console.error('Service addition failed:', error);
     });
@@ -234,6 +235,10 @@ function submitServices(authToken, services) {
 
 function showError(message) {
     var errorMessageDiv = document.getElementById('error-message');
-    errorMessageDiv.textContent = message; 
-    errorMessageDiv.style.display = 'block'; 
+    if (errorMessageDiv) {
+        errorMessageDiv.textContent = message;
+        errorMessageDiv.style.display = 'block'; 
+    } else {
+        console.error('Error message div not found');
+    }
 }

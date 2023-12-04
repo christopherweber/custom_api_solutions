@@ -5,6 +5,7 @@ body {
     display: flex;
     flex-direction: row;
     min-height: 100vh;
+    background: #fff; /* Assuming a light background for the whole page */
 }
 
 #toggleSidebar {
@@ -16,8 +17,7 @@ body {
     background-color: #f0f0f0;
     border: none;
     padding: 10px;
-    border-radius: 0 0 5px 0;
-    transition: background-color 0.3s;
+    font-size: 24px;
 }
 
 #toggleSidebar:hover {
@@ -34,7 +34,7 @@ body {
     background-color: #EBEEF5;
     padding: 10px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out;
 }
 
 .sidebar.collapsed {
@@ -42,30 +42,27 @@ body {
 }
 
 .main-content {
-    flex-grow: 1;
+    transition: margin-left 0.3s ease-in-out;
     padding: 20px;
-    transition: all 0.3s ease-in-out;
+    margin-left: 250px; /* Space for the sidebar */
+    width: calc(100% - 250px); /* Adjust width when sidebar is visible */
 }
 
-.main-content > #analytics-dashboard {
-    margin-left: 250px;
+.sidebar.collapsed + .main-content {
+    margin-left: 0; /* Remove margin when sidebar is collapsed */
+    width: 100%; /* Full width when sidebar is collapsed */
 }
 
-.sidebar.collapsed + .main-content > #analytics-dashboard {
-    margin-left: 0;
-}
-
-#analytics-dashboard h1 {
-    margin-bottom: 0;
+#analytics-dashboard {
+    max-width: 600px; /* Adjust width of the form container */
+    margin: 0 auto; /* Centering the form container */
 }
 
 #analytics-dashboard form {
-    max-width: 400px;
     padding: 15px;
     background: #2D394A;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
 }
 
 form input[type="text"],
@@ -105,10 +102,6 @@ form button[type="submit"] {
     margin-top: 10px;
 }
 
-#data-display {
-    margin-top: 20px;
-}
-
 aside a {
     color: #333;
     text-decoration: none;
@@ -134,6 +127,10 @@ nav li a {
 
 nav li a:hover {
     background-color: #f4f4f4;
+}
+
+#data-display {
+    margin-top: 20px;
 }
 
 #app {

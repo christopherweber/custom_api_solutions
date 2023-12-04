@@ -1,5 +1,5 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     background: #fff;
@@ -36,7 +36,7 @@ main {
 }
 
 #analyticsForm {
-    background-color: #f4f4f4;
+    background: #2D394A;
     padding: 20px;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -45,18 +45,23 @@ main {
 }
 
 .form-field {
-    margin-bottom: 10px;
     width: 100%;
+    margin-bottom: 10px;
+    color: white;
 }
 
 .form-field input[type="text"],
-.form-field input[type="date"],
-.form-field select {
-    width: calc(100% - 22px); /* Adjust width based on padding and border */
+.form-field input[type="date"] {
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    margin-right: 10px;
+    box-sizing: border-box;
+}
+
+.form-field label {
+    font-weight: 600;
+    margin-bottom: 5px;
 }
 
 #addFilter {
@@ -80,8 +85,10 @@ main {
     border-radius: 4px;
 }
 
-#searchButton:hover {
-    background-color: #0F87C9;
+
+
+button:hover {
+    background-color: #0F87C9; 
 }
 
 #reportResults {
@@ -89,9 +96,18 @@ main {
 }
 
 #reportResults .csv-export {
-    display: none; /* Initially hidden */
+    display: none; 
     justify-content: flex-end;
     padding-bottom: 10px;
 }
 
-/* Additional styles as needed */
+button {
+    padding: 6px 10px; 
+    font-size: 0.8em; 
+    background-color: #12A0F3; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

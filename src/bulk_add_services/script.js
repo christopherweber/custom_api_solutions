@@ -226,7 +226,7 @@ function submitServices(authToken, services) {
         }
     })
     .catch(error => {
-        alert(`An error occurred: ${error.message}`);
+        //alert(`An error occurred: ${error.message}`);
         showError(`An error occurred: ${error.message}`);
         console.error('Service addition failed:', error);
     });

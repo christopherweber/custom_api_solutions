@@ -197,7 +197,7 @@ form small {
     line-height: 1.4; 
 }
 
-#errorMessage {
+#error-message {
     color: red; 
     background-color: #ffdddd; 
     border: 1px solid #ff0000; 

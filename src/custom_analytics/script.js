@@ -1,12 +1,48 @@
- document.addEventListener('DOMContentLoaded', () => {
-     fetch('../sidebar.html')
-       .then(response => response.text())
-       .then(data => {
-         document.getElementById('sidebar-placeholder').innerHTML = data;
-        attachFormSubmitListener();
-       })
-       .catch(error => console.error('Error loading the sidebar:', error));
-   });
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('../sidebar.html')
+    .then(response => response.text())
+    .then(data => {
+      // Set the inner HTML of the sidebar
+      document.getElementById('sidebar').innerHTML = data;
+
+      // Attach form submit listener and other necessary event listeners
+      attachFormSubmitListener();
+
+      // Setup the sidebar toggle button now that the sidebar content is loaded
+      setupSidebarToggle();
+    })
+    .catch(error => console.error('Error loading the sidebar:', error));
+});
+
+function setupSidebarToggle() {
+  const toggleButton = document.getElementById('toggleSidebar');
+  toggleButton.addEventListener('click', toggleSidebar);
+
+  // Initialize sidebar state based on localStorage or default to shown
+  const sidebarState = localStorage.getItem('sidebarState') || 'shown';
+  setSidebarState(sidebarState);
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('collapsed');
+  const isCollapsed = sidebar.classList.contains('collapsed');
+  localStorage.setItem('sidebarState', isCollapsed ? 'collapsed' : 'shown');
+  document.getElementById('toggleSidebar').textContent = isCollapsed ? '❯' : '❮';
+}
+
+function setSidebarState(state) {
+  const sidebar = document.getElementById('sidebar');
+  const toggleButton = document.getElementById('toggleSidebar');
+  if (state === 'collapsed') {
+    sidebar.classList.add('collapsed');
+    toggleButton.textContent = '❯';
+  } else {
+    sidebar.classList.remove('collapsed');
+    toggleButton.textContent = '❮';
+  }
+}
+
   
   function attachFormSubmitListener() {
     const form = document.getElementById('analyticsForm');

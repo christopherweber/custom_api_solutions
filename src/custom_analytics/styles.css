@@ -142,3 +142,8 @@ form label {
     width: 200px;
     height: 150px;
 }
+
+.sidebar.collapsed + .main-content {
+    padding-left: 0;
+  }
+  

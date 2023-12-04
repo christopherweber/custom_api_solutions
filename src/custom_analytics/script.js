@@ -25,11 +25,14 @@ function setupSidebarToggle() {
 
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
+  const dashboard = document.getElementById('analytics-dashboard');
   sidebar.classList.toggle('collapsed');
-  const isCollapsed = sidebar.classList.contains('collapsed');
-  localStorage.setItem('sidebarState', isCollapsed ? 'collapsed' : 'shown');
-  document.getElementById('toggleSidebar').textContent = isCollapsed ? '❯' : '❮';
+  dashboard.classList.toggle('collapsed'); // Toggle the class on the dashboard as well
+
+  // Update the text of the toggle button based on the state
+  document.getElementById('toggleSidebar').textContent = sidebar.classList.contains('collapsed') ? '❯' : '❮';
 }
+
 
 function setSidebarState(state) {
   const sidebar = document.getElementById('sidebar');

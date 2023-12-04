@@ -1,71 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('../sidebar.html')
-    .then(response => response.text())
-    .then(data => {
-      // Set the inner HTML of the sidebar
-      document.getElementById('sidebar').innerHTML = data;
-
-      attachFormSubmitListener();
-      // setupSidebarToggle();
-    })
-    .catch(error => console.error('Error loading the sidebar:', error));
+  attachFormSubmitListener();
 });
 
 function goBack() {
-  window.history.back(); // Go back to the previous page
+  window.history.back();
 }
 
-function showMilestoneField() {
+function toggleMilestoneField() {
   const milestoneField = document.getElementById('milestoneField');
-  milestoneField.style.display = 'block'; // Show the milestone field
-  const addMilestoneButton = document.getElementById('addMilestone');
-  addMilestoneButton.style.display = 'none'; // Hide the "+" button
+  const toggleButton = document.getElementById('toggleMilestone');
+  if (milestoneField.style.display === 'none') {
+      milestoneField.style.display = 'block';
+      toggleButton.textContent = '-';
+  } else {
+      milestoneField.style.display = 'none';
+      toggleButton.textContent = '+';
+  }
 }
 
+function addMilestone() {
+  const select = document.getElementById('milestoneDropdown');
+  const selectedValue = select.value;
+  const selectedDiv = document.getElementById('selectedMilestones');
+  if (Array.from(selectedDiv.children).some(child => child.textContent.includes(selectedValue))) {
+      alert('This milestone is already selected.');
+      return;
+  }
+  const newMilestone = document.createElement('span');
+  newMilestone.textContent = selectedValue;
+  newMilestone.classList.add('selectedMilestone');
+  selectedDiv.appendChild(newMilestone);
+  const removeBtn = document.createElement('button');
+  removeBtn.textContent = 'Remove';
+  removeBtn.onclick = function() { newMilestone.remove(); };
+  newMilestone.appendChild(removeBtn);
+}
 
-// function setupSidebarToggle() {
-//   const toggleButton = document.getElementById('toggleSidebar');
-//   toggleButton.addEventListener('click', toggleSidebar);
-
-//   const sidebarState = localStorage.getItem('sidebarState') || 'shown';
-//   setSidebarState(sidebarState);
-// }
-
-// function toggleSidebar() {
-//   const sidebar = document.getElementById('sidebar');
-//   const dashboard = document.getElementById('analytics-dashboard');
-//   sidebar.classList.toggle('collapsed');
-//   dashboard.classList.toggle('collapsed'); 
-
-
-//   document.getElementById('toggleSidebar').textContent = sidebar.classList.contains('collapsed') ? '❯' : '❮';
-// }
-
-
-// function setSidebarState(state) {
-//   const sidebar = document.getElementById('sidebar');
-//   const toggleButton = document.getElementById('toggleSidebar');
-//   if (state === 'collapsed') {
-//     sidebar.classList.add('collapsed');
-//     toggleButton.textContent = '❯';
-//   } else {
-//     sidebar.classList.remove('collapsed');
-//     toggleButton.textContent = '❮';
-//   }
-// }
-
-  
-  function attachFormSubmitListener() {
-    const form = document.getElementById('analyticsForm');
-    form.addEventListener('submit', function(event) {
+function attachFormSubmitListener() {
+  const form = document.getElementById('analyticsForm');
+  form.addEventListener('submit', function(event) {
       event.preventDefault();
       const authToken = document.getElementById('authToken').value;
       const startDate = document.getElementById('startDate').value;
       const endDate = document.getElementById('endDate').value;
       showLoadingMessage();
       fetchAnalyticsData(authToken, startDate, endDate);
-    });
-  }
+  });
+}
 
     let currentPage = 1;
     const pageSize = 10; // Adjust based on your API's pagination

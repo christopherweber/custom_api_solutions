@@ -1,50 +1,132 @@
 body {
-    font-family: Arial, sans-serif;
-  }
-  
-  #app {
-    margin: 20px;
-  }
-  
-  label {
-    margin-top: 10px;
-    display: inline-block;
-  }
-  
-  input, select, button {
-    margin-bottom: 10px;
-  }
-  
-  #data-display {
-    margin-top: 20px;
-  }
-
-  body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: row;
+    min-height: 100vh;
 }
 
-aside {
-    width: 20%;
-    overflow-y: scroll;
+#toggleSidebar {
     position: fixed;
-    height: 100vh;
-    background-color: #EBEEF5; /* Updated background color */
+    top: 0;
+    left: 0;
+    z-index: 100;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: none;
     padding: 10px;
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 5px 0;
+    transition: background-color 0.3s;
 }
 
-/* Style for hyperlinks to remove purple color and underline */
+#toggleSidebar:hover {
+    background-color: #e0e0e0;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    background-color: #EBEEF5;
+    padding: 10px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.collapsed {
+    transform: translateX(-250px);
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+.sidebar.collapsed + .main-content {
+    margin-left: 0;
+}
+
+#analytics-dashboard {
+    position: relative;
+    padding-left: 280px;
+}
+
+#analytics-dashboard h1 {
+    margin-bottom: 0;
+}
+
+#analytics-dashboard form {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    max-width: 400px;
+    padding: 15px;
+    background: #2D394A;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: white;
+}
+
+form input[type="text"],
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form button, #btnNodeJs, #btnPython {
+    padding: 6px 10px;
+    font-size: 0.8em;
+    border: none;
+    border-radius: 4px;
+    background-color: #12A0F3;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #0F87C9;
+}
+
+form button[type="submit"] {
+    margin-top: 10px;
+}
+
+.fields {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+#milestoneFilter {
+    width: 200px;
+    height: 150px;
+}
+
 aside a {
-    color: #333; /* Text color */
-    text-decoration: none; /* Removes underline */
+    color: #333;
+    text-decoration: none;
     word-break: break-word;
 }
 
 aside a:hover {
-    color: #555; /* Text color on hover */
+    color: #555;
 }
 
 nav ul {
@@ -64,135 +146,7 @@ nav li a:hover {
     background-color: #f4f4f4;
 }
 
-main {
-    margin-left: 22%;
-    padding: 20px;
+#data-display {
+    margin-top: 20px;
 }
 
-#ranalytics-dashboard h1 {
-    margin-bottom: 0;
-}
-
-#ranalytics-dashboard form {
-    margin-top: 10px; 
-    margin-left: 0px;
-}
-
-form {
-    max-width: 400px;
-    margin: 20px auto;
-    padding: 15px;
-    background: #2D394A;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-form input[type="text"],
-form select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    font-size: 0.9em;
-    color: white;
-}
-
-#analytics-dashboard form button, #btnNodeJs, #btnPython {
-    padding: 6px 10px; /* Smaller padding for a smaller button */
-    font-size: 0.8em; /* Smaller font size for the text inside the button */
-    border: none;
-    border-radius: 4px;
-    background-color: #12A0F3; /* New button background color */
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-
-.fields {
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-    margin-top: 10px;
-}
-
-#analytics-dashboard form button:hover {
-    background-color: #0F87C9; /* Darker shade on hover */
-}
-
-#analytics-dashboard form button[type="submit"] {
-    margin-top: 10px;
-}
-
-
-.fields {
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-    margin-top: 10px;
-}
-  
-#milestoneFilter {
-    width: 200px;
-    height: 150px;
-}
-
-.sidebar.collapsed + .main-content {
-    padding-left: 0;
-  }
-  
-.sidebar {
-    width: 250px; 
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .sidebar.collapsed {
-    transform: translateX(-250px); 
-  }
-  
-
-  #toggleSidebar {
-    position: fixed;
-    top: 10px; 
-    left: 250px; 
-    z-index: 100;
-    cursor: pointer;
-    background-color: #f0f0f0; 
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
-  
-  #toggleSidebar:hover {
-    background-color: #e0e0e0; 
-  }
-  
-
-  .main-content {
-    padding-left: 250px; 
-    transition: padding-left 0.3s ease-in-out;
-  }
-  
-
-  .sidebar.collapsed + .main-content {
-    padding-left: 0;
-  }
-  
-  body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: row;
-  }
-  

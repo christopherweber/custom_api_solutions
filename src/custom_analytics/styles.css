@@ -18,60 +18,24 @@ main {
 #analyticsForm {
     padding: 20px;
     border-radius: 5px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    gap: 10px;
 }
 
 .form-field input[type="text"],
 .form-field input[type="date"],
 .form-field select {
-    padding: 8px;
-    margin: 0;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
 .form-field label {
-    color: #333;
-    margin-right: 5px;
-    font-size: 0.9em;
+    color: white;
+    font-weight: 600;
 }
 
-#filtersContainer {
-    padding-left: 19px;
-}
-
-#retrospectiveFilter {
-    order: -1;
-    margin-right: auto;
-}
-
-#addFilterBtn {
-    height: 38px;
-    align-self: center;
-}
-
-#additionalFilters {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-#backToActions {
-    color: #333;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    font-family: inherit;
-    font-size: inherit;
-    text-decoration: underline;
-    margin-right: 10px;
-}
-
-#dashboard-header button {
+button {
     padding: 6px 10px;
     font-size: 0.8em;
     background-color: #12A0F3;
@@ -82,8 +46,20 @@ main {
     transition: background-color 0.3s ease;
 }
 
-#dashboard-header button:hover {
+
+button:hover {
     background-color: #0F87C9;
+}
+
+#backToActions {
+    color: #333;
+    text-decoration: underline;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 #reportResults {
@@ -91,40 +67,127 @@ main {
 }
 
 #reportResults .csv-export {
-    display: none;
+    display: none; 
     justify-content: flex-end;
     padding-bottom: 10px;
 }
 
-#exportCsv {
-    background-color: #cf3a72;
+button {
+    padding: 6px 10px; 
+    font-size: 0.8em; 
+    background-color: #12A0F3; 
     color: white;
-    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
+    transition: background-color 0.3s ease;
 }
 
-#severityFilter {
-    width: 100%; /* Adjust width as needed */
+#filtersContainer {
+    padding-left: 19px;
+}
+
+
+#retrospectiveFilter {
+    width: 400px;
     background-color: #f2f2f2; 
     border: 1px solid #007bff; 
     padding: 4px 8px;
     color: #333; 
-    cursor: text;
+    cursor: pointer;
+    display: block;
+    margin-left: 0;
 }
 
-#retrospectiveFilter:hover,
-#severityFilter:hover {
+#retrospectiveFilter:hover {
     background-color: #e9ecef; 
 }
 
-#currentMilestoneText {
-    font-size: 0.9em;
-    margin-top: 10px;
-    color: #333; /* Making sure the text is visible */
+#exportCsv {
+    background-color: #cf3a72; 
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    position: fixed; 
+    top: 10px; 
+    right: 10px; 
+    z-index: 1000; 
+  }
+  
+#severityFilter {
+    width: 60px;
 }
+
+/* ...existing styles... */
+
+.form-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-field label {
+    margin-right: 5px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+#severityFilter {
+    width: auto; /* Adjust width to fit content */
+    flex-grow: 0; /* Prevent the input from growing */
+    padding: 4px 8px;
+    background-color: #f2f2f2;
+    border: 1px solid #007bff;
+    color: #333;
+    cursor: text;
+    margin-left: 10px;
+}
+
+#filterPillsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; /* Adjust the gap between pills as needed */
+    margin-top: 10px;
+}
+
+.filter-pill {
+    background-color: #e9ecef;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* Spacing between text and button */
+}
+
+.filter-pill button {
+    background-color: transparent;
+    border: none;
+    color: #cf3a72;
+    cursor: pointer;
+    font-size: 1.2em; /* Makes the '×' larger */
+}
+
+.filter-pill button:hover {
+    color: #a83250;
+}
+
+/* Adjustments for responsiveness if needed */
+@media (max-width: 768px) {
+    .form-field {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-field label {
+        margin-bottom: 5px;
+    }
+
+    #severityFilter {
+        width: 100%;
+    }
+}
+

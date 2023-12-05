@@ -32,6 +32,24 @@ function handleSubmit(event) {
   fetchAnalyticsData(authToken, startDate, endDate, true);
 }
 
+function createPill(label, value) {
+  const pill = document.createElement('div');
+  pill.className = 'filter-pill';
+  
+  const textSpan = document.createElement('span');
+  textSpan.textContent = `${label}: ${value}`;
+  pill.appendChild(textSpan);
+
+  const closeButton = document.createElement('button');
+  closeButton.textContent = '×';
+  closeButton.onclick = function() {
+    pill.remove();
+    handleFilterChange();
+  };
+
+  pill.appendChild(closeButton);
+  filterPillsContainer.appendChild(pill);
+}
 
 let dataFetched = false;
 
@@ -44,10 +62,14 @@ function handleFilterChange() {
     const milestoneValue = retrospectiveFilterDropdown.value;
     const milestoneTextContent = milestoneValue === 'all' ? 'All' : 'Retrospective Completed';
 
-    // Update the text content to reflect the current filters
     currentMilestoneText.textContent = `Current milestone is ${milestoneTextContent} AND current severity is ${severityValue}`;
 
-    // Fetch new data if it has been fetched once already
+    filterPillsContainer.innerHTML = ''; 
+    createPill('Milestone', milestoneTextContent);
+    if (severityValue && severityValue !== 'All') {
+      createPill('Severity', severityValue);
+    }
+
     if (dataFetched) {
         const authToken = document.getElementById('authToken').value;
         const startDate = document.getElementById('startDate').value;

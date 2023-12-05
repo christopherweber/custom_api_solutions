@@ -32,48 +32,36 @@ function handleSubmit(event) {
   fetchAnalyticsData(authToken, startDate, endDate, true);
 }
 
-function handleFilterChange() {
-  if (dataFetched) {
-      const authToken = document.getElementById('authToken').value;
-      const startDate = document.getElementById('startDate').value;
-      const endDate = document.getElementById('endDate').value;
-      fetchAnalyticsData(authToken, startDate, endDate, false);
-  }
-}
 
 let dataFetched = false;
 
 const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
-const currentMilestoneText = document.getElementById('currentMilestoneText'); 
-const milestoneText = document.getElementById('milestoneText'); 
 const severityFilterInput = document.getElementById('severityFilter');
-const severityValue = severityFilterInput ? severityFilterInput.value : 'All'; // Default to 'All' if no input
+const currentMilestoneText = document.getElementById('currentMilestoneText'); 
 
+function handleFilterChange() {
+    const severityValue = severityFilterInput ? severityFilterInput.value : 'All';
+    const milestoneValue = retrospectiveFilterDropdown.value;
+    const milestoneTextContent = milestoneValue === 'all' ? 'All' : 'Retrospective Completed';
 
+    // Update the text content to reflect the current filters
+    currentMilestoneText.textContent = `Current milestone is ${milestoneTextContent} AND current severity is ${severityValue}`;
+
+    // Fetch new data if it has been fetched once already
+    if (dataFetched) {
+        const authToken = document.getElementById('authToken').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        fetchAnalyticsData(authToken, startDate, endDate);
+    }
+}
+
+// Attach the event listeners to the filters
 if (retrospectiveFilterDropdown) {
-    retrospectiveFilterDropdown.addEventListener('change', handleFilterChange, (event) => {
-      event.preventDefault();
-
-      const milestoneValue = retrospectiveFilterDropdown.value;
-      const milestoneTextContent = milestoneValue === 'all' ? 'All' : 'Retrospective Completed';
-      currentMilestoneText.textContent = `Current milestone is ${milestoneTextContent} AND current severity is ${severityValue}`;
-
-
-      if (milestoneValue === 'completed') {
-          milestoneText.style.display = 'block'; 
-          document.getElementById('additionalFilters').classList.add('active');
-      } else {
-          milestoneText.style.display = 'none'; 
-          document.getElementById('additionalFilters').classList.remove('active');
-      }
-        
-      if (dataFetched) {
-          const authToken = document.getElementById('authToken').value;
-          const startDate = document.getElementById('startDate').value;
-          const endDate = document.getElementById('endDate').value;
-          fetchAnalyticsData(authToken, startDate, endDate);
-      }
-    });
+    retrospectiveFilterDropdown.addEventListener('change', handleFilterChange);
+}
+if (severityFilterInput) {
+    severityFilterInput.addEventListener('input', handleFilterChange);
 }
 
 

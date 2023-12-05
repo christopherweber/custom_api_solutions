@@ -84,13 +84,25 @@ function displayReportResults(data) {
   const table = createTable(data.incidents);
   reportResultsElement.appendChild(table);
 
-  // Check if a CSV download button already exists
-  let downloadCsvButton = document.getElementById('exportCsv');
-  if (!downloadCsvButton) {
-      // If it doesn't exist, create and show the CSV download button
-      createAndShowDownloadButton(data.csv);
-  }
+  // Create and show the CSV download button
+  const downloadCsvButton = document.createElement('button');
+  downloadCsvButton.id = 'exportCsv';
+  downloadCsvButton.textContent = 'Export to CSV';
+  downloadCsvButton.addEventListener('click', function() {
+      if (!data.csv) {
+          alert('No CSV data available to download.');
+          return;
+      }
+      const blob = new Blob([data.csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'analytics-report.csv';
+      link.click();
+  });
+
+  reportResultsElement.appendChild(downloadCsvButton);
 }
+
 
 function createAndShowDownloadButton(csvData) {
   // Create a new button element for downloading CSV

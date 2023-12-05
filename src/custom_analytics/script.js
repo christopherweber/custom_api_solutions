@@ -44,7 +44,22 @@ function handleSubmit(event) {
   fetchAnalyticsData(authToken, startDate, endDate);
 }
 
+let dataFetched = false;
+
+const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
+if (retrospectiveFilterDropdown) {
+    retrospectiveFilterDropdown.addEventListener('change', () => {
+        if (dataFetched) {
+            const authToken = document.getElementById('authToken').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            fetchAnalyticsData(authToken, startDate, endDate);
+        }
+    });
+}
+
 function fetchAnalyticsData(authToken, startDate, endDate) {
+
   showLoadingMessage();
   fetch('/.netlify/functions/getAnalytics', {
     method: 'POST',
@@ -53,6 +68,7 @@ function fetchAnalyticsData(authToken, startDate, endDate) {
   })
   .then(response => response.json())
   .then(data => {
+    dataFetched = true;
     hideLoadingMessage();
     displayReportResults(data);
   })

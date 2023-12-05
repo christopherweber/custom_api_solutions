@@ -43,6 +43,29 @@
             <button type="submit">Submit</button>
         </form>
     </section>
+    <div class="code-snippets">
+        <div class="button-container">
+            <p>Prefer to execute the code manually? Simply choose a language, and you can copy and paste the code into your editor. 
+                <br>The code snippets will automatically update to reflect any changes you make in the form fields above.
+            </p>
+            <button id="btnNodeJs">Node / Axios</button>
+            <button id="btnPython">Python</button>
+        </div>
+        <div id="copyMessage" style="display: none"></div>
+        <div id="nodeJsSnippetContainer" class="snippet-container">
+            <button class="copy-btn" onclick="copyToClipboard('codeSnippetNodeJs')">Copy Code</button>
+            <pre id="codeSnippetNodeJs" class="code-snippet"><code>
+                // Node.js code here
+            </code></pre>
+        </div>
+        
+        <div id="pythonSnippetContainer" class="snippet-container" style="display:none;">
+            <button class="copy-btn" onclick="copyToClipboard('codeSnippetPython')">Copy Code</button>
+            <pre id="codeSnippetPython" class="code-snippet"><code>
+                // Python code here
+            </code></pre>
+        </div>
+    </div>
 </main>
 </body>
 </html>

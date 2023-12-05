@@ -4,27 +4,26 @@ const moment = require('moment');
 require('moment-duration-format');
 
 exports.handler = async function(event) {
-    try {
-        const { authToken, startDate, endDate } = JSON.parse(event.body);
-        let allIncidents = [];
-        let page = 1;
-        let hasMore = true;
+  try {
+    const { authToken, startDate, endDate } = JSON.parse(event.body);
+    let allIncidents = [];
+    let page = 1;
+    let incidentsCount;
 
-        // Paginate through all incidents
-        while (hasMore) {
-            const incidentsUrl = `https://api.firehydrant.io/v1/incidents?start_date=${startDate}&end_date=${endDate}&page=${page}`;
-            const response = await axios.get(incidentsUrl, {
-                headers: { 'Authorization': authToken }
-            });
+    do {
+        const incidentsUrl = `https://api.firehydrant.io/v1/incidents?start_date=${startDate}&end_date=${endDate}&page=${page}`;
+        const response = await axios.get(incidentsUrl, {
+            headers: { 'Authorization': authToken }
+        });
 
-            const incidents = response.data.data || [];
-            if (incidents.length === 0) {
-                hasMore = false;
-            } else {
-                allIncidents = allIncidents.concat(incidents);
-                page++;
-            }
+        const incidents = response.data.data || [];
+        incidentsCount = incidents.length;
+        allIncidents = allIncidents.concat(incidents);
+
+        if (incidentsCount === 20) {
+            page++;
         }
+    } while (incidentsCount === 20);
 
         // Fetch additional details for each incident
         const fetchPromises = allIncidents.map(async (incident) => {

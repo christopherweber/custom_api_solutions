@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (backToActionsBtn) {
     backToActionsBtn.addEventListener('click', goBack);
   }
-
+  
+  
   const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
   if (retrospectiveFilterDropdown) {
     retrospectiveFilterDropdown.addEventListener('change', () => {
@@ -57,6 +58,7 @@ function fetchAnalyticsData(authToken, startDate, endDate) {
 }
 
 function addFilter() {
+  console.log("Add filter button clicked");
   const filtersContainer = document.getElementById('additionalFilters');
   filtersContainer.style.display = 'block';
   const newFilter = document.createElement('div');

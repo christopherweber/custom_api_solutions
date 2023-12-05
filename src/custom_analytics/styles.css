@@ -50,6 +50,7 @@ button {
 #backToActions {
     color: #333;
     text-decoration: none;
+    background-color: none;
 }
 
 button:hover {

@@ -89,45 +89,24 @@ function displayReportResults(data) {
   downloadCsvButton.id = 'exportCsv';
   downloadCsvButton.textContent = 'Export to CSV';
 
-  // Append the button to the DOM
-  reportResultsElement.appendChild(downloadCsvButton);
+  // Locate the dashboard-header element
+  const headerElement = document.getElementById('dashboard-header');
+
+  // Append the button to the dashboard-header element
+  headerElement.appendChild(downloadCsvButton);
 
   // Add event listener to the newly created button
-  function displayReportResults(data) {
-    const reportResultsElement = document.getElementById('reportResults');
-    reportResultsElement.innerHTML = ''; // Clear previous results
-
-    if (!data || !data.incidents || data.incidents.length === 0) {
-        reportResultsElement.textContent = 'No data to display.';
-        return;
-    }
-
-    // Create and display the table with incident data
-    const table = createTable(data.incidents);
-    reportResultsElement.appendChild(table);
-
-    // Create and show the CSV download button at the top of the window
-    createAndShowDownloadButtonAtTop(data.csv);
-}
-
-function createAndShowDownloadButtonAtTop(csvData) {
-    const headerElement = document.getElementById('dashboard-header');
-    const downloadCsvButton = document.createElement('button');
-    downloadCsvButton.id = 'exportCsv';
-    downloadCsvButton.textContent = 'Export to CSV';
-    downloadCsvButton.addEventListener('click', function() {
-        if (!csvData) {
-            alert('No CSV data available to download.');
-            return;
-        }
-        const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'analytics-report.csv';
-        link.click();
-    });
-
-    headerElement.appendChild(downloadCsvButton); // Append the button to the header element
+  downloadCsvButton.addEventListener('click', function() {
+      if (!data.csv) {
+          alert('No CSV data available to download.');
+          return;
+      }
+      const blob = new Blob([data.csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'analytics-report.csv';
+      link.click();
+  });
 }
 
   

@@ -89,43 +89,61 @@ function hideLoadingMessage() {
   loadingElement.style.display = 'none';
 }
 
+let currentDisplayedIncidents = []; // Global variable to store currently displayed incidents
+
 function displayReportResults(data) {
-  const reportResultsElement = document.getElementById('reportResults');
-  reportResultsElement.innerHTML = '';
+    const reportResultsElement = document.getElementById('reportResults');
+    reportResultsElement.innerHTML = '';
 
-  if (!data || !data.incidents || data.incidents.length === 0) {
-    reportResultsElement.textContent = 'No data to display.';
-    return;
-  }
-
-  const retrospectiveFilter = document.getElementById('retrospectiveFilter').value;
-  
-  let filteredIncidents = data.incidents;
-  if (retrospectiveFilter === 'completed') {
-    filteredIncidents = data.incidents.filter(incident => incident.current_milestone === 'postmortem_completed');
-  }
-
-  const table = createTable(filteredIncidents);
-  reportResultsElement.appendChild(table);
-
-  const downloadCsvButton = document.createElement('button');
-  downloadCsvButton.id = 'exportCsv';
-  downloadCsvButton.textContent = 'Export to CSV';
-
-  const headerElement = document.getElementById('dashboard-header');
-  headerElement.appendChild(downloadCsvButton);
-
-  downloadCsvButton.addEventListener('click', function() {
-    if (!data.csv) {
-      alert('No CSV data available to download.');
-      return;
+    if (!data || !data.incidents || data.incidents.length === 0) {
+        reportResultsElement.textContent = 'No data to display.';
+        return;
     }
-    const blob = new Blob([data.csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'analytics-report.csv';
-    link.click();
+
+    const retrospectiveFilter = document.getElementById('retrospectiveFilter').value;
+    if (retrospectiveFilter === 'completed') {
+        currentDisplayedIncidents = data.incidents.filter(incident => incident.current_milestone === 'postmortem_completed');
+    } else {
+        currentDisplayedIncidents = data.incidents;
+    }
+
+    const table = createTable(currentDisplayedIncidents);
+    reportResultsElement.appendChild(table);
+
+    const downloadCsvButton = document.createElement('button');
+    downloadCsvButton.id = 'exportCsv';
+    downloadCsvButton.textContent = 'Export to CSV';
+
+    const headerElement = document.getElementById('dashboard-header');
+    headerElement.appendChild(downloadCsvButton);
+
+    downloadCsvButton.addEventListener('click', function() {
+        if (!currentDisplayedIncidents || currentDisplayedIncidents.length === 0) {
+            alert('No CSV data available to download.');
+            return;
+        }
+        const csvData = generateCsvFromIncidents(currentDisplayedIncidents);
+        const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'analytics-report.csv';
+        link.click();
+    });
+}
+
+function generateCsvFromIncidents(incidents) {
+  const headers = ['id', 'name', 'created_at', 'started_at', 'severity', 'priority', 'tags', 'custom_fields', 'opened_by', 'milestones', 'impacts', 'lessons_learned', 'current_milestone', 'incident_url', 'report_id'];
+  let csvContent = headers.join(',') + '\n'; // CSV header row
+
+  incidents.forEach(incident => {
+      let row = headers.map(header => {
+          let value = incident[header];
+          return typeof value === 'string' ? `"${value.replace(/"/g, '""')}"` : value; // Handle values containing commas
+      }).join(',');
+      csvContent += row + '\n';
   });
+
+  return csvContent;
 }
 
 

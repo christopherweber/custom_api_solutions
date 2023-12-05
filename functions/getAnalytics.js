@@ -30,14 +30,12 @@ exports.handler = async function(event) {
             let lessonsLearned = 'N/A';
 
             if (incident.report_id) {
-                try {
-                    const retroResponse = await fetchRetrospective(incident.report_id, authToken);
-                    lessonsLearned = formatLessonsLearned(retroResponse.questions);
-                } catch (error) {
-                    console.error('Error fetching retrospective for report_id:', incident.report_id, error);
-                    lessonsLearned = 'Error fetching data';
-                }
-            }
+              const retroResponse = await fetchRetrospective(incident.report_id, authToken);
+              if (retroResponse) {
+                  lessonsLearned = formatLessonsLearned(retroResponse.questions);
+                  console.log(`Lessons learned for report ID ${incident.report_id}: `, lessonsLearned);
+              }
+          }
 
             // Format the incident data
             return {
@@ -79,12 +77,22 @@ exports.handler = async function(event) {
 };
 
 async function fetchRetrospective(reportId, authToken) {
-    const reportUrl = `https://api.firehydrant.io/v1/post_mortems/reports/${reportId}`;
-    const reportResponse = await axios.get(reportUrl, { headers: { 'Authorization': authToken } });
-    return reportResponse.data;
+  try {
+      const reportUrl = `https://api.firehydrant.io/v1/post_mortems/reports/${reportId}`;
+      const reportResponse = await axios.get(reportUrl, { headers: { 'Authorization': authToken } });
+      console.log(`Fetched retrospective for report ID ${reportId}: `, reportResponse.data);
+      return reportResponse.data;
+  } catch (error) {
+      console.error(`Error fetching retrospective for report ID ${reportId}: `, error);
+      return null; // Return null if there is an error
+  }
 }
 
 function formatLessonsLearned(questions) {
+  if (!questions || !Array.isArray(questions)) {
+    console.log('Invalid or empty questions array:', questions);
+    return 'N/A';
+}
     return questions
         .filter(question => question.title.toLowerCase().includes('lessons learned'))
         .map(question => question.body)

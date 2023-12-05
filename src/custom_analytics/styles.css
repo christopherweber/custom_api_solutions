@@ -16,7 +16,7 @@ main {
 }
 
 #analyticsForm {
-    background: #9fa5ad; /* Dark background for the form */
+    background: #b8bbbd; /* Dark background for the form */
     padding: 20px;
     border-radius: 5px;
 }
@@ -47,6 +47,10 @@ button {
     transition: background-color 0.3s ease;
 }
 
+#backToActions {
+    background-color: #b5b8ba;
+}
+
 button:hover {
     background-color: #0F87C9;
 }
@@ -71,3 +75,16 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+#exportCsv {
+    background-color: #cf3a72; /* Set the button color */
+    color: white; /* Set text color to white for better visibility */
+    padding: 10px 20px; /* Add some padding */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Optional: adds rounded corners */
+    cursor: pointer; /* Changes cursor to pointer on hover */
+    position: fixed; /* Position it relative to the viewport */
+    top: 10px; /* Distance from the top of the viewport */
+    right: 10px; /* Distance from the right of the viewport */
+    z-index: 1000; /* Ensure it's above other elements */
+  }

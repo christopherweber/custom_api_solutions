@@ -11,7 +11,9 @@
         "axios": ">=1.6.0",
         "csv-parse": "^5.5.2",
         "dotenv": "^16.0.1",
-        "json2csv": "^5.0.6"
+        "json2csv": "^5.0.6",
+        "moment": "^2.29.4",
+        "moment-duration-format": "^2.3.2"
     },
     "devDependencies": {
         "netlify-lambda": "^2.0.15"

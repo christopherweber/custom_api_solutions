@@ -93,44 +93,42 @@ function displayReportResults(data) {
   reportResultsElement.appendChild(downloadCsvButton);
 
   // Add event listener to the newly created button
-  downloadCsvButton.addEventListener('click', function() {
-      if (!data.csv) {
-          alert('No CSV data available to download.');
-          return;
-      }
-      const blob = new Blob([data.csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'analytics-report.csv';
-      link.click();
-  });
+  function displayReportResults(data) {
+    const reportResultsElement = document.getElementById('reportResults');
+    reportResultsElement.innerHTML = ''; // Clear previous results
+
+    if (!data || !data.incidents || data.incidents.length === 0) {
+        reportResultsElement.textContent = 'No data to display.';
+        return;
+    }
+
+    // Create and display the table with incident data
+    const table = createTable(data.incidents);
+    reportResultsElement.appendChild(table);
+
+    // Create and show the CSV download button at the top of the window
+    createAndShowDownloadButtonAtTop(data.csv);
 }
 
+function createAndShowDownloadButtonAtTop(csvData) {
+    const headerElement = document.getElementById('dashboard-header');
+    const downloadCsvButton = document.createElement('button');
+    downloadCsvButton.id = 'exportCsv';
+    downloadCsvButton.textContent = 'Export to CSV';
+    downloadCsvButton.addEventListener('click', function() {
+        if (!csvData) {
+            alert('No CSV data available to download.');
+            return;
+        }
+        const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'analytics-report.csv';
+        link.click();
+    });
 
-
-function createAndShowDownloadButton(csvData) {
-  // Create a new button element for downloading CSV
-  const downloadCsvButton = document.createElement('button');
-  downloadCsvButton.id = 'exportCsv';
-  downloadCsvButton.textContent = 'Export to CSV';
-  downloadCsvButton.addEventListener('click', function() {
-      if (!csvData) {
-          alert('No CSV data available to download.');
-          return;
-      }
-      // Create a Blob from the CSV data and trigger the download
-      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'analytics-report.csv';
-      link.click();
-  });
-
-  // Append the button to the report results element
-  const reportResultsElement = document.getElementById('reportResults');
-  reportResultsElement.appendChild(downloadCsvButton);
+    headerElement.appendChild(downloadCsvButton); // Append the button to the header element
 }
-
 
   
 function createTable(incidents) {

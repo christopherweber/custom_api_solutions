@@ -90,14 +90,25 @@ async function fetchRetrospective(reportId, authToken) {
 
 function formatLessonsLearned(questions) {
   if (!questions || !Array.isArray(questions)) {
-    console.log('Invalid or empty questions array:', questions);
-    return 'N/A';
+      console.log('Invalid or empty questions array:', questions);
+      return 'N/A';
+    }
+    console.log(questions)
+  return questions
+  .filter(question => question.title && question.title.toLowerCase().includes('lessons learned'))
+  .map(question => {
+    let lesson = '';
+    if (question.title) {
+      lesson += `Title: ${question.title}`;
+    }
+    if (question.body) {
+      lesson += `; Body: ${question.body}`;
+    }
+    return lesson;
+  })
+  .join('; ');
 }
-    return questions
-        .filter(question => question.title.toLowerCase().includes('lessons learned'))
-        .map(question => question.body)
-        .join(', ');
-}
+
 
 function formatCustomFields(fields) {
     if (!Array.isArray(fields)) {

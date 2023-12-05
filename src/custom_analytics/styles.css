@@ -16,8 +16,10 @@ main {
 }
 
 #analyticsForm {
+    display: flex;
     padding: 20px;
     border-radius: 5px;
+    align-items: flex-start;
 }
 
 .form-field input[type="text"],
@@ -97,7 +99,7 @@ button {
   }
 
   #retrospectiveFilter {
-    width: 40px;
+    width: 400px;
     background-color: #f2f2f2; /* Light grey background */
     border: 1px solid #007bff; /* Subtle blue border */
     padding: 4px 8px;
@@ -109,3 +111,8 @@ button {
     background-color: #e9ecef; /* Slightly darker on hover */
 }
 
+#additionalFilters {
+    width: 100%;
+    margin-top: 10px; /* Adjust spacing between fields */
+    padding-left: 0; /* Align to the left */
+}

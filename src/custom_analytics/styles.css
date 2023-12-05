@@ -51,11 +51,6 @@ button:hover {
     background-color: #0F87C9;
 }
 
-/* #exportCsv {
-    display: none; /* Initially hidden */
-    margin-left: auto; /* Align to the right */
-} */
-
 #reportResults {
     width: 100%;
 }

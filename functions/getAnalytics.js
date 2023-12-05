@@ -12,11 +12,13 @@ exports.handler = async function(event) {
 
         while (hasMore) {
             const incidentsUrl = `https://api.firehydrant.io/v1/incidents?start_date=${startDate}&end_date=${endDate}&page=${page}`;
+            console.log(`Fetching page ${page}: ${incidentsUrl}`); 
             const response = await axios.get(incidentsUrl, {
                 headers: { 'Authorization': authToken }
             });
 
             const incidents = response.data.data || [];
+            console.log(`Fetched ${incidents.length} incidents on page ${page}`);
             if (incidents.length === 0) {
                 hasMore = false;
             } else {
@@ -25,12 +27,15 @@ exports.handler = async function(event) {
             }
         }
 
-        const fetchPromises = allIncidents.map(async (incident) => {
-          let lessonsLearned = '';
-          if (incident.report_id) {
-            const retroResponse = await fetchRetrospective(incident.report_id, authToken);
-            lessonsLearned = formatLessonsLearned(retroResponse.questions);
-          }
+        console.log(`Total incidents fetched: ${allIncidents.length}`); // Log the total number of incidents fetched
+        console.log(allIncidents);
+
+        const formattedIncidents = await Promise.all(allIncidents.map(async incident => {
+            let lessonsLearned = '';
+            if (incident.report_id) {
+                const retroResponse = await fetchRetrospective(incident.report_id, authToken);
+                lessonsLearned = formatLessonsLearned(retroResponse.questions);
+            }
 
             return {
                 id: incident.id,
@@ -49,16 +54,14 @@ exports.handler = async function(event) {
                 incident_url: incident.incident_url,
                 report_id: incident.report_id
             };
-        });
-
-        const formattedIncidents = await Promise.all(fetchPromises);
+        }));
 
         const fields = ['id', 'name', 'created_at', 'started_at', 'severity', 'priority', 'tags', 'custom_fields', 'opened_by', 'milestones', 'impacts', 'lessons_learned', 'current_milestone', 'incident_url', 'report_id'];
         const csv = parse(formattedIncidents, { fields });
 
         return {
-          statusCode: 200,
-          body: JSON.stringify({ incidents: formattedIncidents, csv })
+            statusCode: 200,
+            body: JSON.stringify({ incidents: formattedIncidents, csv })
         };
     } catch (error) {
         console.error('Error:', error);

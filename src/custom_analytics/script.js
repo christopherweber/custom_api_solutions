@@ -20,16 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   
-  const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
-  if (retrospectiveFilterDropdown) {
-    retrospectiveFilterDropdown.addEventListener('change', () => {
-      // Call fetchAnalyticsData or equivalent function to fetch and display the filtered data
-      const authToken = document.getElementById('authToken').value;
-      const startDate = document.getElementById('startDate').value;
-      const endDate = document.getElementById('endDate').value;
-      fetchAnalyticsData(authToken, startDate, endDate);
-    });
-  }
+  // const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
+  // if (retrospectiveFilterDropdown) {
+  //   retrospectiveFilterDropdown.addEventListener('change', () => {
+  //     // Call fetchAnalyticsData or equivalent function to fetch and display the filtered data
+  //     const authToken = document.getElementById('authToken').value;
+  //     const startDate = document.getElementById('startDate').value;
+  //     const endDate = document.getElementById('endDate').value;
+  //     fetchAnalyticsData(authToken, startDate, endDate);
+  //   });
+  // }
 });
 
 function goBack() {

@@ -41,7 +41,17 @@ function handleSubmit(event) {
   const authToken = document.getElementById('authToken').value;
   const startDate = document.getElementById('startDate').value;
   const endDate = document.getElementById('endDate').value;
-  fetchAnalyticsData(authToken, startDate, endDate);
+  fetchAnalyticsData(authToken, startDate, endDate, true);
+}
+
+function handleFilterChange() {
+  // Check if data has been fetched
+  if (dataFetched) {
+      const authToken = document.getElementById('authToken').value;
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      fetchAnalyticsData(authToken, startDate, endDate, false);
+  }
 }
 
 let dataFetched = false;
@@ -58,23 +68,24 @@ if (retrospectiveFilterDropdown) {
     });
 }
 
-function fetchAnalyticsData(authToken, startDate, endDate) {
-
+function fetchAnalyticsData(authToken, startDate, endDate, updateFlag) {
   showLoadingMessage();
   fetch('/.netlify/functions/getAnalytics', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ authToken, startDate, endDate })
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ authToken, startDate, endDate })
   })
   .then(response => response.json())
   .then(data => {
-    dataFetched = true;
-    hideLoadingMessage();
-    displayReportResults(data);
+      if (updateFlag) {
+          dataFetched = true;
+      }
+      hideLoadingMessage();
+      displayReportResults(data);
   })
   .catch(error => {
-    console.error('Error:', error);
-    hideLoadingMessage();
+      console.error('Error:', error);
+      hideLoadingMessage();
   });
 }
 

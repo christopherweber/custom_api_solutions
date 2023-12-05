@@ -339,13 +339,12 @@ async function updateStatusPage(payload, authToken, statusPageId) {
 
 main();`;
 
-;
-    
-      const pythonSnippet = `Nothing yet`;
-      
-  
-    document.getElementById('codeSnippetNodeJs').textContent = nodeSnippet;
-    document.getElementById('codeSnippetPython').textContent = pythonSnippet;
+const nodeJsSnippetContainer = document.getElementById('codeSnippetNodeJs');
+if (nodeJsSnippetContainer) {
+    nodeJsSnippetContainer.textContent = nodeSnippet;
+} else {
+    console.error('Node.js snippet container not found');
+}
   }
 
 document.getElementById('apiKey').addEventListener('input', updateCodeSnippets);

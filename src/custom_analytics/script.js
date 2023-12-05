@@ -183,17 +183,25 @@ function displayReportResults(filteredIncidents) {
   headerElement.appendChild(downloadCsvButton);
 
   downloadCsvButton.addEventListener('click', function() {
-      if (!filteredIncidents || filteredIncidents.length === 0) {
-          alert('No CSV data available to download.');
-          return;
-      }
-      const csvData = generateCsvFromIncidents(filteredIncidents);
-      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'analytics-report.csv';
-      link.click();
-  });
+    if (!filteredIncidents || filteredIncidents.length === 0) {
+        alert('No CSV data available to download.');
+        return;
+    }
+    const csvData = generateCsvFromIncidents(filteredIncidents);
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+  
+    const filename = `analytics-report-${startDate}-to-${endDate}.csv`;
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename; 
+    link.click();
+});
+
 }
 
 

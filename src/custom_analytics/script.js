@@ -38,6 +38,7 @@ function goBack() {
 
 function handleSubmit(event) {
   event.preventDefault();
+  showLoadingMessage();
   const authToken = document.getElementById('authToken').value;
   const startDate = document.getElementById('startDate').value;
   const endDate = document.getElementById('endDate').value;
@@ -69,7 +70,7 @@ if (retrospectiveFilterDropdown) {
 }
 
 function fetchAnalyticsData(authToken, startDate, endDate, updateFlag) {
-  showLoadingMessage();
+  // showLoadingMessage();
   fetch('/.netlify/functions/getAnalytics', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -136,15 +136,15 @@ document.getElementById('btnNodeJs').addEventListener('click', function() {
     showPythonSnippet();
   });
   
-  function showNodeJsSnippet() {
-    document.getElementById('nodeJsSnippetContainer').style.display = 'block';
-    document.getElementById('pythonSnippetContainer').style.display = 'none';
-  }
+//   function showNodeJsSnippet() {
+//     document.getElementById('nodeJsSnippetContainer').style.display = 'block';
+//     document.getElementById('pythonSnippetContainer').style.display = 'none';
+//   }
   
-  function showPythonSnippet() {
-    document.getElementById('nodeJsSnippetContainer').style.display = 'none';
-    document.getElementById('pythonSnippetContainer').style.display = 'block';
-  }
+//   function showPythonSnippet() {
+//     document.getElementById('nodeJsSnippetContainer').style.display = 'none';
+//     document.getElementById('pythonSnippetContainer').style.display = 'block';
+//   }
 
   function updateCodeSnippets() {
     const authToken = document.getElementById('apiKey').value;
@@ -348,7 +348,7 @@ main();`;
     document.getElementById('codeSnippetPython').textContent = pythonSnippet;
   }
 
-  document.getElementById('apiKey').addEventListener('input', updateCodeSnippets);
+document.getElementById('apiKey').addEventListener('input', updateCodeSnippets);
 document.addEventListener('DOMContentLoaded', updateCodeSnippets);
 
 async function copyToClipboard(elementId) {
@@ -386,3 +386,8 @@ function resetForm() {
     document.getElementById('componentFieldsContainer').style.display = '';
     document.getElementById('csvUploadMessage').style.display = 'none';
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    attachFormSubmitListener();
+    updateCodeSnippets(); //
+  });

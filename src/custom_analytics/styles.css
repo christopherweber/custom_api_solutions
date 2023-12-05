@@ -16,10 +16,8 @@ main {
 }
 
 #analyticsForm {
-    display: flex;
     padding: 20px;
     border-radius: 5px;
-    align-items: flex-start;
 }
 
 .form-field input[type="text"],
@@ -111,8 +109,3 @@ button {
     background-color: #e9ecef; /* Slightly darker on hover */
 }
 
-#additionalFilters {
-    width: 100%;
-    margin-top: 10px; /* Adjust spacing between fields */
-    padding-left: 0; /* Align to the left */
-}

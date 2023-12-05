@@ -48,7 +48,8 @@ button {
 }
 
 #backToActions {
-    background-color: #b5b8ba;
+    color: #333;
+    text-decoration: none;
 }
 
 button:hover {

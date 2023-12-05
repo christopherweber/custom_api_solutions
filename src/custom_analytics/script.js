@@ -13,6 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (backToActionsBtn) {
     backToActionsBtn.addEventListener('click', goBack);
   }
+
+  const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
+  if (retrospectiveFilterDropdown) {
+    retrospectiveFilterDropdown.addEventListener('change', () => {
+      // Call fetchAnalyticsData or equivalent function to fetch and display the filtered data
+      const authToken = document.getElementById('authToken').value;
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      fetchAnalyticsData(authToken, startDate, endDate);
+    });
+  }
 });
 
 function goBack() {
@@ -73,42 +84,48 @@ function hideLoadingMessage() {
 
 function displayReportResults(data) {
   const reportResultsElement = document.getElementById('reportResults');
-  reportResultsElement.innerHTML = ''; // Clear previous results
+  reportResultsElement.innerHTML = '';
 
   if (!data || !data.incidents || data.incidents.length === 0) {
-      reportResultsElement.textContent = 'No data to display.';
-      return;
+    reportResultsElement.textContent = 'No data to display.';
+    return;
   }
 
-  // Create and display the table with incident data
-  const table = createTable(data.incidents);
+  const retrospectiveFilter = document.getElementById('retrospectiveFilter').value;
+  
+  let filteredIncidents = data.incidents;
+  if (retrospectiveFilter === 'completed') {
+    filteredIncidents = data.incidents.filter(incident => incident.current_milestone === 'postmortem_completed');
+  }
+
+  const table = createTable(filteredIncidents);
   reportResultsElement.appendChild(table);
 
-  // Create the CSV download button
   const downloadCsvButton = document.createElement('button');
   downloadCsvButton.id = 'exportCsv';
   downloadCsvButton.textContent = 'Export to CSV';
 
-  // Locate the dashboard-header element
   const headerElement = document.getElementById('dashboard-header');
-
-  // Append the button to the dashboard-header element
   headerElement.appendChild(downloadCsvButton);
 
-  // Add event listener to the newly created button
   downloadCsvButton.addEventListener('click', function() {
-      if (!data.csv) {
-          alert('No CSV data available to download.');
-          return;
-      }
-      const blob = new Blob([data.csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'analytics-report.csv';
-      link.click();
+    if (!data.csv) {
+      alert('No CSV data available to download.');
+      return;
+    }
+    const blob = new Blob([data.csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'analytics-report.csv';
+    link.click();
   });
 }
 
+
+function addFilter() {
+  const filtersContainer = document.getElementById('additionalFilters');
+  filtersContainer.style.display = filtersContainer.style.display === 'block' ? 'none' : 'block';
+}
   
 function createTable(incidents) {
   const table = document.createElement('table');

@@ -96,12 +96,12 @@ function formatLessonsLearned(questions) {
   return questions.map(question => {
       let lesson = '';
       if (question.title) {
-          lesson += `Title: ${question.title}`;
+          lesson += `Question: ${question.title}`;
       }
       if (question.body) {
-          lesson += `; Body: ${question.body}`;
+          lesson += `; Answer: ${question.body}`;
       } else {
-          lesson += '; Body: N/A';
+          lesson += '; Answer: N/A';
       }
       return lesson;
   }).join('; ');

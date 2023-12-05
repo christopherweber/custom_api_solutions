@@ -84,12 +84,16 @@ function displayReportResults(data) {
   const table = createTable(data.incidents);
   reportResultsElement.appendChild(table);
 
-  // Create and show the CSV download button
-  createAndShowDownloadButton(data.csv);
+  // Check if a CSV download button already exists
+  let downloadCsvButton = document.getElementById('exportCsv');
+  if (!downloadCsvButton) {
+      // If it doesn't exist, create and show the CSV download button
+      createAndShowDownloadButton(data.csv);
+  }
 }
 
 function createAndShowDownloadButton(csvData) {
-  const reportResultsElement = document.getElementById('reportResults');
+  // Create a new button element for downloading CSV
   const downloadCsvButton = document.createElement('button');
   downloadCsvButton.id = 'exportCsv';
   downloadCsvButton.textContent = 'Export to CSV';
@@ -98,6 +102,7 @@ function createAndShowDownloadButton(csvData) {
           alert('No CSV data available to download.');
           return;
       }
+      // Create a Blob from the CSV data and trigger the download
       const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
@@ -105,8 +110,11 @@ function createAndShowDownloadButton(csvData) {
       link.click();
   });
 
+  // Append the button to the report results element
+  const reportResultsElement = document.getElementById('reportResults');
   reportResultsElement.appendChild(downloadCsvButton);
 }
+
 
   
 function createTable(incidents) {

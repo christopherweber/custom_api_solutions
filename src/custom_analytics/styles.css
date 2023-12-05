@@ -98,14 +98,16 @@ button {
 
   #retrospectiveFilter {
     width: 400px;
-    background-color: #f2f2f2; /* Light grey background */
-    border: 1px solid #007bff; /* Subtle blue border */
+    background-color: #f2f2f2; 
+    border: 1px solid #007bff; 
     padding: 4px 8px;
-    color: #333; /* Dark text for contrast */
-    cursor: pointer; /* Indicate it's clickable */
+    color: #333; 
+    cursor: pointer;
+    display: block;
+    margin-left: 0;
 }
 
 #retrospectiveFilter:hover {
-    background-color: #e9ecef; /* Slightly darker on hover */
+    background-color: #e9ecef; 
 }
 

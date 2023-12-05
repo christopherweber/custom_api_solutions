@@ -12,19 +12,17 @@ exports.handler = async function(event) {
 
         while (hasMore) {
             const incidentsUrl = `https://api.firehydrant.io/v1/incidents?start_date=${startDate}&end_date=${endDate}&page=${page}`;
-            console.log(`Fetching page ${page}: ${incidentsUrl}`); 
+            console.log(`Fetching page ${page}: ${incidentsUrl}`);
             const response = await axios.get(incidentsUrl, {
                 headers: { 'Authorization': authToken }
             });
 
             const incidents = response.data.data || [];
-            console.log(`Fetched ${incidents.length} incidents on page ${page}`);
-            if (incidents.length === 0) {
+            if (incidents.length < 20) { // Assuming 20 is the max number of incidents per page
                 hasMore = false;
-            } else {
-                allIncidents = allIncidents.concat(incidents);
-                page++;
             }
+            allIncidents = allIncidents.concat(incidents);
+            page++;
         }
 
         console.log(`Total incidents fetched: ${allIncidents.length}`); // Log the total number of incidents fetched

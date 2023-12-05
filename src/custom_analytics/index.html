@@ -23,26 +23,22 @@
         <button type="submit">Fetch Data</button>
     </form>
 
-    <div id="loadingMessage" style="display: none;">
-      <!-- The loading message will be displayed here -->
-  </div>
+    <div id="loadingMessage" style="display: none;"></div>
 
     <div id="filtersContainer">
       <div id="additionalFilters" style="display: none;">
         <div class="form-field">
-          <label for="retrospectiveFilter">Filter by Retrospective Completed:</label>
+          <!-- <label for="retrospectiveFilter">Filter by Retrospective Completed:</label> -->
           <select id="retrospectiveFilter">
             <option value="all">All</option>
             <option value="completed">Retrospective Completed</option>
           </select>
-          <span id="milestoneText">Current milestone is Retrospective Completed</span>
+          <div id="currentMilestoneText"></div>
         </div>
       </div>
     </div>
 
-    <div id="reportResults">
-        <!-- Data results will be inserted here by your JavaScript logic -->
-    </div>
+    <div id="reportResults"></div>
 </main>
 
 <script src="script.js" defer></script>

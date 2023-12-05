@@ -57,27 +57,34 @@ function handleFilterChange() {
 let dataFetched = false;
 
 const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
-const milestoneText = document.getElementById('milestoneText');
+const currentMilestoneText = document.getElementById('currentMilestoneText'); // Ensure this exists in your HTML
+const milestoneText = document.getElementById('milestoneText'); // Ensure this exists in your HTML if it's a different element
+
 if (retrospectiveFilterDropdown) {
     retrospectiveFilterDropdown.addEventListener('change', (event) => {
       event.preventDefault();
 
-      if (retrospectiveFilterDropdown.value === 'completed') {
-          milestoneText.style.display = 'block';
+      const milestoneValue = retrospectiveFilterDropdown.value;
+      const milestoneTextContent = milestoneValue === 'all' ? 'All' : 'Retrospective Completed';
+      currentMilestoneText.textContent = `Current milestone is ${milestoneTextContent}`;
+
+      if (milestoneValue === 'completed') {
+          milestoneText.style.display = 'block'; // Show the milestone text if completed is selected
           document.getElementById('additionalFilters').classList.add('active');
       } else {
-          milestoneText.style.display = 'none';
+          milestoneText.style.display = 'none'; // Hide the milestone text if all is selected
           document.getElementById('additionalFilters').classList.remove('active');
       }
         
       if (dataFetched) {
-            const authToken = document.getElementById('authToken').value;
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            fetchAnalyticsData(authToken, startDate, endDate);
-        }
+          const authToken = document.getElementById('authToken').value;
+          const startDate = document.getElementById('startDate').value;
+          const endDate = document.getElementById('endDate').value;
+          fetchAnalyticsData(authToken, startDate, endDate);
+      }
     });
 }
+
 
 function fetchAnalyticsData(authToken, startDate, endDate, updateFlag) {
   showLoadingMessage();

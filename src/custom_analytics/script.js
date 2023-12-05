@@ -5,9 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const addFilterBtn = document.getElementById('addFilterBtn');
+  console.log(addFilterBtn)
   if (addFilterBtn) {
-    addFilterBtn.addEventListener('click', addFilter);
+    addFilterBtn.addEventListener('click', () => {
+      console.log("Add filter button clicked");
+    });
   }
+
 
   const backToActionsBtn = document.getElementById('backToActions');
   if (backToActionsBtn) {

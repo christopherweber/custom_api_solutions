@@ -58,7 +58,7 @@ let dataFetched = false;
 
 const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
 if (retrospectiveFilterDropdown) {
-    retrospectiveFilterDropdown.addEventListener('change', () => {
+    retrospectiveFilterDropdown.addEventListener('change', (event) => {
       event.preventDefault();
         if (dataFetched) {
             const authToken = document.getElementById('authToken').value;

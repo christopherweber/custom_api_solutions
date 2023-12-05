@@ -10,31 +10,37 @@ exports.handler = async function(event) {
         let page = 1;
         let hasMore = true;
 
+        // Paginate through all incidents
         while (hasMore) {
             const incidentsUrl = `https://api.firehydrant.io/v1/incidents?start_date=${startDate}&end_date=${endDate}&page=${page}`;
-            console.log(`Fetching page ${page}: ${incidentsUrl}`);
             const response = await axios.get(incidentsUrl, {
                 headers: { 'Authorization': authToken }
             });
 
             const incidents = response.data.data || [];
-            if (incidents.length < 20) { // Assuming 20 is the max number of incidents per page
+            if (incidents.length === 0) {
                 hasMore = false;
+            } else {
+                allIncidents = allIncidents.concat(incidents);
+                page++;
             }
-            allIncidents = allIncidents.concat(incidents);
-            page++;
         }
 
-        console.log(`Total incidents fetched: ${allIncidents.length}`); // Log the total number of incidents fetched
-        console.log(allIncidents);
+        // Fetch additional details for each incident
+        const fetchPromises = allIncidents.map(async (incident) => {
+            let lessonsLearned = 'N/A';
 
-        const formattedIncidents = await Promise.all(allIncidents.map(async incident => {
-            let lessonsLearned = '';
             if (incident.report_id) {
-                const retroResponse = await fetchRetrospective(incident.report_id, authToken);
-                lessonsLearned = formatLessonsLearned(retroResponse.questions);
+                try {
+                    const retroResponse = await fetchRetrospective(incident.report_id, authToken);
+                    lessonsLearned = formatLessonsLearned(retroResponse.questions);
+                } catch (error) {
+                    console.error('Error fetching retrospective for report_id:', incident.report_id, error);
+                    lessonsLearned = 'Error fetching data';
+                }
             }
 
+            // Format the incident data
             return {
                 id: incident.id,
                 name: incident.name,
@@ -52,7 +58,10 @@ exports.handler = async function(event) {
                 incident_url: incident.incident_url,
                 report_id: incident.report_id
             };
-        }));
+        });
+
+        // Resolve all promises and format the final incidents array
+        const formattedIncidents = await Promise.all(fetchPromises);
 
         const fields = ['id', 'name', 'created_at', 'started_at', 'severity', 'priority', 'tags', 'custom_fields', 'opened_by', 'milestones', 'impacts', 'lessons_learned', 'current_milestone', 'incident_url', 'report_id'];
         const csv = parse(formattedIncidents, { fields });
@@ -98,8 +107,8 @@ function formatMilestones(milestones) {
         return 'N/A';
     }
     return milestones.map(milestone => {
-        const readableDuration = formatDuration(milestone.duration);
-        return `${milestone.type} (duration: ${readableDuration || 'N/A'})`;
+        const durationFormatted = milestone.duration ? moment.duration(milestone.duration).format('d[d] h[h] m[m] s[s]') : 'N/A';
+        return `${milestone.type} (duration: ${durationFormatted})`;
     }).join('; ');
 }
 

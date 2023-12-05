@@ -1,3 +1,5 @@
+let dataFetched = false;
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('analyticsForm');
   if (form) {
@@ -23,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const currentMilestoneText = document.getElementById('currentMilestoneText'); 
 
   if (retrospectiveFilterDropdown && severityFilterInput && currentMilestoneText) {
-      // Attach event listeners for both filters
       retrospectiveFilterDropdown.addEventListener('change', handleFilterChange);
       severityFilterInput.addEventListener('input', handleFilterChange);
   }
@@ -80,35 +81,19 @@ function updateFilterText() {
   currentMilestoneText.textContent = `Current milestone is ${milestoneTextContent} AND current severity is ${severityValue}`;
 }
 
-
-
-xButton.addEventListener('click', function() {
-  removePill(pillType); 
-  pill.remove(); 
-});
-
-
-let dataFetched = false;
-
 const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
 const severityFilterInput = document.getElementById('severityFilter');
 const currentMilestoneText = document.getElementById('currentMilestoneText'); 
 
 function handleFilterChange() {
-  const severityValue = severityFilterInput ? severityFilterInput.value : 'All';
-  const milestoneValue = retrospectiveFilterDropdown.value;
-  const milestoneTextContent = milestoneValue === 'all' ? 'All' : 'Retrospective Completed';
 
-  // Update the text content to reflect the current filters
-  currentMilestoneText.textContent = `Current milestone is ${milestoneTextContent} AND current severity is ${severityValue}`;
-
-  // Fetch new data if it has been fetched once already
   if (dataFetched) {
       const authToken = document.getElementById('authToken').value;
       const startDate = document.getElementById('startDate').value;
       const endDate = document.getElementById('endDate').value;
       fetchAnalyticsData(authToken, startDate, endDate);
   }
+  updateFilterText()
 }
 
 // Attach the event listeners to the filters

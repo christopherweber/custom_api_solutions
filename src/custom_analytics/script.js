@@ -45,7 +45,10 @@ function handleSubmit(event) {
 
 function createPill(filterType, value) {
   const pillContainer = document.getElementById('filterPillsContainer');
-  if (!pillContainer) return; 
+  if (!pillContainer) {
+      console.error('Pill container not found');
+      return;
+  }
 
   const pill = document.createElement('span');
   pill.textContent = `${filterType}: ${value} `;
@@ -61,6 +64,7 @@ function createPill(filterType, value) {
   pill.appendChild(xButton);
   pillContainer.appendChild(pill);
 }
+
 
 function removePill(filterType, pill) {
   if (filterType === 'severity') {
@@ -105,19 +109,19 @@ function handleFilterChange() {
 
   document.getElementById('filterPillsContainer').innerHTML = '';
 
-
+  filterPillsContainer.innerHTML = ''; 
   createPill('Milestone', milestoneTextContent);
-  if (severityValue !== 'All') {
+  if (severityValue && severityValue !== 'All') {
       createPill('Severity', severityValue);
   }
 }
 
 // Attach the event listeners to the filters
 if (retrospectiveFilterDropdown) {
-    retrospectiveFilterDropdown.addEventListener('change', handleFilterChange);
+  retrospectiveFilterDropdown.addEventListener('change', handleFilterChange);
 }
 if (severityFilterInput) {
-    severityFilterInput.addEventListener('input', handleFilterChange);
+  severityFilterInput.addEventListener('input', handleFilterChange);
 }
 
 

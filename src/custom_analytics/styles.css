@@ -145,11 +145,12 @@ button {
     margin-left: 10px;
 }
 
-#filterPillsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px; /* Adjust the gap between pills as needed */
-    margin-top: 10px;
+.filter-pill {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
 }
 
 .pill-remove-button {

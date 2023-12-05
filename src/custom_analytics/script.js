@@ -110,49 +110,62 @@ function createAndShowDownloadButton(csvData) {
 
   
 function createTable(incidents) {
-    const table = document.createElement('table');
-    table.setAttribute('border', '1');
-    const thead = document.createElement('thead');
-    const tbody = document.createElement('tbody');
+  const table = document.createElement('table');
+  table.setAttribute('border', '1');
+  const thead = document.createElement('thead');
+  const tbody = document.createElement('tbody');
 
-    const headers = ['id', 'name', 'created_at', 'started_at', 'severity', 'priority', 'tags', 'custom_fields', 'opened_by', 'milestones', 'impacts', 'lessons_learned'];
-    const headerRow = document.createElement('tr');
-    headers.forEach(headerText => {
+  // Add new headers for the additional fields
+  const headers = [
+      'id', 
+      'name', 
+      'created_at', 
+      'started_at', 
+      'severity', 
+      'priority', 
+      'tags', 
+      'custom_fields', 
+      'opened_by', 
+      'milestones', 
+      'impacts', 
+      'lessons_learned',
+      'current_milestone', // New field
+      'incident_url',      // New field
+      'report_id'          // New field
+  ];
+
+  const headerRow = document.createElement('tr');
+  headers.forEach(headerText => {
       const header = document.createElement('th');
       header.textContent = headerText;
       headerRow.appendChild(header);
-    });
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
 
-    incidents.forEach(incident => {
-        const row = document.createElement('tr');
-        headers.forEach(header => {
-            const cell = document.createElement('td');
+  incidents.forEach(incident => {
+      const row = document.createElement('tr');
+      headers.forEach(header => {
+          const cell = document.createElement('td');
+          if (header === 'incident_url') {
+              // For URLs, create a hyperlink
+              const link = document.createElement('a');
+              link.href = incident[header];
+              link.textContent = incident[header];
+              link.target = '_blank';
+              cell.appendChild(link);
+          } else {
+              cell.textContent = incident[header] || 'N/A';
+          }
+          row.appendChild(cell);
+      });
+      tbody.appendChild(row);
+  });
 
-            if (header === 'milestones') {
-                const text = incident[header] || 'N/A';
-                cell.textContent = text.length > 30 ? text.substring(0, 27) + '...' : text;
-                cell.style.cursor = 'pointer';
-                cell.onclick = function() {
-                    if (cell.textContent.endsWith('...')) {
-                        cell.textContent = incident[header];
-                    } else {
-                        cell.textContent = text.substring(0, 27) + '...';
-                    }
-                };
-            } else {
-                cell.textContent = incident[header] || 'N/A';
-            }
-
-            row.appendChild(cell);
-        });
-        tbody.appendChild(row);
-    });
-
-    table.appendChild(tbody);
-    return table;
+  table.appendChild(tbody);
+  return table;
 }
+
   
   document.getElementById('downloadCsv').addEventListener('click', function() {
     if (!csvData) {

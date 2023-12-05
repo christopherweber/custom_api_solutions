@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (addFilterBtn) {
     addFilterBtn.addEventListener('click', () => {
       console.log("Add filter button clicked");
+      addFilter()
     });
   }
 

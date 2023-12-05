@@ -32,24 +32,46 @@ function handleSubmit(event) {
   fetchAnalyticsData(authToken, startDate, endDate, true);
 }
 
-function createPill(label, value) {
-  const pill = document.createElement('div');
+function createPill(filterType, value) {
+  const pill = document.createElement('span');
+  pill.textContent = `${filterType}: ${value}`;
   pill.className = 'filter-pill';
-  
-  const textSpan = document.createElement('span');
-  textSpan.textContent = `${label}: ${value}`;
-  pill.appendChild(textSpan);
 
-  const closeButton = document.createElement('button');
-  closeButton.textContent = '×';
-  closeButton.onclick = function() {
-    pill.remove();
-    handleFilterChange();
+  const xButton = document.createElement('button');
+  xButton.textContent = '×';
+  xButton.className = 'pill-remove-button';
+  xButton.onclick = function() {
+      removePill(filterType);
+      pill.remove();
   };
 
-  pill.appendChild(closeButton);
-  filterPillsContainer.appendChild(pill);
+  pill.appendChild(xButton);
+
+  const pillContainer = document.getElementById('filterPillsContainer');
+  pillContainer.appendChild(pill);
 }
+
+function removePill(filterType) {
+  if (filterType === 'severity') {
+      document.getElementById('severityFilter').value = ''; 
+  } else if (filterType === 'retrospective') {
+      document.getElementById('retrospectiveFilter').value = 'all'; 
+  }
+
+  const authToken = document.getElementById('authToken').value;
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+  fetchAnalyticsData(authToken, startDate, endDate);
+
+  handleFilterChange();
+}
+
+
+xButton.addEventListener('click', function() {
+  removePill(pillType); 
+  pill.remove(); 
+});
+
 
 let dataFetched = false;
 

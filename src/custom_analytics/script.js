@@ -153,8 +153,7 @@ function addFilter() {
 
 function showLoadingMessage() {
   const loadingElement = document.getElementById('loadingMessage');
-  loadingElement.textContent = 'Loading... Please wait.';
-  loadingElement.style.display = 'block';
+  loadingElement.style.display = 'flex';
 }
 
 function hideLoadingMessage() {

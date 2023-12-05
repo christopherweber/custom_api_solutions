@@ -18,24 +18,60 @@ main {
 #analyticsForm {
     padding: 20px;
     border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
 }
 
 .form-field input[type="text"],
 .form-field input[type="date"],
 .form-field select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 8px;
+    margin: 0;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
 .form-field label {
-    color: white;
-    font-weight: 600;
+    color: #333;
+    margin-right: 5px;
+    font-size: 0.9em;
 }
 
-button {
+#filtersContainer {
+    padding-left: 19px;
+}
+
+#retrospectiveFilter {
+    order: -1;
+    margin-right: auto;
+}
+
+#addFilterBtn {
+    height: 38px;
+    align-self: center;
+}
+
+#additionalFilters {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#backToActions {
+    color: #333;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    text-decoration: underline;
+    margin-right: 10px;
+}
+
+#dashboard-header button {
     padding: 6px 10px;
     font-size: 0.8em;
     background-color: #12A0F3;
@@ -46,20 +82,8 @@ button {
     transition: background-color 0.3s ease;
 }
 
-
-button:hover {
+#dashboard-header button:hover {
     background-color: #0F87C9;
-}
-
-#backToActions {
-    color: #333;
-    text-decoration: underline;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    font-family: inherit;
-    font-size: inherit;
 }
 
 #reportResults {
@@ -67,55 +91,40 @@ button:hover {
 }
 
 #reportResults .csv-export {
-    display: none; 
+    display: none;
     justify-content: flex-end;
     padding-bottom: 10px;
 }
 
-button {
-    padding: 6px 10px; 
-    font-size: 0.8em; 
-    background-color: #12A0F3; 
+#exportCsv {
+    background-color: #cf3a72;
     color: white;
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
 }
 
-#filtersContainer {
-    padding-left: 19px;
-}
-
-
-#retrospectiveFilter {
-    width: 400px;
+#severityFilter {
+    width: 100%; /* Adjust width as needed */
     background-color: #f2f2f2; 
     border: 1px solid #007bff; 
     padding: 4px 8px;
     color: #333; 
-    cursor: pointer;
-    display: block;
-    margin-left: 0;
+    cursor: text;
 }
 
-#retrospectiveFilter:hover {
+#retrospectiveFilter:hover,
+#severityFilter:hover {
     background-color: #e9ecef; 
 }
 
-#exportCsv {
-    background-color: #cf3a72; 
-    color: white; 
-    padding: 10px 20px; 
-    border: none; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    position: fixed; 
-    top: 10px; 
-    right: 10px; 
-    z-index: 1000; 
-  }
-  
-#severityFilter {
-    width: 60px;
+#currentMilestoneText {
+    font-size: 0.9em;
+    margin-top: 10px;
+    color: #333; /* Making sure the text is visible */
 }

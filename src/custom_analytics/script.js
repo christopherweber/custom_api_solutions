@@ -57,10 +57,20 @@ function handleFilterChange() {
 let dataFetched = false;
 
 const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
+const milestoneText = document.getElementById('milestoneText');
 if (retrospectiveFilterDropdown) {
     retrospectiveFilterDropdown.addEventListener('change', (event) => {
       event.preventDefault();
-        if (dataFetched) {
+
+      if (retrospectiveFilterDropdown.value === 'completed') {
+          milestoneText.style.display = 'block';
+          document.getElementById('additionalFilters').classList.add('active');
+      } else {
+          milestoneText.style.display = 'none';
+          document.getElementById('additionalFilters').classList.remove('active');
+      }
+        
+      if (dataFetched) {
             const authToken = document.getElementById('authToken').value;
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;

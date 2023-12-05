@@ -16,7 +16,6 @@ main {
 }
 
 #analyticsForm {
-    background: #b8bbbd; /* Dark background for the form */
     padding: 20px;
     border-radius: 5px;
 }
@@ -85,14 +84,29 @@ button {
 }
 
 #exportCsv {
-    background-color: #cf3a72; /* Set the button color */
-    color: white; /* Set text color to white for better visibility */
-    padding: 10px 20px; /* Add some padding */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Optional: adds rounded corners */
-    cursor: pointer; /* Changes cursor to pointer on hover */
-    position: fixed; /* Position it relative to the viewport */
-    top: 10px; /* Distance from the top of the viewport */
-    right: 10px; /* Distance from the right of the viewport */
-    z-index: 1000; /* Ensure it's above other elements */
+    background-color: #cf3a72; 
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    position: fixed; 
+    top: 10px; 
+    right: 10px; 
+    z-index: 1000; 
   }
+
+  #retrospectiveFilter {
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #f2f2f2; 
+    border: 2px solid #007bff; 
+    padding: 5px 10px;
+    color: #333; 
+    cursor: pointer; 
+}
+
+#retrospectiveFilter:hover {
+    background-color: #e9ecef; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}

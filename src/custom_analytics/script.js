@@ -13,23 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-
   const backToActionsBtn = document.getElementById('backToActions');
   if (backToActionsBtn) {
     backToActionsBtn.addEventListener('click', goBack);
   }
   
-  
-  // const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
-  // if (retrospectiveFilterDropdown) {
-  //   retrospectiveFilterDropdown.addEventListener('change', () => {
-  //     // Call fetchAnalyticsData or equivalent function to fetch and display the filtered data
-  //     const authToken = document.getElementById('authToken').value;
-  //     const startDate = document.getElementById('startDate').value;
-  //     const endDate = document.getElementById('endDate').value;
-  //     fetchAnalyticsData(authToken, startDate, endDate);
-  //   });
-  // }
 });
 
 function goBack() {
@@ -45,7 +33,6 @@ function handleSubmit(event) {
 }
 
 function handleFilterChange() {
-  // Check if data has been fetched
   if (dataFetched) {
       const authToken = document.getElementById('authToken').value;
       const startDate = document.getElementById('startDate').value;
@@ -57,22 +44,26 @@ function handleFilterChange() {
 let dataFetched = false;
 
 const retrospectiveFilterDropdown = document.getElementById('retrospectiveFilter');
-const currentMilestoneText = document.getElementById('currentMilestoneText'); // Ensure this exists in your HTML
-const milestoneText = document.getElementById('milestoneText'); // Ensure this exists in your HTML if it's a different element
+const currentMilestoneText = document.getElementById('currentMilestoneText'); 
+const milestoneText = document.getElementById('milestoneText'); 
+const severityFilterInput = document.getElementById('severityFilter');
+const severityValue = severityFilterInput ? severityFilterInput.value : 'All'; // Default to 'All' if no input
+
 
 if (retrospectiveFilterDropdown) {
-    retrospectiveFilterDropdown.addEventListener('change', (event) => {
+    retrospectiveFilterDropdown.addEventListener('change', handleFilterChange, (event) => {
       event.preventDefault();
 
       const milestoneValue = retrospectiveFilterDropdown.value;
       const milestoneTextContent = milestoneValue === 'all' ? 'All' : 'Retrospective Completed';
-      currentMilestoneText.textContent = `Current milestone is ${milestoneTextContent}`;
+      currentMilestoneText.textContent = `Current milestone is ${milestoneTextContent} AND current severity is ${severityValue}`;
+
 
       if (milestoneValue === 'completed') {
-          milestoneText.style.display = 'block'; // Show the milestone text if completed is selected
+          milestoneText.style.display = 'block'; 
           document.getElementById('additionalFilters').classList.add('active');
       } else {
-          milestoneText.style.display = 'none'; // Hide the milestone text if all is selected
+          milestoneText.style.display = 'none'; 
           document.getElementById('additionalFilters').classList.remove('active');
       }
         
@@ -98,8 +89,12 @@ function fetchAnalyticsData(authToken, startDate, endDate, updateFlag) {
       if (updateFlag) {
           dataFetched = true;
       }
+      const severityFilterValue = document.getElementById('severityFilter') ? document.getElementById('severityFilter').value : '';
+      const retrospectiveFilterValue = document.getElementById('retrospectiveFilter').value;
+      
+      const filteredData = applyFilters(data.incidents, severityFilterValue, retrospectiveFilterValue);
       hideLoadingMessage();
-      displayReportResults(data);
+      displayReportResults(filteredData);
   })
   .catch(error => {
       console.error('Error:', error);
@@ -107,21 +102,35 @@ function fetchAnalyticsData(authToken, startDate, endDate, updateFlag) {
   });
 }
 
-function addFilter() {
-  console.log("Add filter button clicked");
-  const filtersContainer = document.getElementById('additionalFilters');
-  filtersContainer.style.display = 'block';
-  const newFilter = document.createElement('div');
-  newFilter.className = 'form-field';
-  newFilter.innerHTML = `
-    <label for="milestoneDropdown">Milestone:</label>
-    <select id="milestoneDropdown">
-      <option value="started">Started</option>
-      // Add other options as needed
-    </select>
-  `;
-  filtersContainer.appendChild(newFilter);
+function applyFilters(incidents, severity, retrospective) {
+  return incidents.filter(incident => {
+      const severityMatch = !severity || incident.severity === severity;
+      const retrospectiveMatch = retrospective === 'all' || (retrospective === 'completed' && incident.current_milestone === 'postmortem_completed');
+      return severityMatch && retrospectiveMatch;
+  });
 }
+
+
+function addFilter() {
+  const filtersContainer = document.getElementById('additionalFilters');
+  if (filtersContainer.style.display === 'none') {
+      filtersContainer.innerHTML = `
+          <div class="form-field">
+              <label for="severityFilter">Severity:</label>
+              <input type="text" id="severityFilter" placeholder="Enter severity">
+          </div>
+      ` + filtersContainer.innerHTML;
+      filtersContainer.style.display = 'block';
+
+      const severityFilterInput = document.getElementById('severityFilter');
+      if (severityFilterInput) {
+          severityFilterInput.addEventListener('input', handleFilterChange);
+      }
+  } else {
+      filtersContainer.style.display = 'none';
+  }
+}
+
 
 function showLoadingMessage() {
   const loadingElement = document.getElementById('loadingMessage');
@@ -136,45 +145,39 @@ function hideLoadingMessage() {
 
 let currentDisplayedIncidents = []; // Global variable to store currently displayed incidents
 
-function displayReportResults(data) {
-    const reportResultsElement = document.getElementById('reportResults');
-    reportResultsElement.innerHTML = '';
+function displayReportResults(filteredIncidents) {
+  const reportResultsElement = document.getElementById('reportResults');
+  reportResultsElement.innerHTML = '';
 
-    if (!data || !data.incidents || data.incidents.length === 0) {
-        reportResultsElement.textContent = 'No data to display.';
-        return;
-    }
+  if (!filteredIncidents || filteredIncidents.length === 0) {
+      reportResultsElement.textContent = 'No data to display.';
+      return;
+  }
 
-    const retrospectiveFilter = document.getElementById('retrospectiveFilter').value;
-    if (retrospectiveFilter === 'completed') {
-        currentDisplayedIncidents = data.incidents.filter(incident => incident.current_milestone === 'postmortem_completed');
-    } else {
-        currentDisplayedIncidents = data.incidents;
-    }
+  const table = createTable(filteredIncidents);
+  reportResultsElement.appendChild(table);
 
-    const table = createTable(currentDisplayedIncidents);
-    reportResultsElement.appendChild(table);
+  const downloadCsvButton = document.createElement('button');
+  downloadCsvButton.id = 'exportCsv';
+  downloadCsvButton.textContent = 'Export to CSV';
 
-    const downloadCsvButton = document.createElement('button');
-    downloadCsvButton.id = 'exportCsv';
-    downloadCsvButton.textContent = 'Export to CSV';
+  const headerElement = document.getElementById('dashboard-header');
+  headerElement.appendChild(downloadCsvButton);
 
-    const headerElement = document.getElementById('dashboard-header');
-    headerElement.appendChild(downloadCsvButton);
-
-    downloadCsvButton.addEventListener('click', function() {
-        if (!currentDisplayedIncidents || currentDisplayedIncidents.length === 0) {
-            alert('No CSV data available to download.');
-            return;
-        }
-        const csvData = generateCsvFromIncidents(currentDisplayedIncidents);
-        const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'analytics-report.csv';
-        link.click();
-    });
+  downloadCsvButton.addEventListener('click', function() {
+      if (!filteredIncidents || filteredIncidents.length === 0) {
+          alert('No CSV data available to download.');
+          return;
+      }
+      const csvData = generateCsvFromIncidents(filteredIncidents);
+      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'analytics-report.csv';
+      link.click();
+  });
 }
+
 
 function generateCsvFromIncidents(incidents) {
   const headers = ['id', 'name', 'created_at', 'started_at', 'severity', 'priority', 'tags', 'custom_fields', 'opened_by', 'milestones', 'impacts', 'lessons_learned', 'current_milestone', 'incident_url', 'report_id'];

@@ -83,6 +83,10 @@ button {
     transition: background-color 0.3s ease;
 }
 
+#filtersContainer {
+    padding-left: 19px;
+}
+
 
 #retrospectiveFilter {
     width: 400px;

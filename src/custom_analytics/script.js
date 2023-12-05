@@ -44,16 +44,20 @@ function handleSubmit(event) {
 }
 
 function createPill(filterType, value) {
-  const pillContainer = document.getElementById('filterPillsContainer'); 
+  const pillContainer = document.getElementById('filterPillsContainer');
+  if (!pillContainer) return; 
+
   const pill = document.createElement('span');
   pill.textContent = `${filterType}: ${value} `;
   pill.className = 'filter-pill';
+
   const xButton = document.createElement('button');
   xButton.textContent = '×';
   xButton.className = 'pill-remove-button';
   xButton.addEventListener('click', function() {
       removePill(filterType, pill);
   });
+
   pill.appendChild(xButton);
   pillContainer.appendChild(pill);
 }
@@ -93,7 +97,19 @@ function handleFilterChange() {
       const endDate = document.getElementById('endDate').value;
       fetchAnalyticsData(authToken, startDate, endDate);
   }
-  updateFilterText()
+  updateFilterText();
+
+  const severityValue = document.getElementById('severityFilter').value || 'All';
+  const milestoneValue = document.getElementById('retrospectiveFilter').value;
+  const milestoneTextContent = milestoneValue === 'all' ? 'All' : 'Retrospective Completed';
+
+  document.getElementById('filterPillsContainer').innerHTML = '';
+
+
+  createPill('Milestone', milestoneTextContent);
+  if (severityValue !== 'All') {
+      createPill('Severity', severityValue);
+  }
 }
 
 // Attach the event listeners to the filters

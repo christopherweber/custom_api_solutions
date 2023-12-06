@@ -201,3 +201,8 @@ form small {
         height: auto;
     }
 }
+
+#add-instructions {
+    height: 500px;
+    width: 500px;
+}

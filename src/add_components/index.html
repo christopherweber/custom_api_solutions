@@ -12,6 +12,7 @@
     <div id="sidebar-placeholder"></div>
     
 <main>
+    <div class="content-container">
     <section id="component-update-form">
         <h1>Components Statuspage Update</h1>
         <p id="csv-upload-note">
@@ -46,6 +47,7 @@
 
             <button type="submit">Submit</button>
         </form>
+    </section>
         <div class="instructions-container" style="display:none;">
             <h2>CSV Upload Instructions:</h2>
             <ul>
@@ -53,35 +55,9 @@
                 <li><strong>Component Group:</strong> Name of Component group. This must be created in FireHydrant first.</li>
             </ul>
         </div>
-    </section>
+    </div>
     <p>This is a txt file with an example of how you might uploaded a CSV to be parsed and update the components and their groups.</p>
     <a href="../component_node_app_example_snippet.txt" download="node_snippet.txt" class="download-btn">Download Node.js Snippet Example</a>
-    <!-- <div class="code-snippets">
-        <div class="button-container">
-            <p>Prefer to execute the code manually? Simply choose a language, 
-                <br>and you can copy and paste the code into your editor. 
-                <br>The code snippets will automatically update to reflect any changes you make in the form fields above.
-            </p>
-            <button id="btnNodeJs">Node / Axios</button>
-            <button id="btnPython">Python</button>
-        </div>
-        <div id="copyMessage" style="display: none"></div>
-        <div id="nodeJsSnippetContainer" class="snippet-container">
-            <button class="copy-btn" onclick="copyToClipboard('codeSnippetNodeJs')">Copy Code</button>
-            <pre id="codeSnippetNodeJs" class="code-snippet">
-                <code>
-                // Node.js code here
-            </code>
-        </pre>
-        </div>
-        
-        <div id="pythonSnippetContainer" class="snippet-container" style="display:none;">
-            <button class="copy-btn" onclick="copyToClipboard('codeSnippetPython')">Copy Code</button>
-            <pre id="codeSnippetPython" class="code-snippet"><code>
-                // Python code here
-            </code></pre>
-        </div>
-    </div> -->
 </main>
 </body>
 </html>

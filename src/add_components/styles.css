@@ -205,3 +205,8 @@ form small {
 #add-instructions {
     width: 500px;
 }
+
+.instructions-container ul li {
+    margin-bottom: 10px; 
+    line-height: 1.4; 
+}

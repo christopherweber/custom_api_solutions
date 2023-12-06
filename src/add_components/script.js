@@ -131,15 +131,15 @@ function sendDataToBackend(data) {
     });
 }
 
-document.getElementById('btnNodeJs').addEventListener('click', function() {
-    updateCodeSnippets();
-    showNodeJsSnippet();
-  });
+// document.getElementById('btnNodeJs').addEventListener('click', function() {
+//     updateCodeSnippets();
+//     showNodeJsSnippet();
+//   });
   
-  document.getElementById('btnPython').addEventListener('click', function() {
-    updateCodeSnippets();
-    showPythonSnippet();
-  });
+//   document.getElementById('btnPython').addEventListener('click', function() {
+//     updateCodeSnippets();
+//     showPythonSnippet();
+//   });
   
 //   function showNodeJsSnippet() {
 //     document.getElementById('nodeJsSnippetContainer').style.display = 'block';

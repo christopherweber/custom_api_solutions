@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     attachCSVUploadListener();
 });
 
+document.getElementById('csv-instructions-link').addEventListener('click', function() {
+    var instructions = document.querySelector('.instructions-container');
+    instructions.style.display = instructions.style.display === 'none' ? 'block' : 'none';
+});
+
 function attachCSVUploadListener() {
     const csvUploadInput = document.getElementById('csvFileUpload');
     const componentFieldsContainer = document.getElementById('componentFieldsContainer'); // Adjust the ID to match your form

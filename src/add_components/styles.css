@@ -183,3 +183,14 @@ form small {
         margin-left: 0;
     }
 }
+
+main {
+    margin-left: 22%;
+    padding: 20px;
+}
+
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+}
